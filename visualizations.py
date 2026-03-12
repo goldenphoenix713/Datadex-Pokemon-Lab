@@ -1,6 +1,6 @@
-import plotly.graph_objects as go  # type: ignore[import-untyped]
-import pandas as pd  # type: ignore[import-untyped]
-import plotly.express as px  # type: ignore[import-untyped]
+import plotly.graph_objects as go
+import pandas as pd
+import plotly.express as px
 
 # Canonical Pokemon Type Colors
 TYPE_COLORS = {
@@ -26,6 +26,20 @@ TYPE_COLORS = {
 }
 
 
+def create_type_badge(pokemon_type: str):
+    import dash_mantine_components as dmc
+
+    color = TYPE_COLORS.get(pokemon_type, "#68A090")
+    return dmc.Badge(
+        pokemon_type,
+        color=color,
+        variant="filled",
+        size="lg",
+        radius="sm",
+        style={"textTransform": "capitalize", "fontWeight": 700},
+    )
+
+
 def create_radar_chart(df: pd.DataFrame, pokemon_names: list) -> go.Figure:
     categories = [
         "HP",
@@ -37,9 +51,11 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: list) -> go.Figure:
     ]
     fig = go.Figure()
 
+    max_stat = df[categories].max().max()
+
     if not pokemon_names:
         fig.update_layout(
-            polar=dict(radialaxis=dict(visible=True, range=[0, 160])),
+            polar=dict(radialaxis=dict(visible=True, range=[0, max_stat])),
             showlegend=False,
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
@@ -68,7 +84,7 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: list) -> go.Figure:
         polar=dict(
             radialaxis=dict(
                 visible=True,
-                range=[0, 160],
+                range=[0, max_stat],
                 showticklabels=False,
                 gridcolor="lightgrey",
             ),
@@ -105,7 +121,7 @@ def create_type_leaderboard(df: pd.DataFrame, stat_column: str) -> go.Figure:
 
     # Calculate group means
     type_stats = (
-        df.groupby("Primary Type")[stat_column]
+        df.groupby("Primary Type", observed=False)[stat_column]
         .mean()
         .sort_values(ascending=False)
         .reset_index()

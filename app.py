@@ -1,15 +1,16 @@
-import dash  # type: ignore[import-untyped]
+import dash
 from dash import html, dcc, Input, Output, callback
-import dash_mantine_components as dmc  # type: ignore[import-untyped]
+import dash_mantine_components as dmc
 from data_manager import load_and_clean_data
 from visualizations import (
     create_radar_chart,
     create_type_leaderboard,
     create_scatter_plot,
+    create_type_badge,
 )
 
 # Enforce React 18.2.0 for DMC compatibility
-dash._dash_renderer._set_react_version("18.2.0")
+dash._dash_renderer._set_react_version("18.2.0")  # ty:ignore[possibly-missing-attribute]
 
 app = dash.Dash(__name__, title="Data-Dex: Ultimate Stat Lab")
 
@@ -103,6 +104,15 @@ app.layout = dmc.MantineProvider(
                                                     id="pokemon-image",
                                                     src="",
                                                     style={"height": "200px"},
+                                                )
+                                            ]
+                                        ),
+                                        dmc.Center(
+                                            children=[
+                                                dmc.Group(
+                                                    id="pokemon-types",
+                                                    mt="sm",
+                                                    gap="xs",
                                                 )
                                             ]
                                         ),
@@ -225,12 +235,13 @@ def update_scatter(x, y):
 @callback(
     Output("pokemon-image", "src"),
     Output("pokemon-name-display", "children"),
+    Output("pokemon-types", "children"),
     Output("stat-progress-bars", "children"),
     Input("pokemon-selector", "value"),
 )
 def update_details(selected_pokemon):
     if not selected_pokemon:
-        return "", "Select a Pokémon", []
+        return "", "Select a Pokémon", [], []
 
     # Show detail for the first selected
     name = selected_pokemon[0]
@@ -255,8 +266,15 @@ def update_details(selected_pokemon):
             )
         )
 
-    return p_data["Image_URL"], name, progress_bars
+    # Type badges
+    types = [p_data["Primary Type"]]
+    if p_data["Secondary Type"] != "None":
+        types.append(p_data["Secondary Type"])
+
+    type_badges = [create_type_badge(t) for t in types]
+
+    return p_data["Image_URL"], name, type_badges, progress_bars
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True, port=8050)
+    app.run_server(debug=True, port=8050, use_reloader=False)
