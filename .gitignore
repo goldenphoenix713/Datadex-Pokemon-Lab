@@ -11,3 +11,4 @@ wheels/
 
 # Assets Images
 assets/images/*.png
+!assets/images/placeholder.png
