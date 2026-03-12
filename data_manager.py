@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 import requests
+from loguru import logger
 
 # Image URL for official artwork
 OFFICIAL_ARTWORK_URL = (
@@ -21,8 +22,14 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet") -> pd.DataFrame:
     :return: A cleaned pandas DataFrame with localized image paths.
     :rtype: pd.DataFrame
     """
+    logger.info(f"Loading Pokémon data from {filepath}...")
     # Load the raw data from Parquet
-    df = pd.read_parquet(filepath, engine="pyarrow")
+    try:
+        df = pd.read_parquet(filepath, engine="pyarrow")
+        logger.debug(f"Successfully loaded {len(df)} initial records.")
+    except Exception as e:
+        logger.error(f"Failed to load data from {filepath}: {e}")
+        raise
 
     # Ensure the assets and images directories exist for local storage
     assets_dir = Path("assets")
@@ -34,6 +41,7 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet") -> pd.DataFrame:
         images_dir.mkdir()
 
     # Rename stats to more readable full names for the UI
+    logger.debug("Renaming columns for UI readability...")
     rename_map = {
         "Sp. Atk": "Special Attack",
         "Sp. Def": "Special Defense",
@@ -51,10 +59,12 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet") -> pd.DataFrame:
         df["Secondary Type"] = df["Secondary Type"].fillna("None")
 
     # Sync local images: check cache and download missing pieces in parallel
+    logger.info("Starting parallel image sync...")
     with ThreadPoolExecutor(max_workers=20) as executor:
         list(
             executor.map(lambda row: download_image(row[1], images_dir), df.iterrows())
         )
+    logger.info("Image sync complete.")
 
     # Map the localized image paths to a new column for Dash components
     image_dir = Path("assets/images/")
@@ -94,14 +104,14 @@ def download_image(row: pd.Series, images_dir: Path) -> None:
         response = requests.get(image_url)
         if response.status_code == 200:
             with open(image_path, "wb") as f:
-                print(f"Downloading {image_name} for {row['Name']}")
+                logger.debug(f"Downloading {image_name} for {row['Name']}")
                 f.write(response.content)
         else:
             # If download fails, return False so the row can be filtered out
-            print(f"Failed to download {image_name} for {row['Name']}")
+            logger.debug(f"Failed to download {image_name} for {row['Name']}")
     else:
         # Image is already in cache
-        print(f"Image {image_name} already exists for {row['Name']}")
+        logger.debug(f"Image {image_name} already exists for {row['Name']}")
 
 
 if __name__ == "__main__":

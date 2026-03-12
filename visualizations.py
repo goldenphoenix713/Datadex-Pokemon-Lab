@@ -5,6 +5,7 @@ from typing import Any, List
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from loguru import logger
 
 # Canonical Pokemon Type Colors
 TYPE_COLORS = {
@@ -62,6 +63,7 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: List[str]) -> go.Figure:
     :return: A Plotly radar chart.
     :rtype: go.Figure
     """
+    logger.debug(f"Creating radar chart for {len(pokemon_names)} Pokémon.")
     # Defensive stats to compare
     categories = [
         "HP",
@@ -146,6 +148,7 @@ def create_type_leaderboard(df: pd.DataFrame, stat_column: str) -> go.Figure:
     :return: A Plotly horizontal bar chart.
     :rtype: go.Figure
     """
+    logger.debug(f"Creating type leaderboard for stat: {stat_column}")
     fig = go.Figure()
 
     # Validation check

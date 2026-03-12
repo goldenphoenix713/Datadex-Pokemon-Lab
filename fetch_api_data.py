@@ -6,6 +6,7 @@ from typing import Any, Dict, Optional
 
 import pandas as pd
 import requests
+from loguru import logger
 
 
 def fetch_single_pokemon(url: str) -> Optional[Dict[str, Any]]:
@@ -44,20 +45,22 @@ def fetch_single_pokemon(url: str) -> Optional[Dict[str, Any]]:
         }
     except Exception as e:
         # Log error but don't crash; let other fetches continue
-        print(f"Error fetching {url}: {e}")
+        logger.error(f"Error fetching {url}: {e}")
         return None
 
 
 def fetch_all_pokemon() -> None:
     """Fetch all Pokémon entries from PokéAPI, filter, and save to parquet."""
-    print("Fetching list of all Pokémon entries...")
+    logger.info("Fetching list of all Pokémon entries...")
     # Get all potential results (limit=2000 covers all current generations)
     base_url = "https://pokeapi.co/api/v2/pokemon?limit=2000"
     response = requests.get(base_url)
     response.raise_for_status()
     results = response.json()["results"]
 
-    print(f"Total entries found: {len(results)}. Starting multi-threaded fetch...")
+    logger.info(
+        f"Total entries found: {len(results)}. Starting multi-threaded fetch..."
+    )
 
     # Parallelize API calls to avoid bottlenecking (max 20 workers to be polite to API)
     with ThreadPoolExecutor(max_workers=20) as executor:
@@ -96,7 +99,7 @@ def fetch_all_pokemon() -> None:
     filepath = "data/pokemon.parquet"
     df.to_parquet(filepath, engine="pyarrow", compression="zstd")
 
-    print(
+    logger.info(
         f"Fetched {initial_count} entries. Saved {len(df)} unique entries to {filepath}."
     )
 

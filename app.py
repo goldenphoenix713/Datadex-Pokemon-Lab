@@ -9,14 +9,22 @@ from typing import Any, List, Tuple
 import dash
 import dash_mantine_components as dmc
 from dash import Input, Output, callback, dcc, html
+from loguru import logger
+import sys
 
-from data_manager import load_and_clean_data
-from visualizations import (
+logger.remove()
+logger.add("logs/app.log", level="DEBUG")
+logger.add(sys.stderr, level="DEBUG")
+
+from data_manager import load_and_clean_data  # noqa: E402
+from visualizations import (  # noqa: E402
     create_radar_chart,
     create_scatter_plot,
     create_type_badge,
     create_type_leaderboard,
 )
+
+logger.info("Data-Dex Dash application starting...")
 
 # Enforce React 18.2.0 for DMC compatibility
 # This is a specific requirement for dash-mantine-components to render correctly.
@@ -240,6 +248,7 @@ def update_radar(selected_pokemon: List[str]) -> Any:
     :return: A Plotly graph figure.
     :rtype: Any
     """
+    logger.debug(f"Updating radar chart for: {selected_pokemon}")
     return create_radar_chart(df, selected_pokemon)
 
 
@@ -252,6 +261,7 @@ def update_leaderboard(stat: str) -> Any:
     :return: A Plotly graph figure.
     :rtype: Any
     """
+    logger.debug(f"Updating leaderboard for stat: {stat}")
     return create_type_leaderboard(df, stat)
 
 
@@ -270,6 +280,7 @@ def update_scatter(x: str, y: str) -> Any:
     :return: A Plotly graph figure.
     :rtype: Any
     """
+    logger.debug(f"Updating scatter plot: x={x}, y={y}")
     return create_scatter_plot(df, x, y)
 
 
@@ -293,10 +304,12 @@ def update_details(
     """
     # Defensive check: if no selection, show placeholder empty state
     if not selected_pokemon:
+        logger.debug("No Pokémon selected, showing placeholder detail view.")
         return "", "Select a Pokémon", [], []
 
     # Identify the primary Pokémon (first in the list) for details
     name = selected_pokemon[0]
+    logger.debug(f"Updating detailed view for focus: {name}")
     p_data = df[df["Name"] == name].iloc[0]
 
     max_stat = df[stat_options].max().max()
