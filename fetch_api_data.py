@@ -1,18 +1,33 @@
-import requests
-import pandas as pd
+"""Module to fetch Pokémon data from the PokéAPI and save it to a parquet file."""
+
 import os
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any, Dict, Optional
+
+import pandas as pd
+import requests
 
 
-def fetch_single_pokemon(url):
+def fetch_single_pokemon(url: str) -> Optional[Dict[str, Any]]:
+    """Fetch data for a single Pokémon from the given PokéAPI URL.
+
+    :param url: The API URL for a specific Pokémon.
+    :type url: str
+    :return: A dictionary containing filtered Pokémon attributes, or None if the fetch fails.
+    :rtype: Optional[Dict[str, Any]]
+    """
     try:
+        # Request data from the PokeAPI
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         data = response.json()
 
+        # Simplify stat structure: stats list -> dictionary mapping
         stats = {stat["stat"]["name"]: stat["base_stat"] for stat in data["stats"]}
+        # Extract type names into a list
         types = [t["type"]["name"] for t in data["types"]]
 
+        # Map API response to our flat dictionary format
         return {
             "#": data["id"],
             "Name": data["name"].replace("-", " ").title(),
@@ -28,12 +43,15 @@ def fetch_single_pokemon(url):
             "Weight": data["weight"],
         }
     except Exception as e:
+        # Log error but don't crash; let other fetches continue
         print(f"Error fetching {url}: {e}")
         return None
 
 
-def fetch_all_pokemon():
+def fetch_all_pokemon() -> None:
+    """Fetch all Pokémon entries from PokéAPI, filter, and save to parquet."""
     print("Fetching list of all Pokémon entries...")
+    # Get all potential results (limit=2000 covers all current generations)
     base_url = "https://pokeapi.co/api/v2/pokemon?limit=2000"
     response = requests.get(base_url)
     response.raise_for_status()
@@ -41,6 +59,7 @@ def fetch_all_pokemon():
 
     print(f"Total entries found: {len(results)}. Starting multi-threaded fetch...")
 
+    # Parallelize API calls to avoid bottlenecking (max 20 workers to be polite to API)
     with ThreadPoolExecutor(max_workers=20) as executor:
         pokemon_list = list(
             filter(
@@ -48,14 +67,11 @@ def fetch_all_pokemon():
             )
         )
 
+    # Convert results into a DataFrame for easy manipulation
     df = pd.DataFrame(pokemon_list)
 
-    # User's request: "all pokemon forms with any statistical differences or types"
-    # We drop duplicates where stats, types, and the base name ID are identical,
-    # but the API's /pokemon endpoint usually already only contains significant variety.
-    # However, some 'forms' have the same stats as base.
-    # Let's keep one entry per unique set of stats + types + name.
-
+    # Filter for unique entries based on gameplay identity (Name + Stats + Types)
+    # This handles PokéAPI providing separate entries for different forms/varieties.
     initial_count = len(df)
     df = df.drop_duplicates(
         subset=[
@@ -71,10 +87,11 @@ def fetch_all_pokemon():
         ]
     )
 
-    # Store cleaning renames logic here or in data_manager
+    # Optimize column types (categorical is better for plotly/pandas filtering)
     df["Type 1"] = df["Type 1"].astype("category")
     df["Type 2"] = df["Type 2"].astype("category")
 
+    # Save to disk using Parquet with high compression (ZSTD)
     os.makedirs("data", exist_ok=True)
     filepath = "data/pokemon.parquet"
     df.to_parquet(filepath, engine="pyarrow", compression="zstd")

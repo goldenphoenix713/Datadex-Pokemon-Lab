@@ -1,24 +1,35 @@
+"""Main entry point for the Data-Dex Dash application.
+
+This module initializes the Dash app, defines the layout using dash-mantine-components,
+and handles interactivity via Dash callbacks.
+"""
+
+from typing import Any, List, Tuple
+
 import dash
-from dash import html, dcc, Input, Output, callback
 import dash_mantine_components as dmc
+from dash import Input, Output, callback, dcc, html
+
 from data_manager import load_and_clean_data
 from visualizations import (
     create_radar_chart,
-    create_type_leaderboard,
     create_scatter_plot,
     create_type_badge,
+    create_type_leaderboard,
 )
 
 # Enforce React 18.2.0 for DMC compatibility
-dash._dash_renderer._set_react_version("18.2.0")  # ty:ignore[possibly-missing-attribute]
+# This is a specific requirement for dash-mantine-components to render correctly.
+dash._dash_renderer._set_react_version("18.2.0")  # type: ignore[possibly-missing-attribute]
 
 app = dash.Dash(__name__, title="Data-Dex: Ultimate Stat Lab")
 
-# Load data
+# Load and prepare data on startup
 df = load_and_clean_data()
 pokemon_names = sorted(df["Name"].unique())
 stat_options = ["HP", "Attack", "Defense", "Speed", "Special Defense", "Special Attack"]
 
+# Define a consistent theme using Mantine's design system
 custom_theme = {
     "fontFamily": "Inter, sans-serif",
     "headings": {"fontFamily": "PokemonSolid, sans-serif"},
@@ -26,6 +37,7 @@ custom_theme = {
     "colorScheme": "dark",
 }
 
+# Application Layout
 app.layout = dmc.MantineProvider(
     theme=custom_theme,
     children=[
@@ -33,6 +45,7 @@ app.layout = dmc.MantineProvider(
             size="xl",
             p="md",
             children=[
+                # Header Section
                 dmc.Center(
                     children=[
                         html.H1(
@@ -43,7 +56,7 @@ app.layout = dmc.MantineProvider(
                 dmc.Grid(
                     gutter="lg",
                     children=[
-                        # Left Column: Selection & Radar
+                        # Left Column: User Selection and Radar Comparison
                         dmc.GridCol(
                             span={"base": 12, "md": 8},
                             children=[
@@ -64,6 +77,7 @@ app.layout = dmc.MantineProvider(
                                             c="dimmed",
                                             mb="md",
                                         ),
+                                        # Multi-select dropdown for choosing Pokémon
                                         dmc.MultiSelect(
                                             id="pokemon-selector",
                                             label="Choose your Pokémon Team",
@@ -83,7 +97,7 @@ app.layout = dmc.MantineProvider(
                                 ),
                             ],
                         ),
-                        # Right Column: Details & Images
+                        # Right Column: Detail Card for the selected Pokémon
                         dmc.GridCol(
                             span={"base": 12, "md": 4},
                             children=[
@@ -107,6 +121,7 @@ app.layout = dmc.MantineProvider(
                                                 )
                                             ]
                                         ),
+                                        # Box for type badges
                                         dmc.Center(
                                             children=[
                                                 dmc.Group(
@@ -117,12 +132,13 @@ app.layout = dmc.MantineProvider(
                                             ]
                                         ),
                                         dmc.Space(h="md"),
+                                        # Container for dynamic progress bars
                                         html.Div(id="stat-progress-bars"),
                                     ],
                                 )
                             ],
                         ),
-                        # Bottom Row: Leaderboard & Outlier Hunt
+                        # Bottom Row: Global analysis components
                         dmc.GridCol(
                             span={"base": 12, "md": 6},
                             children=[
@@ -142,6 +158,7 @@ app.layout = dmc.MantineProvider(
                                             c="dimmed",
                                             mb="md",
                                         ),
+                                        # Dropdown to select the statistic for averaging
                                         dmc.Select(
                                             id="stat-selector",
                                             label="Compare averages for:",
@@ -176,6 +193,7 @@ app.layout = dmc.MantineProvider(
                                             c="dimmed",
                                             mb="md",
                                         ),
+                                        # Selectors for X and Y axes of the scatter plot
                                         dmc.Group(
                                             grow=True,
                                             children=[
@@ -212,14 +230,28 @@ app.layout = dmc.MantineProvider(
 )
 
 
-# Callbacks
+# Interactivity: Callbacks to update visuals based on user input
 @callback(Output("radar-chart", "figure"), Input("pokemon-selector", "value"))
-def update_radar(selected_pokemon):
+def update_radar(selected_pokemon: List[str]) -> Any:
+    """Update the radar chart based on selected Pokémon.
+
+    :param selected_pokemon: List of names for chosen Pokémon.
+    :type selected_pokemon: List[str]
+    :return: A Plotly graph figure.
+    :rtype: Any
+    """
     return create_radar_chart(df, selected_pokemon)
 
 
 @callback(Output("leaderboard-chart", "figure"), Input("stat-selector", "value"))
-def update_leaderboard(stat):
+def update_leaderboard(stat: str) -> Any:
+    """Update the type leaderboard based on a selected stat.
+
+    :param stat: The Pokémon statistic to compare averages for.
+    :type stat: str
+    :return: A Plotly graph figure.
+    :rtype: Any
+    """
     return create_type_leaderboard(df, stat)
 
 
@@ -228,7 +260,16 @@ def update_leaderboard(stat):
     Input("x-axis-selector", "value"),
     Input("y-axis-selector", "value"),
 )
-def update_scatter(x, y):
+def update_scatter(x: str, y: str) -> Any:
+    """Update the scatter plot visualization for exploring outliers.
+
+    :param x: The stat to display on the X-axis.
+    :type x: str
+    :param y: The stat to display on the Y-axis.
+    :type y: str
+    :return: A Plotly graph figure.
+    :rtype: Any
+    """
     return create_scatter_plot(df, x, y)
 
 
@@ -239,18 +280,33 @@ def update_scatter(x, y):
     Output("stat-progress-bars", "children"),
     Input("pokemon-selector", "value"),
 )
-def update_details(selected_pokemon):
+def update_details(
+    selected_pokemon: List[str],
+) -> Tuple[str, str, List[Any], List[Any]]:
+    """Update the detail card for the primary selected Pokémon.
+
+    :param selected_pokemon: List of chosen Pokémon names.
+    :type selected_pokemon: List[str]
+    :return: A tuple containing the image source URL, the Pokémon name, list of
+        type badge components, and list of stat progress bar components.
+    :rtype: Tuple[str, str, List[Any], List[Any]]
+    """
+    # Defensive check: if no selection, show placeholder empty state
     if not selected_pokemon:
         return "", "Select a Pokémon", [], []
 
-    # Show detail for the first selected
+    # Identify the primary Pokémon (first in the list) for details
     name = selected_pokemon[0]
     p_data = df[df["Name"] == name].iloc[0]
 
+    max_stat = df[stat_options].max().max()
+
+    # Dynamically build progress bars for stats
     progress_bars = []
     for stat in stat_options:
         val = p_data[stat]
-        percent = (val / 160) * 100
+        # Normalize to the maximum stat value
+        percent = (val / max_stat) * 100
         progress_bars.append(
             html.Div(
                 [
@@ -266,7 +322,7 @@ def update_details(selected_pokemon):
             )
         )
 
-    # Type badges
+    # Generate type badges using the helper from visualizations.py
     types = [p_data["Primary Type"]]
     if p_data["Secondary Type"] != "None":
         types.append(p_data["Secondary Type"])
@@ -277,4 +333,5 @@ def update_details(selected_pokemon):
 
 
 if __name__ == "__main__":
+    # Start the server (debug=True enables hot reloading)
     app.run_server(debug=True, port=8050, use_reloader=False)

@@ -1,6 +1,10 @@
-import plotly.graph_objects as go
+"""Module providing functions to create Plotly visualizations for Pokémon data."""
+
+from typing import Any, List
+
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 # Canonical Pokemon Type Colors
 TYPE_COLORS = {
@@ -26,9 +30,17 @@ TYPE_COLORS = {
 }
 
 
-def create_type_badge(pokemon_type: str):
+def create_type_badge(pokemon_type: str) -> Any:
+    """Create a Mantine Badge component for a given Pokémon type.
+
+    :param pokemon_type: The Pokémon type (e.g., 'Fire', 'Water').
+    :type pokemon_type: str
+    :return: A dash-mantine-components Badge component.
+    :rtype: dmc.Badge
+    """
     import dash_mantine_components as dmc
 
+    # Get the canonical color for the type, default to a neutral teal
     color = TYPE_COLORS.get(pokemon_type, "#68A090")
     return dmc.Badge(
         pokemon_type,
@@ -40,7 +52,17 @@ def create_type_badge(pokemon_type: str):
     )
 
 
-def create_radar_chart(df: pd.DataFrame, pokemon_names: list) -> go.Figure:
+def create_radar_chart(df: pd.DataFrame, pokemon_names: List[str]) -> go.Figure:
+    """Create a radar chart comparing stats of selected Pokémon.
+
+    :param df: The Pokémon DataFrame.
+    :type df: pd.DataFrame
+    :param pokemon_names: A list of Pokémon names to compare.
+    :type pokemon_names: List[str]
+    :return: A Plotly radar chart.
+    :rtype: go.Figure
+    """
+    # Defensive stats to compare
     categories = [
         "HP",
         "Attack",
@@ -51,8 +73,10 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: list) -> go.Figure:
     ]
     fig = go.Figure()
 
+    # Determine scale based on all available data to keep visuals consistent
     max_stat = df[categories].max().max()
 
+    # If nothing selected, return empty chart with fixed range
     if not pokemon_names:
         fig.update_layout(
             polar=dict(radialaxis=dict(visible=True, range=[0, max_stat])),
@@ -62,11 +86,14 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: list) -> go.Figure:
         )
         return fig
 
+    # Filter for the chosen Pokémon
     selected_data = df[df["Name"].isin(pokemon_names)]
 
+    # Add a trace for each selected Pokémon
     for _, row in selected_data.iterrows():
         stats = [row[cat] for cat in categories]
-        stats.append(stats[0])  # Close the polygon
+        # Radar charts need to wrap back to the start to close the polygon
+        stats.append(stats[0])
         closed_categories = categories + [categories[0]]
 
         fig.add_trace(
@@ -80,6 +107,7 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: list) -> go.Figure:
             )
         )
 
+    # Style the polar axes and legend
     fig.update_layout(
         polar=dict(
             radialaxis=dict(
@@ -109,8 +137,18 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: list) -> go.Figure:
 
 
 def create_type_leaderboard(df: pd.DataFrame, stat_column: str) -> go.Figure:
+    """Create a bar chart showing averaged stats by Pokémon primary type.
+
+    :param df: The Pokémon DataFrame.
+    :type df: pd.DataFrame
+    :param stat_column: The name of the stat column to average and compare.
+    :type stat_column: str
+    :return: A Plotly horizontal bar chart.
+    :rtype: go.Figure
+    """
     fig = go.Figure()
 
+    # Validation check
     if not stat_column or stat_column not in df.columns:
         fig.update_layout(
             title=dict(text="Select a stat to compare", font=dict(color="white")),
@@ -119,7 +157,7 @@ def create_type_leaderboard(df: pd.DataFrame, stat_column: str) -> go.Figure:
         )
         return fig
 
-    # Calculate group means
+    # Calculate average stat per primary type, sorted highest to lowest
     type_stats = (
         df.groupby("Primary Type", observed=False)[stat_column]
         .mean()
@@ -130,7 +168,7 @@ def create_type_leaderboard(df: pd.DataFrame, stat_column: str) -> go.Figure:
 
     fig = go.Figure()
 
-    # Add bars
+    # Add horizontal bars colored by the type palette
     fig.add_trace(
         go.Bar(
             x=type_stats[stat_column],
@@ -146,7 +184,7 @@ def create_type_leaderboard(df: pd.DataFrame, stat_column: str) -> go.Figure:
         )
     )
 
-    # Add vertical line for global average
+    # Add a global benchmark line for comparison
     fig.add_vline(
         x=global_avg,
         line_dash="dot",
@@ -176,6 +214,18 @@ def create_type_leaderboard(df: pd.DataFrame, stat_column: str) -> go.Figure:
 
 
 def create_scatter_plot(df: pd.DataFrame, x_col: str, y_col: str) -> go.Figure:
+    """Create a scatter plot comparing two stats across all Pokémon.
+
+    :param df: The Pokémon DataFrame.
+    :type df: pd.DataFrame
+    :param x_col: Stat for the X-axis.
+    :type x_col: str
+    :param y_col: Stat for the Y-axis.
+    :type y_col: str
+    :return: A Plotly scatter plot.
+    :rtype: go.Figure
+    """
+    # Validation check for axis selection
     if not x_col or not y_col:
         fig = go.Figure()
         fig.update_layout(
@@ -185,6 +235,7 @@ def create_scatter_plot(df: pd.DataFrame, x_col: str, y_col: str) -> go.Figure:
         )
         return fig
 
+    # Build scatter with automatic coloring by type
     fig = px.scatter(
         df,
         x=x_col,
@@ -209,6 +260,7 @@ def create_scatter_plot(df: pd.DataFrame, x_col: str, y_col: str) -> go.Figure:
         yaxis=dict(gridcolor="rgba(255,255,255,0.1)"),
     )
 
+    # Style data points: solid marker with white outline for visibility
     fig.update_traces(
         marker=dict(size=10, opacity=0.7, line=dict(width=1, color="white"))
     )
