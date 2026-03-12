@@ -1,0 +1,111 @@
+@font-face {
+    font-family: 'PokemonSolid';
+    src: url('pokemon_solid.ttf') format('truetype');
+}
+
+body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: white;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.pokemon-title,
+.pokemon-section-title {
+    font-family: 'PokemonSolid', sans-serif !important;
+    color: #FFCB05;
+    text-shadow:
+        -1.5px -1.5px 0 #2A75BB,
+        1.5px -1.5px 0 #2A75BB,
+        -1.5px 1.5px 0 #2A75BB,
+        1.5px 1.5px 0 #2A75BB,
+        2px 2px 0 #3C5AA6;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.pokemon-title {
+    padding: 20px 0;
+    font-size: 3rem !important;
+}
+
+.pokemon-section-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+}
+
+/* Global Dark Mode Text Fixes */
+.mantine-Text-root,
+.mantine-Title-root,
+.mantine-Select-label,
+.mantine-MultiSelect-label {
+    color: #f8fafc !important;
+    /* Slate 50 */
+}
+
+.mantine-Card-root {
+    background-color: rgba(30, 41, 59, 0.8) !important;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mantine-Card-root:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Fix for Select & MultiSelect Inputs */
+.mantine-Select-input,
+.mantine-MultiSelect-input {
+    background-color: #0f172a !important;
+    /* Slate 900 */
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.mantine-Select-input:focus,
+.mantine-MultiSelect-input:focus {
+    border-color: #3b82f6 !important;
+    /* Blue 500 */
+}
+
+/* Fix for Dropdown Menus (The white background bug) */
+.mantine-Select-dropdown,
+.mantine-MultiSelect-dropdown {
+    background-color: #1e293b !important;
+    /* Slate 800 */
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Fix for Items inside the Dropdown */
+.mantine-Select-option,
+.mantine-MultiSelect-option {
+    color: #e2e8f0 !important;
+    /* Slate 200 */
+}
+
+.mantine-Select-option[data-combobox-selected],
+.mantine-MultiSelect-option[data-combobox-selected] {
+    background-color: #3b82f6 !important;
+    color: white !important;
+}
+
+.mantine-Select-option:hover,
+.mantine-MultiSelect-option:hover {
+    background-color: #334155 !important;
+    /* Slate 700 */
+}
+
+.stat-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+#pokemon-image {
+    max-width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.4));
+    transition: transform 0.3s ease;
+}
