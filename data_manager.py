@@ -66,8 +66,8 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet") -> pd.DataFrame:
             return str(local_path)
 
         # Check if the image exists at the official URL (status check was done in download_image)
-        # However, download_image already tries to download it. If it failed, it returns False.
-        # We can use the existence of the local file as the source of truth if we want to be safe.
+        # However, download_image already tries to download it. We can use the existence of the
+        # local file as the source of truth if we want to be safe.
         return placeholder_path
 
     df["Image_URL"] = df["#"].apply(get_image_url)
