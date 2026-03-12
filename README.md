@@ -42,10 +42,11 @@ This lab runs on **Python**, **Dash**, and **Plotly**.
 
 ### 📂 Project Map
 *   `app.py`: The brain of the Data-Dex.
-*   `data/`: Where the Pokémon CSV files live.
+*   `data/`: Where the Pokémon data files live.
 *   `assets/`: Custom fonts and type icons to make it look official!
 *   `visualizations.py`: The math behind the Radar and Bar charts.
 
 ---
 
 **Built for future Data Champions. Gotta analyze 'em all!** 📊🔥
+
