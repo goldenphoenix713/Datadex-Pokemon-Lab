@@ -75,16 +75,15 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet") -> pd.DataFrame:
     return df
 
 
-def download_image(row: pd.Series, images_dir: Path):
+def download_image(row: pd.Series, images_dir: Path) -> None:
     """Download official artwork for a Pokémon if missing.
 
     :param row: A pandas Series representing a Pokémon record.
     :type row: pd.Series
     :param images_dir: Directory where images should be saved.
     :type images_dir: Path
-    :return: True if the image is available locally (already present or successfully
-        downloaded), False otherwise.
-    :rtype: bool
+    :return: None
+    :rtype: None
     """
     image_name = f"{row['#']}.png"
     image_url = f"{OFFICIAL_ARTWORK_URL}{image_name}"
