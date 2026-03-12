@@ -5,36 +5,36 @@ This cheat sheet provides the "answers" to the Data Quests in your README. Keep 
 ## Quest Level 1: The Scout
 
 * The Tiny Titan (Height < 0.5m, Attack > 100):
-* Answers: Mankey (0.5m / 80 Atk — close!), Cranidos (0.9m / 125 Atk), or Kartana (0.3m / 181 Atk).
-   * Teacher Tip: If they struggle, tell them to look for "Baby" or "Small" Pokémon that look angry or have big claws.
+  * Answers: Mankey (0.5m / 80 Atk — close!), Cranidos (0.9m / 125 Atk), or Kartana (0.3m / 181 Atk).
+  * Teacher Tip: If they struggle, tell them to look for "Baby" or "Small" Pokémon that look angry or have big claws.
 * Speed King (Fastest Type Average):
-* Answer: Flying or Electric.
-   * Teacher Tip: Many kids guess Fire, but Flying usually wins because of its high average speed across all evolutions. [2, 3, 4, 5, 6] 
+  * Answer: Flying or Electric.
+  * Teacher Tip: Many kids guess Fire, but Flying usually wins because of its high average speed across all evolutions. [2, 3, 4, 5, 6] 
 
 ## Quest Level 2: The Researcher
 
 * The Shape-Shifter (Radar Comparison):
-* Snorlax: A massive "blob" shape with a huge spike toward HP.
-   * Pikachu: A small, "spiky" triangle pointing toward Speed.
-   * Teacher Tip: Explain that a "balanced" Pokémon like Mewtwo or Arceus looks like a large, even hexagon.
+  * Snorlax: A massive "blob" shape with a huge spike toward HP.
+  * Pikachu: A small, "spiky" triangle pointing toward Speed.
+  * Teacher Tip: Explain that a "balanced" Pokémon like Mewtwo or Arceus looks like a large, even hexagon.
 * Above the Bar (Benchmarking):
-* Answer: This depends on their favorite, but the Global Average HP is usually around 70.
-   * Teacher Tip: Show them that even "strong" Pokémon like Gengar have below-average HP because they are "Glass Cannons" (hit hard but are fragile). [5, 7, 8, 9, 10] 
+  * Answer: This depends on their favorite, but the Global Average HP is usually around 70.
+  * Teacher Tip: Show them that even "strong" Pokémon like Gengar have below-average HP because they are "Glass Cannons" (hit hard but are fragile). [5, 7, 8, 9, 10] 
 
 ## Quest Level 3: The Data Master
 
 * The Rule Breaker (Weight > 200kg, High Speed):
-* Answer: Gyarados (235kg / 81 Speed), Garchomp (95 Speed), or Primal Groudon (999.7kg / 90 Speed).
-   * Teacher Tip: These are the "scary" outliers that prove being big doesn't always make you slow.
+  * Answer: Gyarados (235kg / 81 Speed), Garchomp (95 Speed), or Primal Groudon (999.7kg / 90 Speed).
+  * Teacher Tip: These are the "scary" outliers that prove being big doesn't always make you slow.
 * The Specialist (One Huge Spike):
-* Answer: Shuckle (Massive Defense, almost 0 Attack/Speed) or Regieleki (World Record Speed, low HP/Defense).
-   * Teacher Tip: A specialist is like a "Tool"—you only bring them out for one specific job! [8, 9, 11, 12, 13] 
+  * Answer: Shuckle (Massive Defense, almost 0 Attack/Speed) or Regieleki (World Record Speed, low HP/Defense).
+  * Teacher Tip: A specialist is like a "Tool"—you only bring them out for one specific job! [8, 9, 11, 12, 13] 
 
 ## Quest Level 4: The Ultimate Challenge
 
 * The Perfect Team (The "Roundest" Radar):
-* Top Picks: Arceus, Mew, Tyranitar, or Dragonite.
-   * Teacher Tip: These are often "Pseudo-Legendary" Pokémon. Their data shapes are large and round because they don't have any weaknesses in their stats. [10, 14] 
+  * Top Picks: Arceus, Mew, Tyranitar, or Dragonite.
+  * Teacher Tip: These are often "Pseudo-Legendary" Pokémon. Their data shapes are large and round because they don't have any weaknesses in their stats. [10, 14] 
 
 ## Presentation "Pro-Moves"
 
