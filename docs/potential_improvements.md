@@ -1,113 +1,164 @@
 # Data-Dex Roadmap: Potential Improvements
 
-This document outlines several high-impact features and technical enhancements to further evolve the Data-Dex Pokémon Lab.
+This document outlines high-impact features and technical enhancements to further evolve the Data-Dex Pokémon Lab from a dashboard into a professional competitive tool and engaging educational platform.
 
 ---
 
-## 🎨 User Experience (UX) & Design
+## � Core Gameplay & Interactive Features
 
-### 1. Evolution Chains
+### 1. 🛡️ Team Builder & Coverage Analysis
+
+Allow users to create a selection of up to 6 Pokémon to analyze team-wide strengths and weaknesses.
+
+- **Implementation**: Add a "Add to Team" button to the detail card. Store selections in a `dcc.Store`.
+- **Feature**: A **Weakness Heatmap** showing cumulative type weaknesses and resistances across the team.
+
+### 2. ⚔️ Comparison Toggle (Dual Radar)
+
+Enable a "Compare" mode to overlay two stat distributions.
+
+- **Overlay Radar**: Select two Pokémon to see their base stats plotted on the same radar chart with different, semi-transparent colors.
+- **Diff Table**: A small table showing the ± difference between their stats.
+
+### 3. 🧬 Evolution Chains
 
 Display the visual evolution lineage for the selected Pokémon.
 
-* **Implementation**:
-    1. Update [fetch_api_data.py](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/fetch_api_data.py) to hit the `/pokemon-species/{id}/` endpoint to find the `evolution_chain` URL.
-    2. Fetch the chain data and flatten the nested JSON into a simple list of Pokémon IDs/names.
-    3. Add a new component in the Detail Card in [app.py](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/app.py) using `dmc.Timeline` or a horizontal `dmc.Group` of small images.
+- **Implementation**: Update [fetch_api_data.py](file:///Users/eduardo.ruiz/PycharmProjects/Datadex-Pokemon-Lab/fetch_api_data.py) to hit the `/pokemon-species/{id}/` endpoint. Add a `dmc.Timeline` or horizontal group of images to [app.py](file:///Users/eduardo.ruiz/PycharmProjects/Datadex-Pokemon-Lab/app.py).
 
-### 2. Generation & Region Filters
-
-Allow users to filter the Pokémon selection list by specific generations (Kanto, Johto, etc.).
-
-* **Implementation**:
-    1. Add a `Generation` column to the Pokémon DataFrame in [data_manager.py](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/data_manager.py) (Gen 1 is IDs 1-151, etc.).
-    2. Add a `dmc.SegmentedControl` or `dmc.Chips` component above the `pokemon-selector` in `app.layout`.
-    3. Create a callback that updates the [data](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/data_manager.py#17-86) property of the `MultiSelect` dropdown based on the selected generation.
-
-### 3. Shiny Artwork Toggle
+### 4. ✨ Shiny Artwork Toggle
 
 Let users switch between standard and "shiny" colors for the main artwork.
 
-* **Implementation**:
-    1. Update [download_image](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/data_manager.py#88-115) in [data_manager.py](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/data_manager.py) to optionally fetch `.../official-artwork/shiny/{id}.png`.
-    2. Add a `dmc.Switch` labeled "Shiny Mode" in the detailed view.
-    3. Update the `update_detailed_view` callback to swap the `src` of the image based on the switch state.
+- **Implementation**: Add a `dmc.Switch` in the detailed view to swap the `src` of the main artwork image.
 
 ---
 
-## 📊 Enhanced Analytics
+## � Advanced Discovery & Filtering
 
-### 4. Dual-Type Sensitivity Analysis
+### 5. 🎯 Stat Range Filters
 
-Improve the leaderboard and type analysis to account for Pokémon with two types.
+Add numeric range filters to the sidebar for precise scouting.
 
-* **Implementation**:
-    1. In [visualizations.py](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/visualizations.py), modify the grouping logic to "explode" the DataFrame (using `df.explode('Secondary Type')`) so a dual-type Pokémon contributes to the average of both its types.
-    2. Create a heatmap visualization showing which type combinations have the highest average stats.
+- **Implementation**: Use `dmc.RangeSlider` for the six base stats (e.g., "Find Pokémon with Speed 100-130 and Attack > 100").
+- **Stat Totals**: Filter by total base stats (BST).
 
-### 5. Stat Global Ranking
+### 6. 🗺️ Generation & Region Filters
 
-Show exactly where a Pokémon stands compared to the rest of the world.
+Allow users to filter the selection list by specific generations or regional origins.
 
-* **Implementation**:
-    1. Calculate percentiles for each stat in [data_manager.py](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/data_manager.py) using `df[stat].rank(pct=True)`.
-    2. In the detail view, add a badge or text next to each progress bar (e.g., "Top 5% for Speed").
+- **Implementation**: Add a `Generation` column to the DataFrame in [data_manager.py](file:///Users/eduardo.ruiz/PycharmProjects/Datadex-Pokemon-Lab/data_manager.py) and a `dmc.SegmentedControl` to the sidebar.
 
----
+### 7. � Smart Search & Accessibility
 
-## 🛠 Technical Polish
-
-### 6. Advanced Caching (Performance)
-
-Reduce startup time and improve responsiveness using server-side caching.
-
-* **Implementation**:
-    1. Install `dash-cache` or `Flask-Caching`.
-    2. Use the `@cache.memoize()` decorator on [load_and_clean_data](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/data_manager.py#17-86) to ensure the Parquet file is only read once per session or on a timed interval.
-
-### 7. UI Error Boundaries
-
-Provide a graceful fallback if data fails to load or a callback errors out.
-
-* **Implementation**:
-    1. Wrap key layout components in a custom Error Boundary component.
-    2. Use a global `dmc.Modal` or `dmc.Notification` that triggers on callback errors (using `dash.no_update` and a dedicated error signal) to tell the user "Something went wrong" instead of leaving the UI in a frozen state.
-
-### 8. Full Unit Test Suite
-
-Ensure stability through automated verification of the data pipeline.
-
-* **Implementation**:
-    1. Create [tests/test_data_manager.py](file:///Users/eddie/PycharmProjects/Datadex-Pokemon-Lab/tests/test_data_manager.py) to mock `requests` and verify the cleaning logic.
-    2. Use `pytest-dash` to write integration tests that simulate user selection and verify that charts update correctly.
+- **Quick-Search**: Enhance the dropdown with faster indexing or a persistent search bar.
+- **Touch-Friendly**: Optimize button spacing and sizing for use on tablets (e.g., STEAM Night demonstrations).
 
 ---
 
+## 📊 Deeper Data Analytics
 
-## Additional Ideas from Gemini
+### 8. 🌎 Global Stat Rankings
 
-### 9. Personalization and Engagement
+Show exactly where a Pokémon stands compared to the entire population.
 
-1. "Trainer Comparison" Mode: Allow kids to input their own height and weight to compare themselves against a selected Pokémon. This makes the data tangible and exciting for their age group.
-2. Custom Avatar Builder: As students complete the "Data Quests" you've already designed, let them "earn" visual upgrades for a basic stick-figure trainer avatar (e.g., earning a hat for finding a "Tiny Titan").
-3. Interactive Sound and Light: Authentic Pokémon sounds (like Poké Ball "clicks") or screen "flashes" can make the dashboard feel more like an actual gadget.
+- **Implementation**: Calculate percentiles for each stat (e.g., "Top 5% for Speed"). Display as a badge next to stat bars.
 
-### 10. Gamified Data Science
+### 9. 🔥 Dual-Type Sensitivity Analysis
 
-1. Achievement Badges: Implement virtual badges for specific milestones, such as a "Persistence Badge" for correcting a data-entry mistake or a "Specialist Badge" for identifying a Pokémon with a single massive stat spike.
-2. Mystery Missions: Reframe standard tasks as "Special Missions" (e.g., "Your mission is to find the hidden giant over 200kg that is still fast enough to escape!").
-3. Narrative Journey: Reveal new parts of a Pokémon "story" as students progress through your levels, turning static numbers into a clear journey.
+Improve type analysis to account for synergy and weaknesses in dual-type Pokémon.
 
-### 11. Dashboard Usability and Features
+- **Heatmap**: Create a visualization showing which type combinations (e.g., Water/Ground) have the highest average stats.
 
-1. Enhanced Stat Visuals: Use segmented or "Experience Bar" style progress bars to help students visually compare the size of one bar to another more easily.
-2. Behavior and Habitat Data: Beyond just battle stats, add "flavor" data like temperament, habitat, or unique behaviors to make the Pokémon feel like part of a living world.
-3. Smart Search and Filtering: Add a fast-scroll slider or search functionality so students don't have to spend limited time scrolling through over 1,000 entries.
-4. Advanced Stat Correlations: Introduce higher-level questions, such as calculating a Pokémon's "Body Mass Index" (BMI) using their weight and height.
+### 10. 📐 Stat Correlations & BMI
 
-### 12. Technical "Under the Hood" Upgrades
+- **BMI Calculation**: Introduce the concept of "Body Mass Index" using height and weight.
+- **Outlier Detection**: Automatically highlight "Tiny Titans" (High stats, low weight) or "Heavy Hitters."
 
-1. Machine Learning Integration: For a more advanced "Quest," you could show how a simple "Decision Tree" model predicts a Pokémon's type based on its stats.
-2. Optimized Assets: To keep the app snappy, consider using remote URLs for images rather than bundling all sprites in the app, which can make the file size unnecessarily large.
-3. Responsive and Touch-Friendly Design: Since students might use tablets at STEAM Night, ensure buttons are not too close together and the layout remains consistent across screen sizes.
+---
 
+## 🏆 Engagement & Gamification
+
+### 11. 🎖️ Achievement & Specialist Badges
+
+Implement virtual badges for discovery milestones:
+
+- **"Persistence Badge"**: For correcting data errors in a session.
+- **"Specialist Badge"**: For identifying a Pokémon with a single massive stat spike (e.g., Shuckle's Defense).
+
+### 12. 🕵️ Mystery Missions & Discovery Quests
+
+Reframe static searches as "Special Missions."
+
+- *“Find the hidden giant over 200kg that is still fast enough to escape!”*
+
+### 13. 👤 Trainer Comparison Mode
+
+Allow users to input their own height/weight to see how they stack up against a selected Pokémon, making the data tangible for students.
+
+---
+
+## 🎨 Aesthetics & UX
+
+### 14. 🌈 Type-Based Dynamic Theming
+
+- **Dynamic Accents**: The app's primary color theme automatically shifts based on the selected Pokémon's primary type (Red for Fire, Blue for Water).
+- **Glassmorphism**: Apply subtle background blurs and sleek border-radius improvements to cards.
+
+### 15. 🔊 Sensory Feedback
+
+Authentic sounds (Poké Ball clicks) or visual gadget "flashes" to make the dashboard feel like a real handheld device.
+
+---
+
+## 🛠 Technical Excellence
+
+### 16. ⚡ Advanced Caching
+
+Use `dash-cache` or `Flask-Caching` on [load_and_clean_data](file:///Users/eduardo.ruiz/PycharmProjects/Datadex-Pokemon-Lab/data_manager.py) to ensure the Parquet file is only read once per session.
+
+### 17. 🛡️ UI Error Boundaries
+
+Wrap key layout components in a custom Error Boundary to provide a graceful "Something went wrong" fallback instead of a frozen UI.
+
+### 18. 🧪 Full Integration Test Suite
+
+Use `pytest-dash` to simulate user interactions and verify that all charts update correctly across different filter combinations.
+
+---
+
+## 🚀 Pro-Tier & Experimental Features
+
+### 19. 🧮 Individual Value (IV) & Effort Value (EV) Simulator
+
+Move beyond base stats to calculated raw stats.
+
+- **Stat Calculator**: Add inputs for Level (1-100), Nature, IVs, and EVs to show the *actual* final stats a Pokémon would have in-game.
+
+### 20. 🎬 Visual Immersion & Animations
+
+- **Animated Sprites**: Where available (e.g., Generation 5 style), swap static images for animated GIFs from PokeAPI to make the dashboard feel alive.
+- **3D Model Viewer**: Integrate a `<model-viewer>` component for Pokémon with available 3D assets to allow 360-degree rotation in the detail card.
+
+### 21. ⚔️ Offensive Coverage Tool
+
+- **Move-Set Analysis**: List common moves for a Pokémon and visualize their offensive coverage (e.g., "This move-set is Super Effective against 14/18 types").
+
+### 22. 💾 Data Portability & Reporting
+
+- **Showdown Export**: Add a "Copy to Clipboard" button that formats the Pokémon's details into the standard format used by Pokémon Showdown.
+- **PDF Research Report**: Generate a polished "Research Summary" PDF for a selected Pokémon, including all its charts and stats—perfect for students to take home from a STEAM event.
+
+### 23. 🗺️ Habitat Geography
+
+- **Interactive Map**: Show which regions and specific routes the Pokémon can be found in, using a zoomable map of the Pokémon world.
+
+### 24. 🔊 Audio Integration (The "Dex" Experience)
+
+- **Pokémon Cries**: Add a "Play Cry" button to hear the unique digital sound of the selected Pokémon.
+- **Text-to-Speech**: A robotic "Pokédex voice" that reads out the name and flavor text.
+
+### 25. 🤖 Cutting-Edge AI & Mobile
+
+- **AI Image Recognition**: A "Scan Pokémon" feature where users can upload a photo, and a lightweight Machine Learning model identifies the species.
+- **Progressive Web App (PWA)**: Optimize the dashboard so it can be "installed" on mobile devices and tablets for offline use during events.

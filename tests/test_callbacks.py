@@ -24,7 +24,7 @@ def test_update_details_callback(mocker):
     mocker.patch("app.ensure_pokemon_image", return_value="assets/images/1.png")
     mocker.patch("app.has_shiny_artwork", return_value=True)
 
-    result = update_details(["Bulbasaur"], False)
+    result = update_details("Bulbasaur", False, ["Bulbasaur"])
     img_src, name_display, type_badges, progress_bars, toggle_style, current_shiny = (
         result
     )
@@ -34,12 +34,12 @@ def test_update_details_callback(mocker):
     assert current_shiny is False
 
     # Test shiny toggle on
-    result_shiny = update_details(["Bulbasaur"], True)
+    result_shiny = update_details("Bulbasaur", True, ["Bulbasaur"])
     assert result_shiny[5] is True
 
 
 def test_update_details_callback_no_selection():
-    result = update_details([], False)
+    result = update_details("", False, [])
     img_src, name_display, type_badges, progress_bars, toggle_style, current_shiny = (
         result
     )
@@ -109,7 +109,7 @@ def test_update_details_callback_high_stat(mocker):
     # Mewtwo is in our mock DF? No, Bulbasaur and Charmander.
     # Let's mock the DF or use one with high stats.
     # Actually, update_details uses the global 'df'.
-    result = update_details(["Charizard"], False)
+    result = update_details("Charizard", False, ["Charizard"])
     # Charizard stats are high enough for green? Attack is 84, Sp Atk is 109.
     # Yes, 109 >= 90.
     img_src, name_display, type_badges, progress_bars, toggle_style, current_shiny = (

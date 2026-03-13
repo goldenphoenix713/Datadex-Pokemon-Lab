@@ -1517,3 +1517,42 @@
 2026-03-13 01:01:24.214 | DEBUG    | visualizations:create_radar_chart:66 - Creating radar chart for 0 Pokémon.
 2026-03-13 01:01:24.226 | DEBUG    | visualizations:create_type_leaderboard:151 - Creating type leaderboard for stat: Attack
 2026-03-13 01:01:24.343 | DEBUG    | visualizations:create_type_leaderboard:151 - Creating type leaderboard for stat: InvalidStat
+2026-03-13 01:16:47.536 | INFO     | app:<module>:33 - Data-Dex Dash application starting...
+2026-03-13 01:16:47.552 | INFO     | data_manager:load_and_clean_data:28 - Loading Pokémon data from data/pokemon.parquet...
+2026-03-13 01:16:47.678 | DEBUG    | data_manager:load_and_clean_data:32 - Successfully loaded 1350 initial records.
+2026-03-13 01:16:47.681 | DEBUG    | data_manager:load_and_clean_data:39 - Filtered out Totem/Eternamax Pokémon. 1337 records remaining.
+2026-03-13 01:16:47.683 | DEBUG    | data_manager:load_and_clean_data:54 - Renaming columns for UI readability...
+2026-03-13 01:16:47.722 | DEBUG    | app:update_radar:539 - Updating radar chart for: ['Bulbasaur']
+2026-03-13 01:16:47.722 | DEBUG    | visualizations:create_radar_chart:66 - Creating radar chart for 1 Pokémon.
+2026-03-13 01:16:47.837 | DEBUG    | app:update_leaderboard:567 - Updating leaderboard for stat: Defense
+2026-03-13 01:16:47.839 | DEBUG    | visualizations:create_type_leaderboard:151 - Creating type leaderboard for stat: Defense
+2026-03-13 01:16:47.995 | DEBUG    | app:update_details:668 - Updating detailed view for focus: Bulbasaur
+2026-03-13 01:16:48.001 | DEBUG    | app:update_details:668 - Updating detailed view for focus: Bulbasaur
+2026-03-13 01:16:48.014 | DEBUG    | app:update_details:664 - No Pokémon selected, showing placeholder detail view.
+2026-03-13 01:16:49.623 | DEBUG    | app:update_details:668 - Updating detailed view for focus: Charizard
+2026-03-13 01:16:49.632 | DEBUG    | app:update_scatter:607 - Updating scatter plot: x=Attack, y=Defense
+2026-03-13 01:16:50.510 | INFO     | data_manager:load_and_clean_data:28 - Loading Pokémon data from fake_path.parquet...
+2026-03-13 01:16:50.510 | DEBUG    | data_manager:load_and_clean_data:32 - Successfully loaded 1 initial records.
+2026-03-13 01:16:50.511 | DEBUG    | data_manager:load_and_clean_data:39 - Filtered out Totem/Eternamax Pokémon. 1 records remaining.
+2026-03-13 01:16:50.512 | DEBUG    | data_manager:load_and_clean_data:54 - Renaming columns for UI readability...
+2026-03-13 01:16:50.522 | INFO     | data_manager:load_and_clean_data:28 - Loading Pokémon data from fake_path.parquet...
+2026-03-13 01:16:50.522 | DEBUG    | data_manager:load_and_clean_data:32 - Successfully loaded 1 initial records.
+2026-03-13 01:16:50.523 | DEBUG    | data_manager:load_and_clean_data:39 - Filtered out Totem/Eternamax Pokémon. 1 records remaining.
+2026-03-13 01:16:50.524 | DEBUG    | data_manager:load_and_clean_data:54 - Renaming columns for UI readability...
+2026-03-13 01:16:50.535 | INFO     | data_manager:load_and_clean_data:28 - Loading Pokémon data from fake_path.parquet...
+2026-03-13 01:16:50.535 | DEBUG    | data_manager:load_and_clean_data:32 - Successfully loaded 4 initial records.
+2026-03-13 01:16:50.536 | DEBUG    | data_manager:load_and_clean_data:39 - Filtered out Totem/Eternamax Pokémon. 4 records remaining.
+2026-03-13 01:16:50.538 | DEBUG    | data_manager:load_and_clean_data:54 - Renaming columns for UI readability...
+2026-03-13 01:16:50.573 | INFO     | data_manager:ensure_pokemon_image:147 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-13 01:16:50.574 | DEBUG    | data_manager:ensure_pokemon_image:154 - Successfully downloaded 1_shiny.png
+2026-03-13 01:16:50.580 | INFO     | data_manager:load_and_clean_data:28 - Loading Pokémon data from any_path.parquet...
+2026-03-13 01:16:50.580 | ERROR    | data_manager:load_and_clean_data:34 - Failed to load data from any_path.parquet: Parquet Error
+2026-03-13 01:16:50.587 | DEBUG    | data_manager:ensure_pokemon_image:166 - Image 1.png already exists for Bulbasaur
+2026-03-13 01:16:50.593 | INFO     | data_manager:ensure_pokemon_image:147 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-13 01:16:50.593 | WARNING  | data_manager:ensure_pokemon_image:157 - Failed to download 1.png (Status: 404)
+2026-03-13 01:16:50.599 | ERROR    | data_manager:has_shiny_artwork:191 - Error checking shiny existence for 1: Network Error
+2026-03-13 01:16:50.618 | ERROR    | fetch_api_data:fetch_single_pokemon:66 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-13 01:16:50.624 | DEBUG    | visualizations:create_radar_chart:66 - Creating radar chart for 2 Pokémon.
+2026-03-13 01:16:50.653 | DEBUG    | visualizations:create_radar_chart:66 - Creating radar chart for 0 Pokémon.
+2026-03-13 01:16:50.670 | DEBUG    | visualizations:create_type_leaderboard:151 - Creating type leaderboard for stat: Attack
+2026-03-13 01:16:50.812 | DEBUG    | visualizations:create_type_leaderboard:151 - Creating type leaderboard for stat: InvalidStat

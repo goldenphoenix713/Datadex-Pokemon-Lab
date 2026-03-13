@@ -7,7 +7,7 @@ and handles interactivity via Dash callbacks.
 from loguru import logger
 import sys
 from typing import Any, List, Tuple
-from dash import callback, Input, Output
+from dash import callback, Input, Output, State
 import dash
 import dash_mantine_components as dmc
 from dash import dcc, html
@@ -102,6 +102,13 @@ pokemon_detail_card = dmc.GridCol(
             p="lg",
             radius="md",
             children=[
+                dmc.Select(
+                    id="focus-selector",
+                    label="Viewing Details For:",
+                    placeholder="Select Pokémon",
+                    mb="sm",
+                    style={"display": "none"},
+                ),
                 dmc.Title(
                     id="pokemon-name-display",
                     order=2,
@@ -612,26 +619,59 @@ def update_scatter(
 
 
 @callback(
+    Output("focus-selector", "data"),
+    Output("focus-selector", "value"),
+    Output("focus-selector", "style"),
+    Input("pokemon-selector", "value"),
+    State("focus-selector", "value"),
+)
+def manage_focus_selection(
+    selected_pokemon: List[str], current_focus: str
+) -> Tuple[List[dict], str, dict]:
+    """Sync the focus selector with the multi-selector."""
+    if not selected_pokemon:
+        return [], "", {"display": "none"}
+
+    data = [{"label": p, "value": p} for p in selected_pokemon]
+    style = {"display": "block"} if len(selected_pokemon) > 1 else {"display": "none"}
+
+    # Determine new focus value
+    if current_focus in selected_pokemon:
+        new_focus = current_focus
+    else:
+        new_focus = selected_pokemon[0]
+
+    return data, new_focus, style
+
+
+@callback(
     Output("pokemon-image", "src"),
     Output("pokemon-name-display", "children"),
     Output("pokemon-types", "children"),
     Output("stat-progress-bars", "children"),
     Output("shiny-toggle", "style"),
     Output("shiny-toggle", "checked"),
-    Input("pokemon-selector", "value"),
+    Input("focus-selector", "value"),
     Input("shiny-toggle", "checked"),
+    State("pokemon-selector", "value"),
 )
 def update_details(
-    selected_pokemon: List[str], is_shiny: bool
+    focus_name: str, is_shiny: bool, selected_pokemon: List[str]
 ) -> Tuple[str, str, List[Any], List[Any], dict, bool]:
-    """Update the detail card for the primary selected Pokémon."""
-    if not selected_pokemon:
+    """Update the detail card for the focused Pokémon."""
+    # If no selection at all, or focus_name is somehow missing
+    if not selected_pokemon or not focus_name:
         logger.debug("No Pokémon selected, showing placeholder detail view.")
         return "", "Select a Pokémon", [], [], {"display": "none"}, False
 
-    name = selected_pokemon[0]
+    name = focus_name
     logger.debug(f"Updating detailed view for focus: {name}")
-    p_data = df[df["Name"] == name].iloc[0]
+    try:
+        p_data = df[df["Name"] == name].iloc[0]
+    except IndexError:
+        # Fallback if the focused name is not in the dataframe (shouldn't happen)
+        return "", "Select a Pokémon", [], [], {"display": "none"}, False
+
     p_id = int(p_data["#"])
 
     # Check for shiny availability to show/hide toggle
