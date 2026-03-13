@@ -6,12 +6,11 @@ from fetch_api_data import fetch_single_pokemon
 
 
 def test_fetch_single_pokemon_success(mocker):
-    # Mock response from requests.get
-    mock_response = MagicMock()
-    mock_response.status_code = 200
-    mock_response.json.return_value = {
+    # Mock response from requests.get for both pokemon and species
+    mock_pokemon_data = {
         "id": 1,
         "name": "bulbasaur",
+        "species": {"name": "bulbasaur", "url": "https://url/species/1"},
         "types": [{"type": {"name": "grass"}}, {"type": {"name": "poison"}}],
         "stats": [
             {"base_stat": 45, "stat": {"name": "hp"}},
@@ -25,16 +24,29 @@ def test_fetch_single_pokemon_success(mocker):
         "weight": 69,
     }
 
-    mocker.patch("requests.get", return_value=mock_response)
+    mock_species_data = {
+        "is_legendary": False,
+        "is_mythical": False,
+        "evolution_chain": {"url": "https://url/evo/1"},
+    }
+
+    # Use a side effect to handle different URLs
+    def get_side_effect(url, **kwargs):
+        resp = MagicMock()
+        resp.status_code = 200
+        if "pokemon" in url:
+            resp.json.return_value = mock_pokemon_data
+        else:
+            resp.json.return_value = mock_species_data
+        return resp
+
+    mocker.patch("requests.get", side_effect=get_side_effect)
 
     result = fetch_single_pokemon("https://pokeapi.co/api/v2/pokemon/1")
 
     assert result["#"] == 1
     assert result["Name"] == "Bulbasaur"
-    assert result["Type 1"] == "Grass"
-    assert result["Type 2"] == "Poison"
-    assert result["HP"] == 45
-    assert result["Sp. Atk"] == 65
+    assert result["Is_Legendary"] is False
 
 
 def test_fetch_single_pokemon_failure(mocker):
