@@ -1556,3 +1556,33 @@
 2026-03-13 01:16:50.653 | DEBUG    | visualizations:create_radar_chart:66 - Creating radar chart for 0 Pokémon.
 2026-03-13 01:16:50.670 | DEBUG    | visualizations:create_type_leaderboard:151 - Creating type leaderboard for stat: Attack
 2026-03-13 01:16:50.812 | DEBUG    | visualizations:create_type_leaderboard:151 - Creating type leaderboard for stat: InvalidStat
+2026-03-13 01:18:07.924 | INFO     | __main__:<module>:33 - Data-Dex Dash application starting...
+2026-03-13 01:18:07.940 | INFO     | data_manager:load_and_clean_data:28 - Loading Pokémon data from data/pokemon.parquet...
+2026-03-13 01:18:08.063 | DEBUG    | data_manager:load_and_clean_data:32 - Successfully loaded 1350 initial records.
+2026-03-13 01:18:08.067 | DEBUG    | data_manager:load_and_clean_data:39 - Filtered out Totem/Eternamax Pokémon. 1337 records remaining.
+2026-03-13 01:18:08.069 | DEBUG    | data_manager:load_and_clean_data:54 - Renaming columns for UI readability...
+2026-03-13 01:18:09.870 | DEBUG    | __main__:update_radar:539 - Updating radar chart for: ['Bulbasaur', 'Charmander']
+2026-03-13 01:18:09.871 | DEBUG    | visualizations:create_radar_chart:66 - Creating radar chart for 2 Pokémon.
+2026-03-13 01:18:09.876 | DEBUG    | __main__:update_leaderboard:567 - Updating leaderboard for stat: Attack
+2026-03-13 01:18:09.882 | DEBUG    | __main__:update_scatter:607 - Updating scatter plot: x=Weight, y=Speed
+2026-03-13 01:18:09.941 | DEBUG    | visualizations:create_type_leaderboard:151 - Creating type leaderboard for stat: Attack
+2026-03-13 01:18:10.102 | DEBUG    | __main__:update_details:668 - Updating detailed view for focus: Bulbasaur
+2026-03-13 01:18:10.226 | DEBUG    | __main__:update_details:664 - No Pokémon selected, showing placeholder detail view.
+2026-03-13 01:18:10.627 | INFO     | data_manager:ensure_pokemon_image:147 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-13 01:18:10.824 | DEBUG    | data_manager:ensure_pokemon_image:154 - Successfully downloaded 1.png
+2026-03-13 01:18:15.569 | DEBUG    | __main__:update_details:668 - Updating detailed view for focus: Bulbasaur
+2026-03-13 01:18:15.718 | DEBUG    | data_manager:ensure_pokemon_image:166 - Image 1.png already exists for Bulbasaur
+2026-03-13 01:18:18.593 | DEBUG    | __main__:update_details:668 - Updating detailed view for focus: Charmander
+2026-03-13 01:18:18.842 | INFO     | data_manager:ensure_pokemon_image:147 - Downloading image for Charmander (ID: 4)...
+2026-03-13 01:18:19.049 | DEBUG    | data_manager:ensure_pokemon_image:154 - Successfully downloaded 4.png
+2026-03-13 01:18:23.745 | DEBUG    | __main__:update_radar:539 - Updating radar chart for: ['Bulbasaur', 'Charmander', 'Abomasnow Mega']
+2026-03-13 01:18:23.752 | DEBUG    | visualizations:create_radar_chart:66 - Creating radar chart for 3 Pokémon.
+2026-03-13 01:18:23.845 | DEBUG    | __main__:update_details:668 - Updating detailed view for focus: Charmander
+2026-03-13 01:18:23.963 | DEBUG    | data_manager:ensure_pokemon_image:166 - Image 4.png already exists for Charmander
+2026-03-13 01:18:26.589 | DEBUG    | __main__:update_details:668 - Updating detailed view for focus: Abomasnow Mega
+2026-03-13 01:18:26.835 | INFO     | data_manager:ensure_pokemon_image:147 - Downloading image for Abomasnow Mega (ID: 10060)...
+2026-03-13 01:18:27.130 | DEBUG    | data_manager:ensure_pokemon_image:154 - Successfully downloaded 10060.png
+2026-03-13 01:18:36.327 | DEBUG    | __main__:update_details:668 - Updating detailed view for focus: Bulbasaur
+2026-03-13 01:18:36.462 | DEBUG    | data_manager:ensure_pokemon_image:166 - Image 1.png already exists for Bulbasaur
+2026-03-13 01:18:38.722 | DEBUG    | __main__:update_details:668 - Updating detailed view for focus: Charmander
+2026-03-13 01:18:38.846 | DEBUG    | data_manager:ensure_pokemon_image:166 - Image 4.png already exists for Charmander
