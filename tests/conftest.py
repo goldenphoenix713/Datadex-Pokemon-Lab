@@ -1,5 +1,7 @@
 import pytest
 import pandas as pd
+import os
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 @pytest.fixture
@@ -24,3 +26,11 @@ def sample_pokemon_df():
         ],
     }
     return pd.DataFrame(data)
+
+
+def pytest_configure(config):
+    """Ensure chromedriver is in PATH for dash.testing."""
+    driver_path = ChromeDriverManager().install()
+    # On some systems ChromeDriverManager returns path to exe, on others to dir
+    driver_dir = os.path.dirname(driver_path)
+    os.environ["PATH"] = driver_dir + os.path.pathsep + os.environ["PATH"]

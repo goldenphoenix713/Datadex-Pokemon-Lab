@@ -16,6 +16,9 @@ SHINY_ARTWORK_URL = (
     + "master/sprites/pokemon/other/official-artwork/shiny/"
 )
 
+METERS_TO_FEET = 3.28084
+KILOGRAMS_TO_POUNDS = 2.20462
+
 
 def load_and_clean_data(filepath: str = "data/pokemon.parquet") -> pd.DataFrame:
     """Load Pokémon data from a parquet file and clean it.
@@ -35,8 +38,23 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet") -> pd.DataFrame:
         raise
 
     # Remove Totem and Eternamax variants as requested
-    df = df[~df["Name"].str.contains("Totem|Eternamax", case=False)]
-    logger.debug(f"Filtered out Totem/Eternamax Pokémon. {len(df)} records remaining.")
+    # Also remove custom Pikachu variants (Cosplay, Cap, etc.)
+    exclude_patterns = [
+        "Totem",
+        "Eternamax",
+        "Pikachu Rock Star",
+        "Pikachu Belle",
+        "Pikachu Phd",
+        "Pikachu Pop Star",
+        "Pikachu Libre",
+        "Pikachu Cosplay",
+        r"Pikachu.*Cap",
+    ]
+
+    df = df[
+        ~df["Name"].str.contains("|".join(exclude_patterns), case=False, regex=True)
+    ]
+    logger.debug(f"Filtered out excluded variants. {len(df)} records remaining.")
 
     # Flag specific forms
     df["Is_GMax"] = df["Name"].str.contains("Gmax", case=False)
@@ -109,6 +127,12 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet") -> pd.DataFrame:
 
     # Add National_Dex for grouping alternate forms with base species
     df["National_Dex"] = df.groupby("Species_Name")["#"].transform("min")
+
+    # Convert height from API units (0.1 meters) to feet
+    df["Height"] = (df["Height"] * METERS_TO_FEET / 10).round(1)
+
+    # Convert weight from API units (0.1 kg) to pounds
+    df["Weight"] = (df["Weight"] * KILOGRAMS_TO_POUNDS / 10).round(1)
 
     return df
 

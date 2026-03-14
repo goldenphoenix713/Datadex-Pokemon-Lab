@@ -2,7 +2,7 @@
 
 import os
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import pandas as pd
 import requests
@@ -29,6 +29,38 @@ def fetch_species_data(species_url: str) -> Dict[str, Any]:
         }
 
 
+# Cache to store evolution chain members to avoid redundant API calls
+# Key: Evolution Chain URL, Value: List of species names in that chain
+EVOLUTION_CHAIN_CACHE: Dict[str, List[str]] = {}
+
+
+def fetch_evolution_members(url: str) -> List[str]:
+    """Fetch and parse evolution chain members from the given URL."""
+    if not url:
+        return []
+    if url in EVOLUTION_CHAIN_CACHE:
+        return EVOLUTION_CHAIN_CACHE[url]
+
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        members = []
+
+        def parse_node(node):
+            members.append(node["species"]["name"])
+            for evolution in node["evolves_to"]:
+                parse_node(evolution)
+
+        parse_node(data["chain"])
+        EVOLUTION_CHAIN_CACHE[url] = members
+        return members
+    except Exception as e:
+        logger.error(f"Error fetching evolution chain {url}: {e}")
+        return []
+
+
 def fetch_single_pokemon(url: str) -> Optional[Dict[str, Any]]:
     """Fetch data for a single Pokémon from the given PokéAPI URL."""
     try:
@@ -39,15 +71,18 @@ def fetch_single_pokemon(url: str) -> Optional[Dict[str, Any]]:
         stats = {stat["stat"]["name"]: stat["base_stat"] for stat in data["stats"]}
         types = [t["type"]["name"] for t in data["types"]]
 
-        # Fetch species data for legendary/mythical status
+        # Fetch species data for legendary/mythical status and evolution chain
         species_info = fetch_species_data(data["species"]["url"])
+
+        # Fetch all members of the evolution chain
+        chain_members = fetch_evolution_members(species_info["evolution_chain_url"])
+        # Store as a comma-separated string for easy storage in Parquet/CSV
+        chain_members_str = ",".join(chain_members)
 
         return {
             "#": data["id"],
             "Name": data["name"].replace("-", " ").title(),
-            "Species_Name": data["species"][
-                "name"
-            ],  # Useful for matching evolution chains
+            "Species_Name": data["species"]["name"],
             "Type 1": types[0].capitalize(),
             "Type 2": types[1].capitalize() if len(types) > 1 else None,
             "HP": stats["hp"],
@@ -61,6 +96,7 @@ def fetch_single_pokemon(url: str) -> Optional[Dict[str, Any]]:
             "Is_Legendary": species_info["is_legendary"],
             "Is_Mythical": species_info["is_mythical"],
             "Evolution_Chain_URL": species_info["evolution_chain_url"],
+            "Evolution_Chain_Members": chain_members_str,
         }
     except Exception as e:
         logger.error(f"Error fetching {url}: {e}")
