@@ -54,7 +54,10 @@ def get_filtered_table(
     if where_clauses:
         query += " WHERE " + " AND ".join(where_clauses)
 
-    return conn.execute(query).to_arrow_table()
+    from src.data import db_lock
+
+    with db_lock:
+        return conn.execute(query).to_arrow_table()
 
 
 # For backward compatibility during migration

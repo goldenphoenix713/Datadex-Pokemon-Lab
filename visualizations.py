@@ -66,18 +66,19 @@ def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
         "Special Attack",
     ]
 
-    from src.data import conn, MAX_BASE_STAT
+    from src.data import conn, MAX_BASE_STAT, db_lock
 
     max_stat = MAX_BASE_STAT
 
     logger.debug(f"Categories for radar: {categories}")
     # Efficiently find global max stat across all categories
     stat_columns = ", ".join([f'"{c}"' for c in categories])
-    res = (
-        conn.execute(f"SELECT MAX(GREATEST({stat_columns})) FROM pokemon")
-        .to_arrow_table()
-        .to_pylist()
-    )
+    with db_lock:
+        res = (
+            conn.execute(f"SELECT MAX(GREATEST({stat_columns})) FROM pokemon")
+            .to_arrow_table()
+            .to_pylist()
+        )
 
     # Safe extraction of the single scalar result
     if res and res[0]:
@@ -105,9 +106,10 @@ def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
 
     # Filter for the chosen Pokémon using SQL
     names_list = ", ".join([f"'{n}'" for n in pokemon_names])
-    selected_data = conn.execute(
-        f'SELECT * FROM pokemon WHERE "Name" IN ({names_list})'
-    ).to_arrow_table()
+    with db_lock:
+        selected_data = conn.execute(
+            f'SELECT * FROM pokemon WHERE "Name" IN ({names_list})'
+        ).to_arrow_table()
 
     logger.debug(
         f"Radar query found {selected_data.num_rows} match(es) for names: {pokemon_names}"
@@ -193,7 +195,7 @@ def create_type_leaderboard(df: Any, stat_column: str) -> go.Figure:
         )
         return fig
 
-    from src.data import conn
+    from src.data import conn, db_lock
 
     # Use SQL for grouping and averaging
     query = f"""
@@ -204,12 +206,13 @@ def create_type_leaderboard(df: Any, stat_column: str) -> go.Figure:
     GROUP BY "Primary Type"
     ORDER BY avg_stat DESC
     """
-    type_stats = conn.execute(query).to_arrow_table().to_pylist()
-    res = (
-        conn.execute(f'SELECT AVG("{stat_column}") FROM pokemon')
-        .to_arrow_table()
-        .to_pylist()
-    )
+    with db_lock:
+        type_stats = conn.execute(query).to_arrow_table().to_pylist()
+        res = (
+            conn.execute(f'SELECT AVG("{stat_column}") FROM pokemon')
+            .to_arrow_table()
+            .to_pylist()
+        )
     global_avg = res[0][list(res[0].keys())[0]] if res and res[0] else 0
 
     if not type_stats:

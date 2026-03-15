@@ -1,4 +1,5 @@
 import duckdb
+import threading
 from loguru import logger
 from pathlib import Path
 from data_manager import load_and_clean_data
@@ -9,12 +10,16 @@ from typing import Any
 df = load_and_clean_data()
 pokemon_names = sorted(df["Name"].to_pylist())
 
+# Thread lock for shared DuckDB connection access
+db_lock = threading.Lock()
+
 # Pre-calculate global max stat for progress bars once (instead of per callback)
 conn = duckdb.connect(":memory:")
-conn.register("pokemon", df)
-stat_columns = ", ".join([f'"{c}"' for c in STAT_OPTIONS])
-res = conn.execute(f"SELECT MAX(GREATEST({stat_columns})) FROM pokemon").fetchone()
-MAX_BASE_STAT = res[0] if res and res[0] is not None else 255
+with db_lock:
+    conn.register("pokemon", df)
+    stat_columns = ", ".join([f'"{c}"' for c in STAT_OPTIONS])
+    res = conn.execute(f"SELECT MAX(GREATEST({stat_columns})) FROM pokemon").fetchone()
+    MAX_BASE_STAT = res[0] if res and res[0] is not None else 255
 
 # Preparation for themed dropdowns with sprites
 pokemon_sprites = dict(zip(df["Name"].to_pylist(), df["Sprite_URL"].to_pylist()))

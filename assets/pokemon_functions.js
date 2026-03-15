@@ -1,7 +1,9 @@
 var dmcfuncs = window.dashMantineFunctions = window.dashMantineFunctions || {};
-var dmc = window.dash_mantine_components;
 
 dmcfuncs.renderPokemonOption = function ({ option }, { sprites }) {
+    const dmc = window.dash_mantine_components;
+    if (!dmc) return option.label;
+
     const spriteUrl = sprites[option.value];
 
     return React.createElement(

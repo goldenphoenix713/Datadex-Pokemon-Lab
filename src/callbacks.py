@@ -431,15 +431,16 @@ def update_details(
     name = focus_name
     logger.debug(f"Updating detailed view for focus: {name}")
 
-    from src.data import conn
+    from src.data import conn, db_lock
 
     # Use DuckDB for efficient random access
     try:
-        p_data = (
-            conn.execute(f"SELECT * FROM pokemon WHERE \"Name\" = '{name}'")
-            .to_arrow_table()
-            .to_pylist()[0]
-        )
+        with db_lock:
+            p_data = (
+                conn.execute(f"SELECT * FROM pokemon WHERE \"Name\" = '{name}'")
+                .to_arrow_table()
+                .to_pylist()[0]
+            )
     except (IndexError, KeyError):
         return "", "Select a Pokémon", [], [], {"display": "none"}, False, "", ""
 
