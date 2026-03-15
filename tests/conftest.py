@@ -1,11 +1,19 @@
+import sys
+from pathlib import Path
+
 import pytest
-import pandas as pd
 import os
 from webdriver_manager.chrome import ChromeDriverManager
+import pyarrow as pa
+
+# Add project root to sys.path for test discovery
+root_dir = str(Path(__file__).parent.parent)
+if root_dir not in sys.path:
+    sys.path.insert(0, root_dir)
 
 
 @pytest.fixture
-def sample_pokemon_df():
+def sample_pokemon_table():
     data = {
         "#": [1, 4, 7],
         "Name": ["Bulbasaur", "Charmander", "Squirtle"],
@@ -25,7 +33,7 @@ def sample_pokemon_df():
             "https://example.com/7.png",
         ],
     }
-    return pd.DataFrame(data)
+    return pa.table(data)
 
 
 def pytest_configure(config):

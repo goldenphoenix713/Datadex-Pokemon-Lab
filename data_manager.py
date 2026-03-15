@@ -1,9 +1,6 @@
-"""Module for loading, cleaning, and managing Pokémon data and assets."""
-
+import duckdb
+import requests  # type: ignore[import-untyped]
 from pathlib import Path
-
-import pandas as pd
-import requests
 from loguru import logger
 
 # Image URL for official artwork
@@ -20,121 +17,74 @@ METERS_TO_FEET = 3.28084
 KILOGRAMS_TO_POUNDS = 2.20462
 
 
-def load_and_clean_data(filepath: str = "data/pokemon.parquet") -> pd.DataFrame:
-    """Load Pokémon data from a parquet file and clean it.
+def load_and_clean_data(filepath: str = "data/pokemon.parquet"):
+    """Load Pokémon data from a parquet file and clean it using DuckDB.
 
     :param filepath: Path to the parquet data file. Defaults to "data/pokemon.parquet".
-    :type filepath: str
-    :return: A cleaned pandas DataFrame with localized image paths.
-    :rtype: pd.DataFrame
+    :return: A PyArrow Table with cleaned Pokémon data.
     """
-    logger.info(f"Loading Pokémon data from {filepath}...")
-    # Load the raw data from Parquet
+    logger.info(f"Loading Pokémon data from {filepath} using DuckDB...")
+
+    # Regional mapping logic
+    region_case = """
+        CASE 
+            WHEN "#" <= 151 THEN 'Kanto'
+            WHEN "#" <= 251 THEN 'Johto'
+            WHEN "#" <= 386 THEN 'Hoenn'
+            WHEN "#" <= 493 THEN 'Sinnoh'
+            WHEN "#" <= 649 THEN 'Unova'
+            WHEN "#" <= 721 THEN 'Kalos'
+            WHEN "#" <= 809 THEN 'Alola'
+            WHEN "#" <= 898 THEN 'Galar'
+            ELSE 'Paldea'
+        END
+    """
+
+    # Exclude patterns (Totem, Eternamax, etc.)
+    exclude_regex = "(?i)Totem|Eternamax|Pikachu Rock Star|Pikachu Belle|Pikachu Phd|Pikachu Pop Star|Pikachu Libre|Pikachu Cosplay|Pikachu.*Cap"
+
+    # SQL query for comprehensive cleaning and transformation
+    query = f"""
+    SELECT 
+        "#" as id, 
+        "#" as "number",
+        "Name", 
+        "Type 1" as "Primary Type",
+        COALESCE("Type 2", 'None') as "Secondary Type",
+        "HP", "Attack", "Defense", 
+        "Sp. Atk" as "Special Attack", 
+        "Sp. Def" as "Special Defense", 
+        "Speed",
+        ROUND("Height" * {METERS_TO_FEET} / 10, 1) as "Height",
+        ROUND("Weight" * {KILOGRAMS_TO_POUNDS} / 10, 1) as "Weight",
+        "Species_Name",
+        "Is_Legendary",
+        "Is_Mythical",
+        "Is_Final_Evolution",
+        {region_case} as "Region",
+        "Name" ILIKE '%Gmax%' as "Is_GMax",
+        "Name" ILIKE '%Mega%' as "Is_Mega",
+        regexp_matches("Name", '(?i)Alola|Galar|Hisui|Paldea') as "Is_Regional",
+        "Evolution_Chain_URL",
+        "Evolution_Chain_Members",
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' || "#" || '.png' as "Sprite_URL",
+        'assets/images/' || "#" || '.png' as "Image_URL",
+        MIN("#") OVER (PARTITION BY Species_Name) as "National_Dex"
+    FROM read_parquet('{filepath}')
+    WHERE NOT regexp_matches("Name", '{exclude_regex}')
+    """
+
     try:
-        df = pd.read_parquet(filepath, engine="pyarrow")
-        logger.debug(f"Successfully loaded {len(df)} initial records.")
-    except Exception as e:
-        logger.error(f"Failed to load data from {filepath}: {e}")
-        raise
-
-    # Remove Totem and Eternamax variants as requested
-    # Also remove custom Pikachu variants (Cosplay, Cap, etc.)
-    exclude_patterns = [
-        "Totem",
-        "Eternamax",
-        "Pikachu Rock Star",
-        "Pikachu Belle",
-        "Pikachu Phd",
-        "Pikachu Pop Star",
-        "Pikachu Libre",
-        "Pikachu Cosplay",
-        r"Pikachu.*Cap",
-    ]
-
-    df = df[
-        ~df["Name"].str.contains("|".join(exclude_patterns), case=False, regex=True)
-    ]
-    logger.debug(f"Filtered out excluded variants. {len(df)} records remaining.")
-
-    # Flag specific forms
-    df["Is_GMax"] = df["Name"].str.contains("Gmax", case=False)
-
-    # Ensure the assets and images directories exist for local storage
-    assets_dir = Path("assets")
-    if not assets_dir.exists():
-        assets_dir.mkdir()
-
-    images_dir = assets_dir / "images"
-    if not images_dir.exists():
-        images_dir.mkdir()
-
-    # Rename stats to more readable full names for the UI
-    logger.debug("Renaming columns for UI readability...")
-    rename_map = {
-        "Sp. Atk": "Special Attack",
-        "Sp. Def": "Special Defense",
-        "Type 1": "Primary Type",
-        "Type 2": "Secondary Type",
-    }
-    df = df.rename(columns=rename_map)
-
-    # Handle missing secondary types by creating a 'None' category
-    if "Secondary Type" in df.columns and hasattr(df["Secondary Type"], "cat"):
-        df["Secondary Type"] = (
-            df["Secondary Type"].cat.add_categories("None").fillna("None")
+        # We use a memory connection to execute the query and return Arrow
+        conn = duckdb.connect(":memory:")
+        table = conn.execute(query).to_arrow_table()
+        logger.debug(
+            f"Successfully loaded {table.num_rows} records into PyArrow Table."
         )
-    else:
-        df["Secondary Type"] = df["Secondary Type"].fillna("None")
-
-    # Map the localized image paths to a new column for Dash components
-    # These will be the potential paths; the actual download/check happens in callbacks
-    def get_image_path(pokemon_id):
-        return f"assets/images/{pokemon_id}.png"
-
-    df["Image_URL"] = df["#"].apply(get_image_path)
-
-    # Enhance with Region mapping based on ID
-    def determine_region(p_id):
-        if p_id <= 151:
-            return "Kanto"
-        if p_id <= 251:
-            return "Johto"
-        if p_id <= 386:
-            return "Hoenn"
-        if p_id <= 493:
-            return "Sinnoh"
-        if p_id <= 649:
-            return "Unova"
-        if p_id <= 721:
-            return "Kalos"
-        if p_id <= 809:
-            return "Alola"
-        if p_id <= 898:
-            return "Galar"
-        return "Paldea"
-
-    df["Region"] = df["#"].apply(determine_region)
-
-    # Detect Forms based on Name
-    df["Is_Mega"] = df["Name"].str.contains("Mega", case=False)
-    df["Is_Regional"] = df["Name"].str.contains("Alola|Galar|Hisui|Paldea", case=False)
-
-    # Add Sprite URL for dropdown icons
-    def get_sprite_url(p_id):
-        return f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{p_id}.png"
-
-    df["Sprite_URL"] = df["#"].apply(get_sprite_url)
-
-    # Add National_Dex for grouping alternate forms with base species
-    df["National_Dex"] = df.groupby("Species_Name")["#"].transform("min")
-
-    # Convert height from API units (0.1 meters) to feet
-    df["Height"] = (df["Height"] * METERS_TO_FEET / 10).round(1)
-
-    # Convert weight from API units (0.1 kg) to pounds
-    df["Weight"] = (df["Weight"] * KILOGRAMS_TO_POUNDS / 10).round(1)
-
-    return df
+        return table
+    except Exception as e:
+        logger.error(f"Failed to load data with DuckDB: {e}")
+        raise
 
 
 def ensure_pokemon_image(

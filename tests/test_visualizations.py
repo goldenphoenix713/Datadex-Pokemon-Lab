@@ -6,37 +6,37 @@ from visualizations import (
 )
 
 
-def test_create_radar_chart_returns_figure(sample_pokemon_df):
-    fig = create_radar_chart(sample_pokemon_df, ["Bulbasaur", "Charmander"])
+def test_create_radar_chart_returns_figure(sample_pokemon_table):
+    fig = create_radar_chart(sample_pokemon_table, ["Bulbasaur", "Charmander"])
     assert isinstance(fig, go.Figure)
     assert len(fig.data) == 2
 
 
-def test_create_radar_chart_empty_selection(sample_pokemon_df):
-    fig = create_radar_chart(sample_pokemon_df, [])
+def test_create_radar_chart_empty_selection(sample_pokemon_table):
+    fig = create_radar_chart(sample_pokemon_table, [])
     assert isinstance(fig, go.Figure)
     assert len(fig.data) == 0
 
 
-def test_create_type_leaderboard_returns_figure(sample_pokemon_df):
-    fig = create_type_leaderboard(sample_pokemon_df, "Attack")
+def test_create_type_leaderboard_returns_figure(sample_pokemon_table):
+    fig = create_type_leaderboard(sample_pokemon_table, "Attack")
     assert isinstance(fig, go.Figure)
     assert len(fig.data) > 0
 
 
-def test_create_scatter_plot_returns_figure(sample_pokemon_df):
-    fig = create_scatter_plot(sample_pokemon_df, "Weight", "Speed")
+def test_create_scatter_plot_returns_figure(sample_pokemon_table):
+    fig = create_scatter_plot(sample_pokemon_table, "Weight", "Speed")
     assert isinstance(fig, go.Figure)
     assert len(fig.data) > 0
 
 
-def test_create_type_leaderboard_invalid_stat(sample_pokemon_df):
-    fig = create_type_leaderboard(sample_pokemon_df, "InvalidStat")
+def test_create_type_leaderboard_invalid_stat(sample_pokemon_table):
+    fig = create_type_leaderboard(sample_pokemon_table, "InvalidStat")
     assert isinstance(fig, go.Figure)
     assert "compare" in fig.layout.title.text
 
 
-def test_create_scatter_plot_missing_axes(sample_pokemon_df):
-    fig = create_scatter_plot(sample_pokemon_df, "", "Speed")
+def test_create_scatter_plot_missing_axes(sample_pokemon_table):
+    fig = create_scatter_plot(sample_pokemon_table, "", "Speed")
     assert isinstance(fig, go.Figure)
     assert "explore" in fig.layout.title.text

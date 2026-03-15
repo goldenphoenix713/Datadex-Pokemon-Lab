@@ -1,8 +1,4 @@
-"""Module providing functions to create Plotly visualizations for Pokémon data."""
-
 from typing import Any, List
-
-import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from loguru import logger
@@ -53,18 +49,14 @@ def create_type_badge(pokemon_type: str) -> Any:
     )
 
 
-def create_radar_chart(df: pd.DataFrame, pokemon_names: List[str]) -> go.Figure:
-    """Create a radar chart comparing stats of selected Pokémon.
+def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
+    """Create a radar chart comparing stats of selected Pokémon using DuckDB for speed.
 
-    :param df: The Pokémon DataFrame.
-    :type df: pd.DataFrame
+    :param table: The Pokémon PyArrow Table.
     :param pokemon_names: A list of Pokémon names to compare.
-    :type pokemon_names: List[str]
     :return: A Plotly radar chart.
-    :rtype: go.Figure
     """
     logger.debug(f"Creating radar chart for {len(pokemon_names)} Pokémon.")
-    # Defensive stats to compare
     categories = [
         "HP",
         "Attack",
@@ -73,12 +65,35 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: List[str]) -> go.Figure:
         "Special Defense",
         "Special Attack",
     ]
+
+    from src.data import conn, MAX_BASE_STAT
+
+    max_stat = MAX_BASE_STAT
+
+    logger.debug(f"Categories for radar: {categories}")
+    # Efficiently find global max stat across all categories
+    stat_columns = ", ".join([f'"{c}"' for c in categories])
+    res = (
+        conn.execute(f"SELECT MAX(GREATEST({stat_columns})) FROM pokemon")
+        .to_arrow_table()
+        .to_pylist()
+    )
+
+    # Safe extraction of the single scalar result
+    if res and res[0]:
+        # Get the first (and only) value from the first row dict
+        max_stat = list(res[0].values())[0]
+    else:
+        max_stat = 255
+
+    # Ensure max_stat is a number and not None
+    if max_stat is None or not isinstance(max_stat, (int, float)):
+        max_stat = 255
+
+    logger.debug(f"Computed max_stat: {max_stat}")
+
     fig = go.Figure()
 
-    # Determine scale based on all available data to keep visuals consistent
-    max_stat = df[categories].max().max()
-
-    # If nothing selected, return empty chart with fixed range
     if not pokemon_names:
         fig.update_layout(
             polar=dict(radialaxis=dict(visible=True, range=[0, max_stat])),
@@ -88,13 +103,21 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: List[str]) -> go.Figure:
         )
         return fig
 
-    # Filter for the chosen Pokémon
-    selected_data = df[df["Name"].isin(pokemon_names)]
+    # Filter for the chosen Pokémon using SQL
+    names_list = ", ".join([f"'{n}'" for n in pokemon_names])
+    selected_data = conn.execute(
+        f'SELECT * FROM pokemon WHERE "Name" IN ({names_list})'
+    ).to_arrow_table()
+
+    logger.debug(
+        f"Radar query found {selected_data.num_rows} match(es) for names: {pokemon_names}"
+    )
+    if selected_data.num_rows > 0:
+        logger.debug(f"Found names in data: {selected_data['Name'].to_pylist()}")
 
     # Add a trace for each selected Pokémon
-    for _, row in selected_data.iterrows():
+    for row in selected_data.to_pylist():
         stats = [row[cat] for cat in categories]
-        # Radar charts need to wrap back to the start to close the polygon
         stats.append(stats[0])
         closed_categories = categories + [categories[0]]
 
@@ -138,49 +161,70 @@ def create_radar_chart(df: pd.DataFrame, pokemon_names: List[str]) -> go.Figure:
     return fig
 
 
-def create_type_leaderboard(df: pd.DataFrame, stat_column: str) -> go.Figure:
-    """Create a bar chart showing averaged stats by Pokémon primary type.
-
-    :param df: The Pokémon DataFrame.
-    :type df: pd.DataFrame
-    :param stat_column: The name of the stat column to average and compare.
-    :type stat_column: str
-    :return: A Plotly horizontal bar chart.
-    :rtype: go.Figure
-    """
+def create_type_leaderboard(df: Any, stat_column: str) -> go.Figure:
+    """Create a bar chart showing averaged stats by Pokémon primary type using DuckDB."""
     logger.debug(f"Creating type leaderboard for stat: {stat_column}")
     fig = go.Figure()
 
-    # Validation check
-    if not stat_column or stat_column not in df.columns:
+    if not stat_column:
+        return fig
+
+    # Verify stat column exists
+    if df is None:
+        logger.warning("No data provided to leaderboard.")
+        return fig
+
+    # Support both PyArrow/DuckDB and Pandas
+    # ARROW/DUCKDB FIRST to avoid property collision where Table has .columns property (RecordBatch)
+    if hasattr(df, "column_names"):
+        cols = df.column_names
+    elif hasattr(df, "columns"):
+        cols = df.columns
+    else:
+        cols = []
+
+    if stat_column not in cols:
+        logger.warning(f"Stat column '{stat_column}' not found in data.")
         fig.update_layout(
-            title=dict(text="Select a stat to compare", font=dict(color="white")),
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
+            title=dict(
+                text=f"Stat '{stat_column}' not found to compare",
+                font=dict(color="white"),
+            ),
         )
         return fig
 
-    # Calculate average stat per primary type, sorted highest to lowest
-    type_stats = (
-        df.groupby("Primary Type", observed=False)[stat_column]
-        .mean()
-        .sort_values(ascending=False)
-        .reset_index()
-    )
-    global_avg = df[stat_column].mean()
+    from src.data import conn
 
-    fig = go.Figure()
+    # Use SQL for grouping and averaging
+    query = f"""
+    SELECT 
+        "Primary Type", 
+        AVG("{stat_column}") as avg_stat
+    FROM pokemon
+    GROUP BY "Primary Type"
+    ORDER BY avg_stat DESC
+    """
+    type_stats = conn.execute(query).to_arrow_table().to_pylist()
+    res = (
+        conn.execute(f'SELECT AVG("{stat_column}") FROM pokemon')
+        .to_arrow_table()
+        .to_pylist()
+    )
+    global_avg = res[0][list(res[0].keys())[0]] if res and res[0] else 0
+
+    if not type_stats:
+        return fig
 
     # Add horizontal bars colored by the type palette
     fig.add_trace(
         go.Bar(
-            x=type_stats[stat_column],
-            y=type_stats["Primary Type"],
+            x=[row["avg_stat"] for row in type_stats],
+            y=[row["Primary Type"] for row in type_stats],
             orientation="h",
             marker_color=[
-                TYPE_COLORS.get(t, "#68A090") for t in type_stats["Primary Type"]
+                TYPE_COLORS.get(row["Primary Type"], "#68A090") for row in type_stats
             ],
-            text=type_stats[stat_column].round(1),
+            text=[round(row["avg_stat"], 1) for row in type_stats],
             textposition="auto",
             name="Type Average",
             textfont=dict(color="white"),
@@ -216,19 +260,8 @@ def create_type_leaderboard(df: pd.DataFrame, stat_column: str) -> go.Figure:
     return fig
 
 
-def create_scatter_plot(df: pd.DataFrame, x_col: str, y_col: str) -> go.Figure:
-    """Create a scatter plot comparing two stats across all Pokémon.
-
-    :param df: The Pokémon DataFrame.
-    :type df: pd.DataFrame
-    :param x_col: Stat for the X-axis.
-    :type x_col: str
-    :param y_col: Stat for the Y-axis.
-    :type y_col: str
-    :return: A Plotly scatter plot.
-    :rtype: go.Figure
-    """
-    # Validation check for axis selection
+def create_scatter_plot(df: Any, x_col: str, y_col: str) -> go.Figure:
+    """Create a scatter plot comparing two stats using Plotly's Arrow support."""
     if not x_col or not y_col:
         fig = go.Figure()
         fig.update_layout(
@@ -238,7 +271,7 @@ def create_scatter_plot(df: pd.DataFrame, x_col: str, y_col: str) -> go.Figure:
         )
         return fig
 
-    # Build scatter with automatic coloring by type
+    # Plotly 6.0+ handles Arrow tables directly
     fig = px.scatter(
         df,
         x=x_col,

@@ -3567,3 +3567,1240 @@
 2026-03-14 03:00:04.810 | DEBUG    | src.callbacks:manage_focus_selection:333 - Syncing focus: triggered={'name': 'Bulbasaur', 'type': 'evo-link'}, new_focus=Bulbasaur, valid_count=2
 2026-03-14 03:00:06.003 | DEBUG    | src.callbacks:update_radar:113 - Updating radar chart for: ['Bulbasaur', 'Charmander']
 2026-03-14 03:00:06.003 | DEBUG    | visualizations:create_radar_chart:66 - Creating radar chart for 2 Pokémon.
+2026-03-14 19:42:20.155 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 19:42:20.211 | ERROR    | data_manager:load_and_clean_data:84 - Failed to load data with DuckDB: 'pyarrow.lib.RecordBatchReader' object has no attribute 'num_rows'
+2026-03-14 19:42:47.426 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 19:42:47.459 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 19:53:31.947 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 19:53:31.947 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 19:53:32.120 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Defense
+2026-03-14 19:53:32.143 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Defense
+2026-03-14 19:53:32.144 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Defense' not found in data.
+2026-03-14 19:53:32.150 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 19:53:32.176 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 19:53:32.202 | DEBUG    | src.callbacks:update_details:397 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 19:53:32.503 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Charizard
+2026-03-14 19:53:32.531 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 19:53:32.798 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 19:53:32.817 | ERROR    | data_manager:load_and_clean_data:84 - Failed to load data with DuckDB: IO Error: No files found that match the pattern "fake_path.parquet"
+
+LINE 37:     FROM read_parquet('fake_path.parquet')
+                  ^
+2026-03-14 19:53:32.961 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 19:53:32.977 | ERROR    | data_manager:load_and_clean_data:84 - Failed to load data with DuckDB: IO Error: No files found that match the pattern "fake_path.parquet"
+
+LINE 37:     FROM read_parquet('fake_path.parquet')
+                  ^
+2026-03-14 19:53:32.987 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 19:53:33.003 | ERROR    | data_manager:load_and_clean_data:84 - Failed to load data with DuckDB: IO Error: No files found that match the pattern "fake_path.parquet"
+
+LINE 37:     FROM read_parquet('fake_path.parquet')
+                  ^
+2026-03-14 19:53:33.028 | INFO     | data_manager:ensure_pokemon_image:119 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 19:53:33.028 | DEBUG    | data_manager:ensure_pokemon_image:126 - Successfully downloaded 1_shiny.png
+2026-03-14 19:53:33.031 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 19:53:33.049 | ERROR    | data_manager:load_and_clean_data:84 - Failed to load data with DuckDB: IO Error: No files found that match the pattern "any_path.parquet"
+
+LINE 37:     FROM read_parquet('any_path.parquet')
+                  ^
+2026-03-14 19:53:33.060 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 19:53:33.063 | INFO     | data_manager:ensure_pokemon_image:119 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 19:53:33.063 | WARNING  | data_manager:ensure_pokemon_image:129 - Failed to download 1.png (Status: 404)
+2026-03-14 19:53:33.066 | ERROR    | data_manager:has_shiny_artwork:163 - Error checking shiny existence for 1: Network Error
+2026-03-14 19:53:33.071 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 19:53:33.073 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 19:53:36.353 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 19:53:36.360 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 19:53:36.361 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 19:53:36.362 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 19:53:36.365 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 19:53:36.440 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 19:53:36.440 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 19:53:36.443 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 19:53:42.771 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 19:53:42.779 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 19:53:42.779 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 19:53:42.783 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 19:53:42.785 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 19:53:42.864 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 19:53:42.889 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 19:53:42.891 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 19:53:50.755 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 19:53:50.763 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 19:53:50.763 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 19:53:50.765 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 19:53:50.769 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 19:53:50.878 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 19:53:50.889 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 19:53:50.892 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 19:54:08.382 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 19:54:08.391 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 19:54:08.395 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 19:54:08.399 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 19:54:08.402 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 19:54:08.483 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 19:54:08.498 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 19:54:08.499 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 19:54:13.503 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 19:54:13.551 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 0 Pokémon.
+2026-03-14 19:54:13.581 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 19:54:13.710 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 19:54:13.711 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'InvalidStat' not found in data.
+2026-03-14 19:59:50.900 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 19:59:50.901 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 19:59:51.137 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Defense
+2026-03-14 19:59:51.159 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Defense
+2026-03-14 19:59:51.160 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Defense' not found in data.
+2026-03-14 19:59:51.171 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 19:59:51.197 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 19:59:51.224 | DEBUG    | src.callbacks:update_details:397 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 19:59:51.540 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Charizard
+2026-03-14 19:59:51.567 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 19:59:51.876 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 19:59:51.876 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 19:59:51.878 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 19:59:51.878 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 19:59:51.881 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 19:59:51.882 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 19:59:51.892 | INFO     | data_manager:ensure_pokemon_image:119 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 19:59:51.893 | DEBUG    | data_manager:ensure_pokemon_image:126 - Successfully downloaded 1_shiny.png
+2026-03-14 19:59:51.895 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 19:59:51.895 | ERROR    | data_manager:load_and_clean_data:84 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 19:59:51.896 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 19:59:51.899 | INFO     | data_manager:ensure_pokemon_image:119 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 19:59:51.899 | WARNING  | data_manager:ensure_pokemon_image:129 - Failed to download 1.png (Status: 404)
+2026-03-14 19:59:51.902 | ERROR    | data_manager:has_shiny_artwork:163 - Error checking shiny existence for 1: Network Error
+2026-03-14 19:59:51.910 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 19:59:51.911 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 19:59:54.917 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 19:59:54.924 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 19:59:54.924 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 19:59:54.931 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 19:59:54.933 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 19:59:55.037 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 19:59:55.037 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 19:59:55.040 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:00:02.236 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:00:02.250 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:00:02.250 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:00:02.255 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:00:02.265 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:00:02.337 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:00:02.349 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:00:02.350 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:00:23.285 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:00:23.297 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:00:23.298 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:00:23.299 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:00:23.308 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:00:23.332 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:00:23.428 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:00:23.442 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:00:46.063 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:00:46.087 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:00:46.087 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:00:46.089 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:00:46.093 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:00:46.162 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:00:46.179 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:00:46.180 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:01:04.284 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:01:04.335 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 0 Pokémon.
+2026-03-14 20:01:04.364 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:01:04.497 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 20:01:04.500 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'InvalidStat' not found in data.
+2026-03-14 20:05:26.688 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 20:05:27.038 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 20:05:27.172 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 20:05:47.564 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:05:47.578 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:05:47.580 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:05:47.588 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:05:47.604 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:05:49.080 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:05:49.119 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:05:49.144 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:05:59.562 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:05:59.578 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:05:59.580 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:05:59.591 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:05:59.597 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:05:59.935 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:05:59.964 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:06:00.014 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:07:43.395 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 20:07:43.743 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 20:07:43.893 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 20:07:46.937 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:07:46.961 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:07:46.969 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:07:46.969 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:07:46.988 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:07:47.182 | DEBUG    | src.callbacks:manage_team:262 - Removing Bulbasaur from team.
+2026-03-14 20:07:47.273 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Charmander']
+2026-03-14 20:07:47.274 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 20:07:47.996 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:07:48.065 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:07:48.189 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:07:52.190 | DEBUG    | src.callbacks:update_details:401 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:07:52.224 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:07:52.225 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:07:52.229 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:07:52.238 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:07:52.406 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:07:52.685 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:07:52.689 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:07:53.534 | DEBUG    | src.callbacks:manage_team:262 - Removing Bulbasaur from team.
+2026-03-14 20:07:57.580 | DEBUG    | src.callbacks:manage_team:254 - Adding Bulbasaur to team.
+2026-03-14 20:07:57.640 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Charmander']
+2026-03-14 20:07:57.640 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 20:07:57.843 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Charmander', 'Bulbasaur']
+2026-03-14 20:07:57.844 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:12:04.135 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 20:12:04.541 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 20:12:04.696 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 20:12:27.604 | DEBUG    | src.callbacks:update_details:408 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:12:27.607 | DEBUG    | src.callbacks:update_add_button_state:342 - Button state check - Focus: 'Bulbasaur', Team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:12:27.620 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:12:27.621 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:12:27.624 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:12:27.628 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:12:27.946 | DEBUG    | src.callbacks:manage_team:262 - Removing Bulbasaur from team.
+2026-03-14 20:12:28.064 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Charmander']
+2026-03-14 20:12:28.065 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 20:12:29.320 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:12:29.338 | DEBUG    | src.callbacks:update_add_button_state:342 - Button state check - Focus: 'Bulbasaur', Team: ['Charmander']
+2026-03-14 20:12:29.347 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:12:29.369 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:12:42.784 | DEBUG    | src.callbacks:manage_team:254 - Adding Bulbasaur to team.
+2026-03-14 20:12:43.080 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Charmander', 'Bulbasaur']
+2026-03-14 20:12:43.080 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:12:43.085 | DEBUG    | src.callbacks:update_add_button_state:342 - Button state check - Focus: 'Bulbasaur', Team: ['Charmander', 'Bulbasaur']
+2026-03-14 20:12:51.710 | DEBUG    | src.callbacks:update_details:408 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:12:51.712 | DEBUG    | src.callbacks:update_add_button_state:342 - Button state check - Focus: 'Bulbasaur', Team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:12:51.720 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:12:51.723 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:12:51.724 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:12:51.726 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:12:51.783 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:12:51.833 | DEBUG    | visualizations:create_type_leaderboard:144 - Creating type leaderboard for stat: Attack
+2026-03-14 20:12:51.836 | WARNING  | visualizations:create_type_leaderboard:164 - Stat column 'Attack' not found in data.
+2026-03-14 20:12:51.947 | DEBUG    | src.callbacks:manage_team:262 - Removing Bulbasaur from team.
+2026-03-14 20:12:52.498 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Charmander']
+2026-03-14 20:12:52.499 | DEBUG    | src.callbacks:update_add_button_state:342 - Button state check - Focus: 'Bulbasaur', Team: ['Charmander']
+2026-03-14 20:12:52.500 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 20:19:33.611 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 20:19:34.218 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 20:19:34.388 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 20:19:36.207 | DEBUG    | src.callbacks:update_add_button_state:345 - Button state check - Focus: 'Bulbasaur', Team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:19:36.212 | DEBUG    | src.callbacks:update_details:411 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:19:36.219 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:19:36.227 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:19:36.229 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:19:36.239 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:19:36.563 | DEBUG    | src.callbacks:manage_team:243 - manage_team triggered by {'name': 'Bulbasaur', 'type': 'remove-pokemon-btn'}. Current Team: ['Bulbasaur', 'Charmander'], Focus: Bulbasaur
+2026-03-14 20:19:36.564 | DEBUG    | src.callbacks:manage_team:265 - Removing Bulbasaur from team.
+2026-03-14 20:19:36.651 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Charmander']
+2026-03-14 20:19:36.651 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 20:19:37.898 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:19:37.906 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:19:38.024 | DEBUG    | visualizations:create_type_leaderboard:164 - Creating type leaderboard for stat: Attack
+2026-03-14 20:19:38.028 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:19:38.030 | DEBUG    | src.callbacks:update_add_button_state:345 - Button state check - Focus: 'Bulbasaur', Team: ['Charmander']
+2026-03-14 20:19:51.852 | DEBUG    | src.callbacks:update_details:411 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:19:51.854 | DEBUG    | src.callbacks:update_add_button_state:345 - Button state check - Focus: 'Bulbasaur', Team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:19:51.863 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:19:51.863 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:19:51.866 | DEBUG    | src.callbacks:update_leaderboard:140 - Updating leaderboard for stat: Attack
+2026-03-14 20:19:51.872 | DEBUG    | src.callbacks:update_scatter:199 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:19:51.902 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:19:51.928 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:19:51.933 | DEBUG    | visualizations:create_type_leaderboard:164 - Creating type leaderboard for stat: Attack
+2026-03-14 20:19:52.180 | DEBUG    | src.callbacks:manage_team:243 - manage_team triggered by {'name': 'Bulbasaur', 'type': 'remove-pokemon-btn'}. Current Team: ['Bulbasaur', 'Charmander'], Focus: Bulbasaur
+2026-03-14 20:19:52.187 | DEBUG    | src.callbacks:manage_team:265 - Removing Bulbasaur from team.
+2026-03-14 20:19:53.110 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Charmander']
+2026-03-14 20:19:53.110 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 20:19:53.112 | DEBUG    | src.callbacks:update_add_button_state:345 - Button state check - Focus: 'Bulbasaur', Team: ['Charmander']
+2026-03-14 20:19:53.131 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:22:54.075 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 20:22:54.419 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 20:22:54.665 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 20:22:57.354 | DEBUG    | src.callbacks:update_details:420 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:22:57.357 | INFO     | src.callbacks:update_add_button_state:349 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:22:57.358 | INFO     | src.callbacks:update_add_button_state:350 - BUTTON STATE TYPES: focus_type=<class 'str'>, team_type=<class 'list'>
+2026-03-14 20:22:57.359 | INFO     | src.callbacks:update_add_button_state:354 - BUTTON STATE FIRST ITEM: 'Bulbasaur' (Type: <class 'str'>)
+2026-03-14 20:22:57.370 | INFO     | src.callbacks:update_radar:94 - RADAR: Updating for team: ['Bulbasaur', 'Charmander'] (Type: <class 'list'>)
+2026-03-14 20:22:57.371 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:22:57.375 | DEBUG    | src.callbacks:update_leaderboard:144 - Updating leaderboard for stat: Attack
+2026-03-14 20:22:57.386 | DEBUG    | src.callbacks:update_scatter:203 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:22:57.687 | DEBUG    | src.callbacks:manage_team:247 - manage_team triggered by {'name': 'Bulbasaur', 'type': 'remove-pokemon-btn'}. Current Team: ['Bulbasaur', 'Charmander'], Focus: Bulbasaur
+2026-03-14 20:22:57.687 | DEBUG    | src.callbacks:manage_team:269 - Removing Bulbasaur from team.
+2026-03-14 20:22:57.773 | INFO     | src.callbacks:update_radar:94 - RADAR: Updating for team: ['Charmander'] (Type: <class 'list'>)
+2026-03-14 20:22:57.773 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 20:22:58.679 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:22:58.684 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:22:58.712 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:22:58.720 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:22:58.779 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 20:22:58.865 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:22:58.974 | INFO     | src.callbacks:update_add_button_state:349 - BUTTON STATE: Focus='Bulbasaur', Team=['Charmander']
+2026-03-14 20:22:58.975 | INFO     | src.callbacks:update_add_button_state:350 - BUTTON STATE TYPES: focus_type=<class 'str'>, team_type=<class 'list'>
+2026-03-14 20:22:58.978 | INFO     | src.callbacks:update_add_button_state:354 - BUTTON STATE FIRST ITEM: 'Charmander' (Type: <class 'str'>)
+2026-03-14 20:22:59.000 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Charmander']
+2026-03-14 20:22:59.001 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Charmander']
+2026-03-14 20:22:59.002 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 20:22:59.003 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 20:22:59.092 | INFO     | src.callbacks:update_radar:98 - RADAR: Created figure with 2 traces
+2026-03-14 20:22:59.098 | INFO     | src.callbacks:update_radar:98 - RADAR: Created figure with 1 traces
+2026-03-14 20:23:51.448 | DEBUG    | src.callbacks:update_details:420 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:23:51.449 | INFO     | src.callbacks:update_add_button_state:349 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:23:51.517 | INFO     | src.callbacks:update_add_button_state:350 - BUTTON STATE TYPES: focus_type=<class 'str'>, team_type=<class 'list'>
+2026-03-14 20:23:51.518 | INFO     | src.callbacks:update_add_button_state:354 - BUTTON STATE FIRST ITEM: 'Bulbasaur' (Type: <class 'str'>)
+2026-03-14 20:23:51.520 | INFO     | src.callbacks:update_radar:94 - RADAR: Updating for team: ['Bulbasaur', 'Charmander'] (Type: <class 'list'>)
+2026-03-14 20:23:51.521 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:23:51.529 | DEBUG    | src.callbacks:update_leaderboard:144 - Updating leaderboard for stat: Attack
+2026-03-14 20:23:51.543 | DEBUG    | src.callbacks:update_scatter:203 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:23:51.659 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:23:51.670 | DEBUG    | src.callbacks:manage_team:247 - manage_team triggered by {'name': 'Bulbasaur', 'type': 'remove-pokemon-btn'}. Current Team: ['Bulbasaur', 'Charmander'], Focus: Bulbasaur
+2026-03-14 20:23:51.671 | DEBUG    | src.callbacks:manage_team:269 - Removing Bulbasaur from team.
+2026-03-14 20:23:51.679 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:23:51.685 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:23:51.688 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 20:23:51.693 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 20:23:51.693 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 20:23:51.714 | INFO     | src.callbacks:update_radar:98 - RADAR: Created figure with 2 traces
+2026-03-14 20:23:52.015 | INFO     | src.callbacks:update_radar:94 - RADAR: Updating for team: ['Charmander'] (Type: <class 'list'>)
+2026-03-14 20:23:52.015 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 20:23:52.017 | INFO     | src.callbacks:update_add_button_state:349 - BUTTON STATE: Focus='Bulbasaur', Team=['Charmander']
+2026-03-14 20:23:52.017 | INFO     | src.callbacks:update_add_button_state:350 - BUTTON STATE TYPES: focus_type=<class 'str'>, team_type=<class 'list'>
+2026-03-14 20:23:52.018 | INFO     | src.callbacks:update_add_button_state:354 - BUTTON STATE FIRST ITEM: 'Charmander' (Type: <class 'str'>)
+2026-03-14 20:23:52.034 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:23:52.037 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:23:52.042 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Charmander']
+2026-03-14 20:23:52.042 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Charmander']
+2026-03-14 20:23:52.061 | INFO     | src.callbacks:update_radar:98 - RADAR: Created figure with 1 traces
+2026-03-14 20:25:50.466 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 20:25:50.884 | DEBUG    | data_manager:load_and_clean_data:79 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 20:25:51.019 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 20:25:53.988 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:25:53.990 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:25:54.008 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:25:54.009 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:25:54.017 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 20:25:54.028 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:25:54.272 | DEBUG    | src.callbacks:manage_team:248 - manage_team ignored trigger with value None
+2026-03-14 20:25:54.335 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:25:54.336 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:25:55.034 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:25:55.040 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:25:55.077 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:25:55.077 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:25:55.082 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 20:25:55.088 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:25:55.095 | DEBUG    | data_manager:ensure_pokemon_image:138 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:25:55.265 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 20:25:55.265 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 20:25:55.267 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 20:25:55.267 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:38.136 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 20:28:38.512 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 20:28:38.666 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 20:28:40.359 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:28:40.363 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:28:40.371 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:40.376 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 20:28:40.377 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:28:40.382 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:28:40.643 | DEBUG    | src.callbacks:manage_team:248 - manage_team ignored trigger with value None
+2026-03-14 20:28:40.707 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:40.707 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:28:41.536 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:28:41.544 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:28:41.554 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:28:41.555 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:28:41.562 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 20:28:41.677 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:28:41.713 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:28:41.750 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:41.751 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:41.751 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:41.752 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:51.757 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:28:51.761 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:28:51.778 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:51.780 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:28:51.792 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 20:28:51.809 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 20:28:52.048 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:28:52.065 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:28:52.185 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:52.201 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:52.243 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:28:52.253 | DEBUG    | src.callbacks:manage_team:248 - manage_team ignored trigger with value None
+2026-03-14 20:28:52.268 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 20:28:52.318 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Venusaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:28:52.327 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Venusaur
+2026-03-14 20:28:52.761 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:52.762 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 20:28:52.786 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 20:28:52.796 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 3.png already exists for Venusaur
+2026-03-14 20:28:52.803 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 20:28:52.826 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:52.828 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 20:28:56.625 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:28:56.628 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:28:56.664 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 20:28:58.654 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:29:01.968 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Venusaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:29:01.969 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Venusaur
+2026-03-14 20:29:02.073 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 3.png already exists for Venusaur
+2026-03-14 20:29:05.866 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 20:29:05.868 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 20:29:05.973 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 21:59:14.993 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 21:59:15.530 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 21:59:15.687 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 21:59:17.648 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 21:59:17.650 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 21:59:17.674 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:17.676 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 21:59:17.680 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 21:59:17.692 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 21:59:17.955 | DEBUG    | src.callbacks:manage_team:248 - manage_team ignored trigger with value None
+2026-03-14 21:59:18.039 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:18.043 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 21:59:19.238 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 21:59:19.257 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 21:59:19.272 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 21:59:19.272 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 21:59:19.320 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 21:59:19.409 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 21:59:19.452 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 21:59:19.489 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:19.489 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:19.490 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:19.490 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:25.712 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Venusaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 21:59:25.714 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Venusaur
+2026-03-14 21:59:26.168 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 3.png already exists for Venusaur
+2026-03-14 21:59:30.809 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 21:59:30.812 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 21:59:30.854 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 21:59:55.593 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 21:59:55.605 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 21:59:55.648 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:55.688 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 21:59:55.691 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 21:59:55.715 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 21:59:55.862 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 21:59:55.959 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 21:59:55.982 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 21:59:55.984 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 21:59:56.006 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:56.008 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:56.114 | DEBUG    | src.callbacks:manage_team:248 - manage_team ignored trigger with value None
+2026-03-14 21:59:57.319 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:57.320 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 21:59:57.353 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 21:59:57.356 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 21:59:57.375 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 21:59:57.375 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:00:03.985 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:00:04.238 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Ivysaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:00:04.245 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Ivysaur
+2026-03-14 22:00:04.686 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 2.png already exists for Ivysaur
+2026-03-14 22:00:08.644 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Ivysaur
+2026-03-14 22:00:08.845 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Ivysaur (ID: 2)...
+2026-03-14 22:00:09.020 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 2_shiny.png
+2026-03-14 22:00:13.075 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Ivysaur
+2026-03-14 22:00:13.113 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 2.png already exists for Ivysaur
+2026-03-14 22:00:14.029 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Ivysaur
+2026-03-14 22:00:14.060 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 2_shiny.png already exists for Ivysaur
+2026-03-14 22:00:15.109 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Ivysaur
+2026-03-14 22:00:15.142 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 2.png already exists for Ivysaur
+2026-03-14 22:00:19.594 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by clear-team-btn. Current Team: ['Bulbasaur', 'Charmander'], Focus: Ivysaur
+2026-03-14 22:00:19.595 | DEBUG    | src.callbacks:manage_team:256 - Clearing team.
+2026-03-14 22:00:19.868 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: []
+2026-03-14 22:00:19.869 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:00:19.874 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Ivysaur', Team=[]
+2026-03-14 22:00:19.899 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:00:19.901 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:00:23.218 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Venusaur', Team=[]
+2026-03-14 22:00:23.221 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Venusaur
+2026-03-14 22:00:23.332 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 3.png already exists for Venusaur
+2026-03-14 22:00:24.779 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: [], Focus: Venusaur
+2026-03-14 22:00:24.779 | DEBUG    | src.callbacks:manage_team:265 - Adding Venusaur to team.
+2026-03-14 22:00:25.055 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Venusaur']
+2026-03-14 22:00:25.058 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:00:25.061 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Venusaur', Team=['Venusaur']
+2026-03-14 22:00:25.091 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:00:25.093 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:00:25.102 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Venusaur']
+2026-03-14 22:00:25.103 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Venusaur']
+2026-03-14 22:00:33.446 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Charizard', Team=['Venusaur']
+2026-03-14 22:00:33.449 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Charizard
+2026-03-14 22:00:33.615 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 6.png already exists for Charizard
+2026-03-14 22:00:35.474 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Venusaur'], Focus: Charizard
+2026-03-14 22:00:35.474 | DEBUG    | src.callbacks:manage_team:265 - Adding Charizard to team.
+2026-03-14 22:00:35.764 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Venusaur', 'Charizard']
+2026-03-14 22:00:35.767 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:00:35.770 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Charizard', Team=['Venusaur', 'Charizard']
+2026-03-14 22:00:35.790 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:00:35.794 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:00:35.799 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Venusaur', 'Charizard']
+2026-03-14 22:00:35.799 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Venusaur', 'Charizard']
+2026-03-14 22:00:51.210 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Blastoise', Team=['Venusaur', 'Charizard']
+2026-03-14 22:00:51.212 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Blastoise
+2026-03-14 22:00:51.366 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 9.png already exists for Blastoise
+2026-03-14 22:00:53.369 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Venusaur', 'Charizard'], Focus: Blastoise
+2026-03-14 22:00:53.369 | DEBUG    | src.callbacks:manage_team:265 - Adding Blastoise to team.
+2026-03-14 22:00:53.643 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Venusaur', 'Charizard', 'Blastoise']
+2026-03-14 22:00:53.643 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 3 Pokémon.
+2026-03-14 22:00:53.650 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Blastoise', Team=['Venusaur', 'Charizard', 'Blastoise']
+2026-03-14 22:00:53.670 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:00:53.672 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:00:53.677 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 3 match(es) for names: ['Venusaur', 'Charizard', 'Blastoise']
+2026-03-14 22:00:53.677 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Venusaur', 'Charizard', 'Blastoise']
+2026-03-14 22:01:04.711 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Raichu', Team=['Venusaur', 'Charizard', 'Blastoise']
+2026-03-14 22:01:04.714 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Raichu
+2026-03-14 22:01:04.747 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 26.png already exists for Raichu
+2026-03-14 22:01:06.510 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Venusaur', 'Charizard', 'Blastoise'], Focus: Raichu
+2026-03-14 22:01:06.511 | DEBUG    | src.callbacks:manage_team:265 - Adding Raichu to team.
+2026-03-14 22:01:06.793 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu']
+2026-03-14 22:01:06.794 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 4 Pokémon.
+2026-03-14 22:01:06.804 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Raichu', Team=['Venusaur', 'Charizard', 'Blastoise', 'Raichu']
+2026-03-14 22:01:06.827 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:01:06.835 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:01:06.841 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 4 match(es) for names: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu']
+2026-03-14 22:01:06.841 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu']
+2026-03-14 22:01:17.512 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Golem', Team=['Venusaur', 'Charizard', 'Blastoise', 'Raichu']
+2026-03-14 22:01:17.514 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Golem
+2026-03-14 22:01:17.698 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 76.png already exists for Golem
+2026-03-14 22:01:19.754 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu'], Focus: Golem
+2026-03-14 22:01:19.754 | DEBUG    | src.callbacks:manage_team:265 - Adding Golem to team.
+2026-03-14 22:01:20.036 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem']
+2026-03-14 22:01:20.036 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 5 Pokémon.
+2026-03-14 22:01:20.044 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Golem', Team=['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem']
+2026-03-14 22:01:20.068 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:01:20.073 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:01:20.082 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 5 match(es) for names: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem']
+2026-03-14 22:01:20.082 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem']
+2026-03-14 22:01:27.574 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Alakazam', Team=['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem']
+2026-03-14 22:01:27.576 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Alakazam
+2026-03-14 22:01:27.615 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 65.png already exists for Alakazam
+2026-03-14 22:01:29.822 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem'], Focus: Alakazam
+2026-03-14 22:01:29.823 | DEBUG    | src.callbacks:manage_team:265 - Adding Alakazam to team.
+2026-03-14 22:01:30.106 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem', 'Alakazam']
+2026-03-14 22:01:30.107 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 6 Pokémon.
+2026-03-14 22:01:30.116 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Alakazam', Team=['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem', 'Alakazam']
+2026-03-14 22:01:30.131 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:01:30.133 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:01:30.139 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 6 match(es) for names: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem', 'Alakazam']
+2026-03-14 22:01:30.139 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Alakazam', 'Golem']
+2026-03-14 22:02:11.342 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:02:11.345 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:02:11.378 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:02:11.828 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='', Team=['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem', 'Alakazam']
+2026-03-14 22:02:11.831 | DEBUG    | src.callbacks:update_details:415 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:02:29.620 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:02:29.623 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:02:29.659 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:02:31.086 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:02:31.087 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:02:31.091 | DEBUG    | src.callbacks:update_details:415 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:02:31.133 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:02:32.296 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:02:32.299 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:02:32.366 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:02:33.830 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:02:33.832 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:02:33.877 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:02:35.947 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:02:35.950 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:02:35.958 | DEBUG    | src.callbacks:update_details:415 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:02:35.990 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:02:42.245 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Attack, y=Speed
+2026-03-14 22:02:48.389 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Attack, y=Special Attack
+2026-03-14 22:03:06.746 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by {'name': 'Alakazam', 'type': 'remove-pokemon-btn'}. Current Team: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem', 'Alakazam'], Focus: None
+2026-03-14 22:03:06.746 | DEBUG    | src.callbacks:manage_team:273 - Removing Alakazam from team.
+2026-03-14 22:03:06.841 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem']
+2026-03-14 22:03:06.848 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 5 Pokémon.
+2026-03-14 22:03:06.880 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='', Team=['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem']
+2026-03-14 22:03:06.890 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:03:06.892 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:03:06.899 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 5 match(es) for names: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem']
+2026-03-14 22:03:06.899 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem']
+2026-03-14 22:03:07.962 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by {'name': 'Blastoise', 'type': 'remove-pokemon-btn'}. Current Team: ['Venusaur', 'Charizard', 'Blastoise', 'Raichu', 'Golem'], Focus: None
+2026-03-14 22:03:07.962 | DEBUG    | src.callbacks:manage_team:273 - Removing Blastoise from team.
+2026-03-14 22:03:08.048 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Venusaur', 'Charizard', 'Raichu', 'Golem']
+2026-03-14 22:03:08.048 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 4 Pokémon.
+2026-03-14 22:03:08.054 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='', Team=['Venusaur', 'Charizard', 'Raichu', 'Golem']
+2026-03-14 22:03:08.071 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:03:08.073 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:03:08.078 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 4 match(es) for names: ['Venusaur', 'Charizard', 'Raichu', 'Golem']
+2026-03-14 22:03:08.079 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Venusaur', 'Charizard', 'Raichu', 'Golem']
+2026-03-14 22:03:09.934 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by {'name': 'Venusaur', 'type': 'remove-pokemon-btn'}. Current Team: ['Venusaur', 'Charizard', 'Raichu', 'Golem'], Focus: None
+2026-03-14 22:03:09.934 | DEBUG    | src.callbacks:manage_team:273 - Removing Venusaur from team.
+2026-03-14 22:03:10.016 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Charizard', 'Raichu', 'Golem']
+2026-03-14 22:03:10.019 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 3 Pokémon.
+2026-03-14 22:03:10.022 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='', Team=['Charizard', 'Raichu', 'Golem']
+2026-03-14 22:03:10.040 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:03:10.042 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:03:10.048 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 3 match(es) for names: ['Charizard', 'Raichu', 'Golem']
+2026-03-14 22:03:10.048 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Charizard', 'Raichu', 'Golem']
+2026-03-14 22:03:10.477 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by {'name': 'Charizard', 'type': 'remove-pokemon-btn'}. Current Team: ['Charizard', 'Raichu', 'Golem'], Focus: None
+2026-03-14 22:03:10.477 | DEBUG    | src.callbacks:manage_team:273 - Removing Charizard from team.
+2026-03-14 22:03:10.553 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Raichu', 'Golem']
+2026-03-14 22:03:10.554 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:03:10.558 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='', Team=['Raichu', 'Golem']
+2026-03-14 22:03:10.573 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:03:10.575 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:03:10.581 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Raichu', 'Golem']
+2026-03-14 22:03:10.581 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Raichu', 'Golem']
+2026-03-14 22:03:10.987 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by {'name': 'Raichu', 'type': 'remove-pokemon-btn'}. Current Team: ['Raichu', 'Golem'], Focus: None
+2026-03-14 22:03:10.992 | DEBUG    | src.callbacks:manage_team:273 - Removing Raichu from team.
+2026-03-14 22:03:11.054 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Golem']
+2026-03-14 22:03:11.054 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:03:11.059 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='', Team=['Golem']
+2026-03-14 22:03:11.075 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:03:11.077 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:03:11.082 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Golem']
+2026-03-14 22:03:11.082 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Golem']
+2026-03-14 22:03:11.570 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by {'name': 'Golem', 'type': 'remove-pokemon-btn'}. Current Team: ['Golem'], Focus: None
+2026-03-14 22:03:11.571 | DEBUG    | src.callbacks:manage_team:273 - Removing Golem from team.
+2026-03-14 22:03:11.639 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: []
+2026-03-14 22:03:11.641 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:03:11.643 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='', Team=[]
+2026-03-14 22:03:11.660 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:03:11.663 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:03:40.626 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Dragonite', Team=[]
+2026-03-14 22:03:40.630 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Dragonite
+2026-03-14 22:03:40.691 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 149.png already exists for Dragonite
+2026-03-14 22:03:44.234 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: [], Focus: Dragonite
+2026-03-14 22:03:44.240 | DEBUG    | src.callbacks:manage_team:265 - Adding Dragonite to team.
+2026-03-14 22:03:44.386 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Dragonite']
+2026-03-14 22:03:44.389 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:03:44.391 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Dragonite', Team=['Dragonite']
+2026-03-14 22:03:44.407 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:03:44.410 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:03:44.414 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Dragonite']
+2026-03-14 22:03:44.414 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Dragonite']
+2026-03-14 22:03:50.385 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Salamence', Team=['Dragonite']
+2026-03-14 22:03:50.388 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Salamence
+2026-03-14 22:03:50.676 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 373.png already exists for Salamence
+2026-03-14 22:03:52.076 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Dragonite'], Focus: Salamence
+2026-03-14 22:03:52.076 | DEBUG    | src.callbacks:manage_team:265 - Adding Salamence to team.
+2026-03-14 22:03:52.191 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Dragonite', 'Salamence']
+2026-03-14 22:03:52.191 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:03:52.196 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Salamence', Team=['Dragonite', 'Salamence']
+2026-03-14 22:03:52.213 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:03:52.216 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:03:52.225 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Dragonite', 'Salamence']
+2026-03-14 22:03:52.226 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Dragonite', 'Salamence']
+2026-03-14 22:03:55.665 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Haxorus', Team=['Dragonite', 'Salamence']
+2026-03-14 22:03:55.668 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Haxorus
+2026-03-14 22:03:55.728 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 612.png already exists for Haxorus
+2026-03-14 22:04:00.497 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Garchomp', Team=['Dragonite', 'Salamence']
+2026-03-14 22:04:00.502 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Garchomp
+2026-03-14 22:04:00.786 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 445.png already exists for Garchomp
+2026-03-14 22:04:02.518 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Dragonite', 'Salamence'], Focus: Garchomp
+2026-03-14 22:04:02.519 | DEBUG    | src.callbacks:manage_team:265 - Adding Garchomp to team.
+2026-03-14 22:04:02.669 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Dragonite', 'Salamence', 'Garchomp']
+2026-03-14 22:04:02.674 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 3 Pokémon.
+2026-03-14 22:04:02.678 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Garchomp', Team=['Dragonite', 'Salamence', 'Garchomp']
+2026-03-14 22:04:02.707 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:04:02.711 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:04:02.721 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 3 match(es) for names: ['Dragonite', 'Salamence', 'Garchomp']
+2026-03-14 22:04:02.722 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Dragonite', 'Salamence', 'Garchomp']
+2026-03-14 22:04:08.789 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Hydreigon', Team=['Dragonite', 'Salamence', 'Garchomp']
+2026-03-14 22:04:08.796 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Hydreigon
+2026-03-14 22:04:08.866 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 635.png already exists for Hydreigon
+2026-03-14 22:04:10.406 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Dragonite', 'Salamence', 'Garchomp'], Focus: Hydreigon
+2026-03-14 22:04:10.407 | DEBUG    | src.callbacks:manage_team:265 - Adding Hydreigon to team.
+2026-03-14 22:04:10.553 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon']
+2026-03-14 22:04:10.553 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 4 Pokémon.
+2026-03-14 22:04:10.563 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Hydreigon', Team=['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon']
+2026-03-14 22:04:10.584 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:04:10.590 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:04:10.597 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 4 match(es) for names: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon']
+2026-03-14 22:04:10.597 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon']
+2026-03-14 22:04:16.830 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Goodra', Team=['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon']
+2026-03-14 22:04:16.835 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Goodra
+2026-03-14 22:04:17.062 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 706.png already exists for Goodra
+2026-03-14 22:04:18.979 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon'], Focus: Goodra
+2026-03-14 22:04:18.980 | DEBUG    | src.callbacks:manage_team:265 - Adding Goodra to team.
+2026-03-14 22:04:19.153 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra']
+2026-03-14 22:04:19.155 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 5 Pokémon.
+2026-03-14 22:04:19.156 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Goodra', Team=['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra']
+2026-03-14 22:04:19.189 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:04:19.192 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:04:19.204 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 5 match(es) for names: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra']
+2026-03-14 22:04:19.205 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra']
+2026-03-14 22:04:25.584 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Kommo O', Team=['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra']
+2026-03-14 22:04:25.589 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Kommo O
+2026-03-14 22:04:25.835 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 784.png already exists for Kommo O
+2026-03-14 22:04:27.460 | DEBUG    | src.callbacks:manage_team:251 - manage_team triggered by add-pokemon-btn. Current Team: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra'], Focus: Kommo O
+2026-03-14 22:04:27.461 | DEBUG    | src.callbacks:manage_team:265 - Adding Kommo O to team.
+2026-03-14 22:04:27.637 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra', 'Kommo O']
+2026-03-14 22:04:27.648 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 6 Pokémon.
+2026-03-14 22:04:27.702 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Kommo O', Team=['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra', 'Kommo O']
+2026-03-14 22:04:27.765 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:04:27.772 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:04:27.787 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 6 match(es) for names: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra', 'Kommo O']
+2026-03-14 22:04:27.788 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra', 'Kommo O']
+2026-03-14 22:04:35.303 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Dragapult', Team=['Dragonite', 'Salamence', 'Garchomp', 'Hydreigon', 'Goodra', 'Kommo O']
+2026-03-14 22:04:35.314 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Dragapult
+2026-03-14 22:04:35.624 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 887.png already exists for Dragapult
+2026-03-14 22:04:48.042 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Dragapult
+2026-03-14 22:04:48.188 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Dragapult (ID: 887)...
+2026-03-14 22:04:48.317 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 887_shiny.png
+2026-03-14 22:04:49.711 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Dragapult
+2026-03-14 22:04:49.835 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 887.png already exists for Dragapult
+2026-03-14 22:04:50.514 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Dragapult
+2026-03-14 22:04:50.562 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 887_shiny.png already exists for Dragapult
+2026-03-14 22:04:51.201 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Dragapult
+2026-03-14 22:04:51.250 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 887.png already exists for Dragapult
+2026-03-14 22:04:51.858 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Dragapult
+2026-03-14 22:04:51.902 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 887_shiny.png already exists for Dragapult
+2026-03-14 22:04:52.558 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Dragapult
+2026-03-14 22:04:52.597 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 887.png already exists for Dragapult
+2026-03-14 22:06:18.855 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:06:18.855 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:06:18.903 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:06:18.906 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:06:18.961 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:06:18.962 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:06:19.058 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Defense
+2026-03-14 22:06:19.082 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:06:19.152 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:06:19.185 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:06:19.219 | DEBUG    | src.callbacks:update_details:415 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:06:19.547 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Charizard
+2026-03-14 22:06:19.582 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:06:19.891 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:06:19.891 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:06:19.894 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:06:19.894 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:06:19.896 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:06:19.896 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:06:19.906 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:06:19.906 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:06:19.908 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:06:19.908 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:06:19.911 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:06:19.915 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:06:19.915 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:06:19.917 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:06:19.922 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:06:19.924 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:06:24.760 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:06:24.793 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:06:24.796 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 65
+2026-03-14 22:06:24.800 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:06:24.800 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:06:24.821 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:06:24.843 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:06:24.846 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 65
+2026-03-14 22:06:24.855 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:06:25.070 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 22:06:25.071 | WARNING  | visualizations:create_type_leaderboard:188 - Stat column 'InvalidStat' not found in data.
+2026-03-14 22:07:17.451 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:07:17.451 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:07:17.500 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:07:17.504 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:07:17.611 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:07:17.611 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:07:17.641 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Defense
+2026-03-14 22:07:17.664 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:07:17.733 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:07:17.764 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:07:17.797 | DEBUG    | src.callbacks:update_details:415 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:07:18.131 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Charizard
+2026-03-14 22:07:18.165 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:07:18.471 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:07:18.471 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:07:18.473 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:07:18.473 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:07:18.476 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:07:18.476 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:07:18.490 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:07:18.490 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:07:18.492 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:07:18.492 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:07:18.494 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:07:18.497 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:07:18.497 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:07:18.499 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:07:18.507 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:07:18.509 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:07:21.616 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:07:21.618 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:07:21.632 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:21.632 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:07:21.639 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:07:21.642 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:07:21.652 | DEBUG    | src.callbacks:manage_team:248 - manage_team ignored trigger with value None
+2026-03-14 22:07:21.667 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:07:21.677 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:21.678 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:07:21.688 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:07:21.705 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:07:21.767 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:07:21.782 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:07:21.782 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:21.786 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:21.787 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:07:21.787 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:07:21.844 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:21.844 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:28.634 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:07:28.636 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:07:28.642 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:28.643 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:07:28.644 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:07:28.646 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:07:28.674 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:07:28.734 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:07:28.741 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:07:28.744 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:28.745 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:28.778 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:07:28.779 | DEBUG    | src.callbacks:manage_team:248 - manage_team ignored trigger with value None
+2026-03-14 22:07:31.627 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:31.627 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:07:31.651 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:07:31.654 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:07:31.659 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:31.659 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:32.568 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:07:49.540 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:07:49.542 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:07:49.547 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:49.548 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:07:49.549 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:07:49.551 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:07:49.576 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:07:49.591 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:07:49.656 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:49.657 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:07:49.657 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:49.681 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:07:50.622 | DEBUG    | src.callbacks:manage_team:248 - manage_team ignored trigger with value None
+2026-03-14 22:07:53.096 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:53.096 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:07:53.098 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:07:53.113 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:07:53.120 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:07:53.126 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:53.126 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:54.167 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Ivysaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:07:54.169 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Ivysaur
+2026-03-14 22:07:54.198 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 2.png already exists for Ivysaur
+2026-03-14 22:07:58.013 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:07:58.015 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:07:58.020 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:58.028 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Attack
+2026-03-14 22:07:58.028 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:07:58.032 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:07:58.073 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:07:58.090 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:07:58.152 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:07:58.167 | DEBUG    | src.callbacks:manage_team:248 - manage_team ignored trigger with value None
+2026-03-14 22:07:58.172 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:58.172 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:07:58.191 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:08:00.615 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 22:08:00.615 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:08:00.656 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:08:00.665 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:08:00.675 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:08:00.675 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:08:01.999 | DEBUG    | src.callbacks:update_add_button_state:353 - BUTTON STATE: Focus='Bulbasaur', Team=['Bulbasaur', 'Charmander']
+2026-03-14 22:08:16.515 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:08:16.537 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:08:16.540 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 65
+2026-03-14 22:08:16.543 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:08:16.543 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:08:16.562 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:08:16.583 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:08:16.585 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 65
+2026-03-14 22:08:16.596 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:08:16.719 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 22:08:16.720 | WARNING  | visualizations:create_type_leaderboard:188 - Stat column 'InvalidStat' not found in data.
+2026-03-14 22:15:57.273 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 22:15:57.331 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 22:16:36.967 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:16:36.967 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:16:37.038 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:16:37.047 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:16:37.099 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:16:37.099 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:16:37.136 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Defense
+2026-03-14 22:16:37.159 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:16:37.232 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:16:37.267 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:16:37.299 | DEBUG    | src.callbacks:update_details:415 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:16:37.629 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Charizard
+2026-03-14 22:16:37.663 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:16:37.970 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:16:37.970 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:16:37.972 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:16:37.973 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:16:37.975 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:16:37.975 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:16:37.985 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:16:37.986 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:16:37.988 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:16:37.988 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:16:37.990 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:16:37.992 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:16:37.993 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:16:37.996 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:16:38.001 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:16:38.005 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:17:12.678 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:17:12.678 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:17:12.750 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:17:12.761 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:17:12.811 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:17:12.811 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:17:12.843 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Defense
+2026-03-14 22:17:12.868 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:17:12.944 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:17:12.979 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:17:13.012 | DEBUG    | src.callbacks:update_details:415 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:17:13.349 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Charizard
+2026-03-14 22:17:13.382 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:17:13.712 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:17:13.712 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:17:13.715 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:17:13.716 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:17:13.718 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:17:13.718 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:17:13.728 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:17:13.729 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:17:13.730 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:17:13.731 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:17:13.733 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:17:13.736 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:17:13.736 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:17:13.738 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:17:13.744 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:17:13.746 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:18:16.990 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:18:16.990 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:18:17.182 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:18:17.188 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:18:17.280 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:18:17.280 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:18:17.309 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Defense
+2026-03-14 22:18:17.332 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:18:17.409 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:18:17.440 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:18:17.472 | DEBUG    | src.callbacks:update_details:415 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:18:17.793 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Charizard
+2026-03-14 22:18:17.826 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:18:18.135 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:18:18.135 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:18:18.137 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:18:18.137 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:18:18.140 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:18:18.140 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:18:18.152 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:18:18.153 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:18:18.155 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:18:18.155 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:18:18.157 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:18:18.160 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:18:18.160 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:18:18.162 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:18:18.168 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:18:18.170 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:18:47.340 | DEBUG    | src.callbacks:update_radar:94 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:18:47.341 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:18:47.406 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:18:47.409 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:18:47.512 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:18:47.512 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:18:47.542 | DEBUG    | src.callbacks:update_leaderboard:141 - Updating leaderboard for stat: Defense
+2026-03-14 22:18:47.564 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:18:47.632 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:18:47.664 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:18:47.696 | DEBUG    | src.callbacks:update_details:415 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:18:48.008 | DEBUG    | src.callbacks:update_details:419 - Updating detailed view for focus: Charizard
+2026-03-14 22:18:48.043 | DEBUG    | src.callbacks:update_scatter:200 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:18:48.331 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:18:48.331 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:18:48.333 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:18:48.333 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:18:48.335 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:18:48.336 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:18:48.348 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:18:48.349 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:18:48.351 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:18:48.351 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:18:48.353 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:18:48.356 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:18:48.356 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:18:48.358 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:18:48.364 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:18:48.366 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:18:48.368 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:18:48.384 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:18:48.386 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 65
+2026-03-14 22:18:48.389 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:18:48.389 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:18:48.406 | DEBUG    | visualizations:create_radar_chart:60 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:18:48.422 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:18:48.423 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 65
+2026-03-14 22:18:48.430 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:18:48.526 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 22:18:48.527 | WARNING  | visualizations:create_type_leaderboard:188 - Stat column 'InvalidStat' not found in data.
+2026-03-14 22:24:38.806 | DEBUG    | src.callbacks:update_radar:91 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:24:38.807 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:24:38.967 | DEBUG    | src.callbacks:update_leaderboard:151 - Updating leaderboard for stat: Defense
+2026-03-14 22:24:38.971 | DEBUG    | visualizations:create_type_leaderboard:166 - Creating type leaderboard for stat: Defense
+2026-03-14 22:24:39.085 | DEBUG    | src.callbacks:update_details:429 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:24:39.098 | DEBUG    | src.callbacks:update_details:429 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:24:39.110 | DEBUG    | src.callbacks:update_details:425 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:24:39.316 | DEBUG    | src.callbacks:update_details:429 - Updating detailed view for focus: Charizard
+2026-03-14 22:24:39.329 | DEBUG    | src.callbacks:update_scatter:210 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:24:39.609 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:24:39.609 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:24:39.612 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:24:39.612 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:24:39.614 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:24:39.614 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:24:39.624 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:24:39.625 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:24:39.627 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:24:39.627 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:24:39.629 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:24:39.632 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:24:39.633 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:24:39.635 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:24:39.640 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:24:39.642 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:24:39.644 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:24:39.653 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:24:39.661 | DEBUG    | visualizations:create_type_leaderboard:166 - Creating type leaderboard for stat: Attack
+2026-03-14 22:24:39.744 | DEBUG    | visualizations:create_type_leaderboard:166 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 22:24:39.745 | WARNING  | visualizations:create_type_leaderboard:187 - Stat column 'InvalidStat' not found in data.
+2026-03-14 22:24:54.540 | DEBUG    | src.callbacks:update_radar:91 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:24:54.542 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:24:54.542 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:24:54.545 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:24:54.598 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:24:54.598 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:24:54.624 | DEBUG    | src.callbacks:update_leaderboard:151 - Updating leaderboard for stat: Defense
+2026-03-14 22:24:54.628 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:24:54.679 | DEBUG    | src.callbacks:update_details:429 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:24:54.693 | DEBUG    | src.callbacks:update_details:429 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:24:54.708 | DEBUG    | src.callbacks:update_details:425 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:24:54.905 | DEBUG    | src.callbacks:update_details:429 - Updating detailed view for focus: Charizard
+2026-03-14 22:24:54.918 | DEBUG    | src.callbacks:update_scatter:210 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:24:55.211 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:24:55.214 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:24:55.217 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:24:55.217 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:24:55.220 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:24:55.221 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:24:55.236 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:24:55.237 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:24:55.238 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:24:55.239 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:24:55.240 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:24:55.243 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:24:55.244 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:24:55.246 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:24:55.251 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:24:55.253 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:24:55.255 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:24:55.255 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:24:55.257 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:24:55.263 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:24:55.263 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:24:55.279 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:24:55.279 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:24:55.281 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:24:55.287 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:24:55.368 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 22:24:55.369 | WARNING  | visualizations:create_type_leaderboard:188 - Stat column 'InvalidStat' not found in data.
+2026-03-14 22:25:48.438 | DEBUG    | src.callbacks:update_radar:91 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:25:48.438 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:25:48.438 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:25:48.441 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:25:48.489 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:25:48.489 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:25:48.512 | DEBUG    | src.callbacks:update_leaderboard:151 - Updating leaderboard for stat: Defense
+2026-03-14 22:25:48.517 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:25:48.791 | DEBUG    | src.callbacks:update_details:428 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:25:49.112 | DEBUG    | src.callbacks:update_scatter:210 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:25:49.335 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:25:49.336 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:25:49.338 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:25:49.338 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:25:49.341 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:25:49.341 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:25:49.351 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:25:49.351 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:25:49.354 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:25:49.354 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:25:49.356 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:25:49.359 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:25:49.359 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:25:49.361 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:25:49.367 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:25:49.370 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:25:49.372 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:25:49.372 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:25:49.375 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:25:49.379 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:25:49.379 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:25:49.394 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:25:49.394 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:25:49.397 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:25:49.403 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:25:49.487 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 22:25:49.488 | WARNING  | visualizations:create_type_leaderboard:188 - Stat column 'InvalidStat' not found in data.
+2026-03-14 22:26:29.294 | DEBUG    | src.callbacks:update_radar:91 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:26:29.294 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:26:29.294 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:26:29.297 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:26:29.346 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:26:29.346 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:26:29.375 | DEBUG    | src.callbacks:update_leaderboard:151 - Updating leaderboard for stat: Defense
+2026-03-14 22:26:29.379 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:26:29.639 | DEBUG    | src.callbacks:update_details:430 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:26:29.941 | DEBUG    | src.callbacks:update_scatter:210 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:26:30.172 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:26:30.172 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:26:30.175 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:26:30.175 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:26:30.177 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:26:30.178 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:26:30.188 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:26:30.189 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:26:30.191 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:26:30.191 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:26:30.193 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:26:30.197 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:26:30.197 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:26:30.198 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:26:30.204 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:26:30.206 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:26:30.208 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:26:30.208 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:26:30.211 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:26:30.216 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:26:30.217 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:26:30.234 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:26:30.234 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:26:30.236 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:26:30.243 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:26:30.324 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 22:26:30.325 | WARNING  | visualizations:create_type_leaderboard:188 - Stat column 'InvalidStat' not found in data.
+2026-03-14 22:27:04.353 | DEBUG    | src.callbacks:update_radar:91 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:27:04.353 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:27:04.353 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:27:04.355 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:27:04.407 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:27:04.407 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:27:04.436 | DEBUG    | src.callbacks:update_leaderboard:151 - Updating leaderboard for stat: Defense
+2026-03-14 22:27:04.440 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:27:04.713 | DEBUG    | src.callbacks:update_details:430 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:27:05.015 | DEBUG    | src.callbacks:update_scatter:210 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:27:05.235 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:27:05.236 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:27:05.238 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:27:05.238 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:27:05.240 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:27:05.241 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:27:05.251 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:27:05.251 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:27:05.253 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:27:05.253 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:27:05.255 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:27:05.258 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:27:05.258 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:27:05.260 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:27:05.267 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:27:05.269 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:27:05.271 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:27:05.272 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:27:05.274 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:27:05.283 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:27:05.283 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:27:05.300 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:27:05.301 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:27:05.303 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:27:05.309 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:27:05.397 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 22:27:05.398 | WARNING  | visualizations:create_type_leaderboard:188 - Stat column 'InvalidStat' not found in data.
+2026-03-14 22:27:23.154 | DEBUG    | src.callbacks:update_radar:91 - Updating radar chart for team: ['Bulbasaur']
+2026-03-14 22:27:23.154 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 1 Pokémon.
+2026-03-14 22:27:23.154 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:27:23.157 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:27:23.204 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 1 match(es) for names: ['Bulbasaur']
+2026-03-14 22:27:23.204 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur']
+2026-03-14 22:27:23.227 | DEBUG    | src.callbacks:update_leaderboard:151 - Updating leaderboard for stat: Defense
+2026-03-14 22:27:23.232 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Defense
+2026-03-14 22:27:23.279 | DEBUG    | src.callbacks:update_details:434 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:27:23.287 | DEBUG    | src.callbacks:update_details:434 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:27:23.295 | DEBUG    | src.callbacks:update_details:430 - No Pokémon selected, showing placeholder detail view.
+2026-03-14 22:27:23.574 | DEBUG    | src.callbacks:update_details:434 - Updating detailed view for focus: Charizard
+2026-03-14 22:27:23.587 | DEBUG    | src.callbacks:update_scatter:210 - Updating scatter plot: x=Attack, y=Defense
+2026-03-14 22:27:23.824 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:27:23.824 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:27:23.826 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:27:23.826 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1 records into PyArrow Table.
+2026-03-14 22:27:23.829 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from fake_path.parquet using DuckDB...
+2026-03-14 22:27:23.829 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 4 records into PyArrow Table.
+2026-03-14 22:27:23.839 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading shiny image for Bulbasaur (ID: 1)...
+2026-03-14 22:27:23.840 | DEBUG    | data_manager:ensure_pokemon_image:128 - Successfully downloaded 1_shiny.png
+2026-03-14 22:27:23.841 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from any_path.parquet using DuckDB...
+2026-03-14 22:27:23.842 | ERROR    | data_manager:load_and_clean_data:86 - Failed to load data with DuckDB: DuckDB Error
+2026-03-14 22:27:23.843 | DEBUG    | data_manager:ensure_pokemon_image:140 - Image 1.png already exists for Bulbasaur
+2026-03-14 22:27:23.846 | INFO     | data_manager:ensure_pokemon_image:121 - Downloading image for Bulbasaur (ID: 1)...
+2026-03-14 22:27:23.846 | WARNING  | data_manager:ensure_pokemon_image:131 - Failed to download 1.png (Status: 404)
+2026-03-14 22:27:23.849 | ERROR    | data_manager:has_shiny_artwork:165 - Error checking shiny existence for 1: Network Error
+2026-03-14 22:27:23.854 | ERROR    | fetch_api_data:fetch_evolution_members:60 - Error fetching evolution chain https://url/evo/1: 'chain'
+2026-03-14 22:27:23.856 | ERROR    | fetch_api_data:fetch_single_pokemon:102 - Error fetching https://pokeapi.co/api/v2/pokemon/invalid: Connection error
+2026-03-14 22:27:23.858 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:27:23.858 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:27:23.860 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:27:23.867 | DEBUG    | visualizations:create_radar_chart:113 - Radar query found 2 match(es) for names: ['Bulbasaur', 'Charmander']
+2026-03-14 22:27:23.867 | DEBUG    | visualizations:create_radar_chart:117 - Found names in data: ['Bulbasaur', 'Charmander']
+2026-03-14 22:27:23.883 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 0 Pokémon.
+2026-03-14 22:27:23.883 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:27:23.887 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:27:23.893 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack
+2026-03-14 22:27:23.984 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: InvalidStat
+2026-03-14 22:27:23.985 | WARNING  | visualizations:create_type_leaderboard:188 - Stat column 'InvalidStat' not found in data.
+2026-03-14 22:41:21.496 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 22:41:21.885 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 22:41:22.891 | INFO     | src.data:<module>:24 - Pre-calculating shiny artwork availability...
+2026-03-14 22:41:23.151 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 22:41:56.479 | DEBUG    | src.callbacks:update_details:432 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:43:18.795 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 22:43:19.282 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 22:43:20.067 | INFO     | src.data:<module>:24 - Pre-calculating shiny artwork availability...
+2026-03-14 22:43:20.315 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 22:43:39.465 | DEBUG    | src.callbacks:update_details:432 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:46:16.013 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 22:46:16.380 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 22:46:17.300 | INFO     | src.data:<module>:24 - Pre-calculating shiny artwork availability...
+2026-03-14 22:46:17.554 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 22:46:23.378 | DEBUG    | src.callbacks:update_details:432 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:47:32.166 | INFO     | data_manager:load_and_clean_data:26 - Loading Pokémon data from data/pokemon.parquet using DuckDB...
+2026-03-14 22:47:32.520 | DEBUG    | data_manager:load_and_clean_data:81 - Successfully loaded 1323 records into PyArrow Table.
+2026-03-14 22:47:33.331 | INFO     | src.data:<module>:24 - Pre-calculating shiny artwork availability...
+2026-03-14 22:47:33.629 | INFO     | __main__:<module>:29 - Data-Dex Dash application starting...
+2026-03-14 22:47:36.185 | DEBUG    | src.callbacks:update_details:432 - Updating detailed view for focus: Bulbasaur
+2026-03-14 22:47:36.218 | DEBUG    | src.callbacks:update_radar:89 - Updating radar chart for team: ['Bulbasaur', 'Charmander']
+2026-03-14 22:47:36.219 | DEBUG    | visualizations:create_radar_chart:59 - Creating radar chart for 2 Pokémon.
+2026-03-14 22:47:36.223 | DEBUG    | src.callbacks:update_leaderboard:149 - Updating leaderboard for stat: Attack
+2026-03-14 22:47:36.223 | DEBUG    | visualizations:create_radar_chart:73 - Categories for radar: ['HP', 'Attack', 'Defense', 'Speed', 'Special Defense', 'Special Attack']
+2026-03-14 22:47:36.226 | DEBUG    | src.callbacks:update_scatter:208 - Updating scatter plot: x=Weight, y=Speed
+2026-03-14 22:47:36.265 | DEBUG    | visualizations:create_radar_chart:94 - Computed max_stat: 255
+2026-03-14 22:47:36.274 | DEBUG    | visualizations:create_type_leaderboard:167 - Creating type leaderboard for stat: Attack

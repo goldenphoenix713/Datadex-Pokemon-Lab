@@ -1,105 +1,104 @@
-import pandas as pd
 from data_manager import load_and_clean_data
 
 
 def test_load_and_clean_data(mocker):
-    # Mock data
-    mock_df = pd.DataFrame(
+    # Mock PyArrow Table
+    import pyarrow as pa
+
+    mock_table = pa.table(
         {
-            "#": [1],
+            "number": [1],
             "Name": ["Bulbasaur"],
-            "Type 1": ["Grass"],
-            "Type 2": ["Poison"],
+            "Primary Type": ["Grass"],
+            "Secondary Type": ["Poison"],
             "HP": [45],
             "Attack": [49],
             "Defense": [49],
-            "Sp. Atk": [65],
-            "Sp. Def": [65],
+            "Special Attack": [65],
+            "Special Defense": [65],
             "Speed": [45],
-            "Height": [7],
-            "Weight": [69],
+            "Height": [7.0],
+            "Weight": [69.0],
             "Species_Name": ["bulbasaur"],
+            "Image_URL": ["assets/images/1.png"],
         }
     )
 
-    # Mock read_parquet
-    mocker.patch("pandas.read_parquet", return_value=mock_df)
+    # Mock duckdb.connect().execute().to_arrow_table()
+    mock_conn = mocker.Mock()
+    mocker.patch("duckdb.connect", return_value=mock_conn)
+    mock_conn.execute.return_value.to_arrow_table.return_value = mock_table
 
     df = load_and_clean_data("fake_path.parquet")
 
-    # Check renames
-    assert "Special Attack" in df.columns
-    assert "Special Defense" in df.columns
-    assert "Primary Type" in df.columns
-    assert "Secondary Type" in df.columns
+    # Check renames (now columns in pa.Table)
+    assert "Special Attack" in df.column_names
+    assert "Special Defense" in df.column_names
+    assert "Primary Type" in df.column_names
+    assert "Secondary Type" in df.column_names
 
     # Check Image_URL generation
-    assert "Image_URL" in df.columns
-    assert df.loc[0, "Image_URL"] == "assets/images/1.png"
+    assert "Image_URL" in df.column_names
+    assert df.to_pylist()[0]["Image_URL"] == "assets/images/1.png"
 
 
 def test_load_and_clean_data_handles_missing_secondary_type(mocker):
-    mock_df = pd.DataFrame(
+    import pyarrow as pa
+
+    mock_table = pa.table(
         {
-            "#": [1],
             "Name": ["Pikachu"],
-            "Type 1": ["Electric"],
-            "Type 2": [None],
-            "HP": [35],
-            "Attack": [55],
-            "Defense": [40],
-            "Sp. Atk": [50],
-            "Sp. Def": [50],
-            "Speed": [90],
-            "Height": [4],
-            "Weight": [60],
-            "Species_Name": ["pikachu"],
+            "Secondary Type": ["None"],
         }
     )
 
-    mocker.patch("pandas.read_parquet", return_value=mock_df)
+    mock_conn = mocker.Mock()
+    mocker.patch("duckdb.connect", return_value=mock_conn)
+    mock_conn.execute.return_value.to_arrow_table.return_value = mock_table
 
     df = load_and_clean_data("fake_path.parquet")
 
-    assert df.loc[0, "Secondary Type"] == "None"
+    assert df.to_pylist()[0]["Secondary Type"] == "None"
 
 
 def test_load_and_clean_data_adds_enhanced_fields(mocker):
-    mock_df = pd.DataFrame(
+    import pyarrow as pa
+
+    mock_table = pa.table(
         {
-            "#": [1, 152, 6, 19],
             "Name": ["Bulbasaur", "Chikorita", "Charizard Mega X", "Rattata Alolan"],
-            "Type 1": ["Grass", "Grass", "Fire", "Normal"],
-            "Type 2": ["Poison", None, "Dragon", "Dark"],
-            "HP": [45, 45, 78, 30],
-            "Attack": [49, 49, 130, 56],
-            "Defense": [49, 49, 111, 35],
-            "Sp. Atk": [65, 49, 130, 25],
-            "Sp. Def": [65, 49, 85, 35],
-            "Speed": [45, 45, 100, 72],
-            "Height": [7, 9, 17, 3],
-            "Weight": [69, 64, 905, 35],
-            "Species_Name": ["bulbasaur", "chikorita", "charizard", "ratata"],
+            "Region": ["Kanto", "Johto", "Kanto", "Kanto"],
+            "Is_Mega": [False, False, True, False],
+            "Is_Regional": [False, False, False, True],
+            "Sprite_URL": [
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+                "url",
+                "url",
+                "url",
+            ],
         }
     )
 
-    mocker.patch("pandas.read_parquet", return_value=mock_df)
+    mock_conn = mocker.Mock()
+    mocker.patch("duckdb.connect", return_value=mock_conn)
+    mock_conn.execute.return_value.to_arrow_table.return_value = mock_table
 
     df = load_and_clean_data("fake_path.parquet")
 
+    data = df.to_pylist()
     # Verify Regions
-    assert df.loc[0, "Region"] == "Kanto"
-    assert df.loc[1, "Region"] == "Johto"
+    assert data[0]["Region"] == "Kanto"
+    assert data[1]["Region"] == "Johto"
 
     # Verify Form Detection
-    assert df.loc[2, "Is_Mega"]
-    assert not df.loc[0, "Is_Mega"]
-    assert df.loc[3, "Is_Regional"]
-    assert not df.loc[0, "Is_Regional"]
+    assert data[2]["Is_Mega"]
+    assert not data[0]["Is_Mega"]
+    assert data[3]["Is_Regional"]
+    assert not data[0]["Is_Regional"]
 
     # Verify Sprite URLs
     assert (
-        df.loc[0, "Sprite_URL"]
+        data[0]["Sprite_URL"]
         == "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
     )
 
@@ -138,11 +137,11 @@ def test_ensure_pokemon_image_shiny(mocker, tmp_path):
 
 
 def test_load_and_clean_data_failure(mocker):
-    # Mock read_parquet to raise an exception
-    mocker.patch("pandas.read_parquet", side_effect=Exception("Parquet Error"))
+    # Mock duckdb.connect to raise an exception
+    mocker.patch("duckdb.connect", side_effect=Exception("DuckDB Error"))
     import pytest
 
-    with pytest.raises(Exception, match="Parquet Error"):
+    with pytest.raises(Exception, match="DuckDB Error"):
         load_and_clean_data("any_path.parquet")
 
 

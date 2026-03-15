@@ -2,7 +2,7 @@
 
 import dash_mantine_components as dmc
 from dash import dcc, html
-from src.data import pokemon_names, pokemon_sprites
+from src.data import pokemon_sprites
 from src.constants import STAT_OPTIONS
 
 # Left Column: User Selection and Radar Comparison
@@ -16,35 +16,53 @@ radar_card = dmc.GridCol(
             radius="md",
             mb="md",
             children=[
-                dmc.Title(
-                    "Face-Off Radar",
-                    order=2,
-                    className="pokemon-section-title",
+                dmc.Group(
+                    justify="space-between",
+                    children=[
+                        dmc.Title(
+                            "Face-Off Radar",
+                            order=2,
+                            className="pokemon-section-title",
+                        ),
+                        dmc.Button(
+                            "Clear Team",
+                            id="clear-team-btn",
+                            variant="subtle",
+                            color="gray",
+                            leftSection=html.I(className="fas fa-trash"),
+                        ),
+                    ],
+                    mb="md",
                 ),
                 dmc.Text(
-                    "Select 2-3 Pokémon to compare their stats side-by-side.",
+                    "Compare your team's stats side-by-side.",
                     c="dimmed",
                     mb="md",
                 ),
-                dmc.Text("Choose your Pokémon Team", size="sm", fw=500, mb=4),
-                dmc.MultiSelect(
-                    id="pokemon-selector",
-                    placeholder="Search names...",
-                    data=[{"label": n, "value": n} for n in pokemon_names],
-                    value=["Bulbasaur", "Charmander"],
-                    clearable=True,
-                    searchable=True,
-                    hidePickedOptions=True,
-                    renderOption={
-                        "function": "renderPokemonOption",
-                        "options": {"sprites": pokemon_sprites},
-                    },
-                    maxValues=6,
+                # Dynamic Team List Container
+                dmc.ScrollArea(
+                    h=120,
+                    offsetScrollbars=True,
+                    children=[
+                        dmc.Group(
+                            id="team-list",
+                            gap="xs",
+                            children=[
+                                dmc.Text(
+                                    "No Pokémon in your team yet. Add some from the Detail view!",
+                                    c="dimmed",
+                                    size="sm",
+                                    fs="italic",
+                                )
+                            ],
+                        )
+                    ],
+                    mb="xl",
                 ),
-                dmc.Space(h="xl"),
                 dcc.Graph(
                     id="radar-chart",
                     config={"displayModeBar": False},
+                    style={"height": "500px"},
                 ),
             ],
         ),
@@ -113,6 +131,17 @@ pokemon_detail_card = dmc.GridCol(
                 ),
                 # Container for dynamic progress bars
                 html.Div(id="stat-progress-bars"),
+                dmc.Space(h="md"),
+                dmc.Button(
+                    "Add to Team",
+                    id="add-pokemon-btn",
+                    fullWidth=True,
+                    size="lg",
+                    radius="md",
+                    leftSection=html.I(className="fas fa-plus"),
+                    mb="md",
+                    disabled=True,  # Default to disabled if no selection
+                ),
                 dmc.Divider(my="md"),
                 dmc.Text("Evolution Lineage", size="sm", fw=700, mb="sm"),
                 html.Div(id="evolution-chain-display"),

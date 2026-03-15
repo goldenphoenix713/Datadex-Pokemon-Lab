@@ -1,7 +1,7 @@
 """Main layout assembly for the Data-Dex application."""
 
 import dash_mantine_components as dmc
-from dash import html
+from dash import dcc, html
 from src.constants import CUSTOM_THEME, REGIONS, TYPES, STAT_OPTIONS
 from src.components import (
     radar_card,
@@ -14,6 +14,7 @@ layout = dmc.MantineProvider(
     theme=CUSTOM_THEME,
     forceColorScheme="dark",
     children=[
+        dcc.Store(id="team-store", data=["Bulbasaur", "Charmander"]),
         dmc.AppShell(
             header={"height": 100},
             navbar={
@@ -87,6 +88,7 @@ layout = dmc.MantineProvider(
                                                 {"value": 128, "label": "128"},
                                                 {"value": 255, "label": "255"},
                                             ],
+                                            updatemode="mouseup",
                                             mb="xl",
                                         ),
                                     ]
@@ -142,6 +144,7 @@ layout = dmc.MantineProvider(
                                     min=2,
                                     max=7,
                                     step=0.01,
+                                    debounce=500,
                                 ),
                                 dmc.NumberInput(
                                     id="trainer-weight",
@@ -150,6 +153,7 @@ layout = dmc.MantineProvider(
                                     min=10,
                                     max=200,
                                     step=1,
+                                    debounce=500,
                                 ),
                             ],
                             mb="md",
@@ -171,8 +175,8 @@ layout = dmc.MantineProvider(
                                 dmc.Grid(
                                     gutter="lg",
                                     children=[
-                                        radar_card,
                                         pokemon_detail_card,
+                                        radar_card,
                                         type_leaderboard_card,
                                         world_exploration_card,
                                     ],
@@ -190,7 +194,7 @@ layout = dmc.MantineProvider(
                             children=[
                                 dmc.Text(
                                     "© 2026 Pokémon. © 1995–2026 Nintendo/Creatures Inc./GAME FREAK inc. "
-                                    "Pokémon and Pokémon character names are trademarks of Nintendo. "
+                                    "Pokémon and Pokémon character names are trademarks of Nintendo.\n"
                                     "This project is not affiliated with or endorsed by The Pokémon Company or Nintendo.",
                                     size="xs",
                                     c="dimmed",
@@ -207,6 +211,6 @@ layout = dmc.MantineProvider(
                     ],
                 ),
             ],
-        )
+        ),
     ],
 )

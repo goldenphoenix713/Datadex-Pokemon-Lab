@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-import requests
+import requests  # type: ignore[import-untyped]
 
 from fetch_api_data import fetch_single_pokemon
 

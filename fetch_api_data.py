@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Optional
 
 import pandas as pd
-import requests
+import requests  # type: ignore[import-untyped]
 from loguru import logger
 
 
