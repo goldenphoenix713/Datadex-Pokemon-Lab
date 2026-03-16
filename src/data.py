@@ -24,17 +24,6 @@ with db_lock:
 # Preparation for themed dropdowns with sprites
 pokemon_sprites = dict(zip(df["Name"].to_pylist(), df["Sprite_URL"].to_pylist()))
 
-# Phase 3: Pre-calculate shiny existence to avoid runtime network requests
-# TODO Does this only work for shiny images previously downloaded?
-#  If so, it may not download images when requested, since it'll assume they
-#  don't exist.
-
-logger.info("Pre-calculating shiny artwork availability...")
-shiny_lookup = set()
-for p_id in df["id"].to_pylist():
-    if Path(f"assets/images/{p_id}_shiny.png").exists():
-        shiny_lookup.add(p_id)
-
 # Phase 3: Pre-process evolution chains into a species-to-forms map
 # This avoids doing SQL queries per click in the evolution lineage UI.
 evolution_map: dict[str, list[dict[str, Any]]] = {}

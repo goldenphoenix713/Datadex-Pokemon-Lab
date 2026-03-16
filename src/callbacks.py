@@ -4,10 +4,12 @@ from dash import callback, Input, Output, State, ALL, ctx, html
 import dash_mantine_components as dmc
 from loguru import logger
 
-from src.data import pokemon_sprites, evolution_map, shiny_lookup
+from src.data import pokemon_sprites, evolution_map
+
+# Phase 3: Pre-process evolution chains into a species-to-forms map
 from src.constants import STAT_OPTIONS
 from src.utils import get_filtered_table as get_filtered_df
-from data_manager import ensure_pokemon_image
+from data_manager import ensure_pokemon_image, has_shiny_artwork
 from visualizations import (
     create_scatter_plot,
     create_radar_chart,
@@ -559,7 +561,7 @@ def update_details(
         ],
     )
 
-    shiny_exists = p_id in shiny_lookup
+    shiny_exists = has_shiny_artwork(p_id)
     toggle_style = {"display": "block"} if shiny_exists else {"display": "none"}
     current_shiny = is_shiny if shiny_exists else False
 
