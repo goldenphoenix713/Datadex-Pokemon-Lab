@@ -1,12 +1,12 @@
 
 > Dash Mantine Components v2.6.0 Documentation for Functions as Props
-> See complete docs at <https://www.dash-mantine-components.com/assets/llms.txt>  
+> See complete docs at <https://www.dash-mantine-components.com/assets/llms.txt>
 > All relative links in this file should be resolved against <https://www.dash-mantine-components.com>
 
-## Functions as Props  
+## Functions as Props
 
-Introduction to using JavaScript functions with Dash Mantine Components  
-Category: Dash  
+Introduction to using JavaScript functions with Dash Mantine Components
+Category: Dash
 
 ### How Function Props Work
 
@@ -276,7 +276,7 @@ AI Prompt
 >        option["value"],
 >        color= "red" if option["value"] == "A" else "blue",
 >        variant="light",
->        radius="sm"        
+>        radius="sm"
 >    )
 > ```
 

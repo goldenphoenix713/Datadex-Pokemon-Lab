@@ -15,7 +15,7 @@ dmcfuncs.renderPokemonOption = function ({ option }, { sprites }) {
             h: 30,
             w: 30,
             fit: "contain",
-            fallbackSrc: "/assets/images/pokeball_placeholder.png",
+            fallbackSrc: "/assets/sprites/pokeball_placeholder.png",
             className: "pokemon-sprite"
         }),
         React.createElement(

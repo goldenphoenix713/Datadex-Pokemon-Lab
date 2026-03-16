@@ -122,7 +122,7 @@ pokemon_detail_card = dmc.GridCol(
                     children=[
                         dmc.Switch(
                             id="shiny-toggle",
-                            label="Shiny Mode",
+                            label="Shiny",
                             checked=False,
                             mb="md",
                             style={"display": "none"},  # Hidden by default

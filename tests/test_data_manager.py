@@ -187,3 +187,48 @@ def test_has_shiny_artwork_cache_hit(mocker):
     from data_manager import has_shiny_artwork
 
     assert has_shiny_artwork(1) is True
+
+
+def test_ensure_pokemon_sprite_cache_hit(mocker):
+    # Mock Path.exists to return True for the sprite
+    mocker.patch("data_manager.Path.exists", return_value=True)
+    from data_manager import ensure_pokemon_sprite
+
+    path = ensure_pokemon_sprite(1, "Bulbasaur")
+    assert "1.png" in path
+    assert "sprites" in path
+    assert "pokeball_placeholder" not in path
+
+
+def test_ensure_pokemon_sprite_download_success(mocker):
+    # Mock Path.exists to False (not in cache)
+    mocker.patch("data_manager.Path.exists", return_value=False)
+    mocker.patch("data_manager.Path.mkdir")
+
+    mock_resp = mocker.Mock()
+    mock_resp.status_code = 200
+    mock_resp.content = b"fake_sprite_content"
+    mocker.patch("requests.get", return_value=mock_resp)
+
+    mocker.patch("builtins.open", mocker.mock_open())
+
+    from data_manager import ensure_pokemon_sprite
+
+    path = ensure_pokemon_sprite(1, "Bulbasaur")
+    assert "1.png" in path
+    assert "sprites" in path
+
+
+def test_ensure_pokemon_sprite_download_failure(mocker):
+    # Mock Path.exists to False
+    mocker.patch("data_manager.Path.exists", return_value=False)
+    mocker.patch("data_manager.Path.mkdir")
+
+    mock_resp = mocker.Mock()
+    mock_resp.status_code = 404
+    mocker.patch("requests.get", return_value=mock_resp)
+
+    from data_manager import ensure_pokemon_sprite
+
+    path = ensure_pokemon_sprite(1, "Bulbasaur")
+    assert "pokeball_placeholder.png" in path

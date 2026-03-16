@@ -8,7 +8,7 @@ Welcome to the **Data-Dex Lab**! This tool is designed to help you explore Poké
 **Goal:** Compare the strengths of different Pokémon.
 
 1.  **Select Pokémon:** Click the "Choose your Pokémon Team" box. You can pick up to **3 Pokémon**.
-2.  **Analyze the Shape:** Look at the blue, red, and green shapes. 
+2.  **Analyze the Shape:** Look at the blue, red, and green shapes.
     -   A **wider** shape means a Pokémon is an all-rounder.
     -   A **pointy** shape means they specialize in one stat (like high Speed).
 3.  **Hover for Data:** Put your mouse over the points on the radar to see the exact numbers for HP, Attack, Defense, and more.
@@ -20,7 +20,7 @@ Welcome to the **Data-Dex Lab**! This tool is designed to help you explore Poké
 
 1.  **Choose a Stat:** Use the "Compare averages for" dropdown to pick a stat (like **Attack** or **Speed**).
 2.  **Read the Bars:** The longer the bar, the higher the average for that Type.
-3.  **The White Line:** The dotted white line shows the **Global Average** (the middle point for all Pokémon). 
+3.  **The White Line:** The dotted white line shows the **Global Average** (the middle point for all Pokémon).
     -   Is your favorite type above or below the line?
 
 ---

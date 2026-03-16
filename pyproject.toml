@@ -8,12 +8,12 @@ dependencies = [
     "dash",
     "plotly",
     "dash-mantine-components",
-    "pandas",
     "pyarrow",
     "requests",
     "loguru",
     "pillow",
     "duckdb",
+    "dash-iconify>=0.1.2",
 ]
 
 [dependency-groups]
@@ -27,6 +27,7 @@ dev = [
     "dash[testing]",
     "webdriver-manager",
     "urllib3",
+    "pre-commit>=4.5.1",
 ]
 [tool.mypy]
 ignore_missing_imports = true

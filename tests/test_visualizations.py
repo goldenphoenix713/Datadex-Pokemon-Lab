@@ -15,7 +15,8 @@ def test_create_radar_chart_returns_figure(sample_pokemon_table):
 def test_create_radar_chart_empty_selection(sample_pokemon_table):
     fig = create_radar_chart(sample_pokemon_table, [])
     assert isinstance(fig, go.Figure)
-    assert len(fig.data) == 0
+    # 1 because we add a dummy Scatterpolar trace to force the polar system
+    assert len(fig.data) == 1
 
 
 def test_create_type_leaderboard_returns_figure(sample_pokemon_table):

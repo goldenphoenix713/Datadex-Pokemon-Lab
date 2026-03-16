@@ -4,9 +4,10 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Optional
 
-import pandas as pd
 import requests  # type: ignore[import-untyped]
 from loguru import logger
+import pyarrow as pa
+import duckdb
 
 
 def fetch_species_data(species_url: str) -> Dict[str, Any]:
@@ -158,41 +159,56 @@ def fetch_all_pokemon() -> None:
             )
         )
 
-    # Convert results into a DataFrame
-    df = pd.DataFrame(pokemon_list)
+    # Convert results into a PyArrow Table
+    table = pa.Table.from_pylist(pokemon_list)
 
     # Get final evolutions set
-    final_evolutions = get_final_evolutions()
-    # Mark final evolutions by species name
-    df["Is_Final_Evolution"] = df["Species_Name"].isin(final_evolutions)
+    final_evolutions = list(get_final_evolutions())
 
-    # Filter for unique entries
-    initial_count = len(df)
-    df = df.drop_duplicates(
-        subset=[
-            "Type 1",
-            "Type 2",
-            "HP",
-            "Attack",
-            "Defense",
-            "Sp. Atk",
-            "Sp. Def",
-            "Speed",
-            "Name",
-        ]
-    )
+    # Use DuckDB for efficient transformation and deduplication
+    con = duckdb.connect(":memory:")
+    con.register("raw_table", table)
 
-    # Standardize data types
-    df["Type 1"] = df["Type 1"].astype("category")
-    df["Type 2"] = df["Type 2"].astype("category")
+    # Create a list of final evolution species for the SQL query
+    species_list_str = ", ".join([f"'{s}'" for s in final_evolutions])
+
+    initial_count = table.num_rows
+
+    # SQL query to:
+    # 1. Add Is_Final_Evolution column
+    # 2. Deduplicate based on stats and name (keeping first occurrence by id)
+    dedup_cols = [
+        "Type 1",
+        "Type 2",
+        "HP",
+        "Attack",
+        "Defense",
+        "Sp. Atk",
+        "Sp. Def",
+        "Speed",
+        "Name",
+    ]
+    cols_str = ", ".join([f'"{c}"' for c in dedup_cols])
+
+    query = f"""
+    SELECT *,
+        CASE WHEN "Species_Name" IN ({species_list_str}) THEN True ELSE False END as "Is_Final_Evolution"
+    FROM raw_table
+    QUALIFY row_number() OVER (PARTITION BY {cols_str} ORDER BY "#") = 1
+    """
+
+    table = con.execute(query).to_arrow_table()
 
     # Save to disk
     os.makedirs("data", exist_ok=True)
     filepath = "data/pokemon.parquet"
-    df.to_parquet(filepath, engine="pyarrow", compression="zstd")
+
+    import pyarrow.parquet as pq
+
+    pq.write_table(table, filepath, compression="zstd")
 
     logger.info(
-        f"Fetched {initial_count} entries. Saved {len(df)} unique entries to {filepath}."
+        f"Fetched {initial_count} entries. Saved {table.num_rows} unique entries to {filepath}."
     )
 
 

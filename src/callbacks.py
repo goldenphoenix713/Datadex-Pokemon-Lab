@@ -4,12 +4,12 @@ from dash import callback, Input, Output, State, ALL, ctx, html
 import dash_mantine_components as dmc
 from loguru import logger
 
-from src.data import pokemon_sprites, evolution_map
+from src.data import evolution_map, pokemon_ids
 
 # Phase 3: Pre-process evolution chains into a species-to-forms map
 from src.constants import STAT_OPTIONS
 from src.utils import get_filtered_table as get_filtered_df
-from data_manager import ensure_pokemon_image, has_shiny_artwork
+from data_manager import ensure_pokemon_image, has_shiny_artwork, ensure_pokemon_sprite
 from visualizations import (
     create_scatter_plot,
     create_radar_chart,
@@ -305,7 +305,11 @@ def update_team_list_ui(team: List[str]) -> Any:
 
     items = []
     for name in team:
-        sprite = pokemon_sprites.get(name, "")
+        p_id = pokemon_ids.get(name)
+        if p_id is not None:
+            sprite = ensure_pokemon_sprite(p_id, name)
+        else:
+            sprite = "assets/sprites/pokeball_placeholder.png"
         items.append(
             dmc.Card(
                 withBorder=True,
@@ -337,10 +341,11 @@ def update_team_list_ui(team: List[str]) -> Any:
                                 ],
                             ),
                             dmc.ActionIcon(
-                                html.I(className="fas fa-times"),
+                                children=dmc.Image(
+                                    src="/assets/icons/mdi--close.svg", w=16, h=16
+                                ),
                                 id={"type": "remove-pokemon-btn", "name": name},
                                 variant="subtle",
-                                color="red",
                                 size="sm",
                             ),
                         ],
@@ -356,11 +361,11 @@ dash.clientside_callback(
     function(team, focus_name) {
         team = team || [];
         focus_name = focus_name ? focus_name.trim() : "";
-        
+
         if (!focus_name) {
             return [true, "Select a Pokémon"];
         }
-        
+
         // Direct comparison after stripping whitespace (case-insensitive)
         if (team.some(p => p.trim().toLowerCase() === focus_name.toLowerCase())) {
             return [true, focus_name + " is in Team"];
@@ -485,8 +490,10 @@ def update_details(
                             },
                             children=[
                                 dmc.Image(
-                                    src=base_form["Sprite_URL"],
-                                    fallbackSrc="/assets/images/pokeball_placeholder.png",
+                                    src=ensure_pokemon_sprite(
+                                        base_form["id"], base_form["Name"]
+                                    ),
+                                    fallbackSrc="/assets/sprites/pokeball_placeholder.png",
                                     h=64,
                                     w="auto",
                                 )
@@ -520,8 +527,10 @@ def update_details(
                                     style={"cursor": "pointer"},
                                     children=[
                                         dmc.Image(
-                                            src=v["Sprite_URL"],
-                                            fallbackSrc="/assets/images/pokeball_placeholder.png",
+                                            src=ensure_pokemon_sprite(
+                                                v["id"], v["Name"]
+                                            ),
+                                            fallbackSrc="/assets/sprites/pokeball_placeholder.png",
                                             h=32,
                                             w="auto",
                                             style={"opacity": 0.8},
@@ -555,7 +564,7 @@ def update_details(
         children=[
             dmc.Text("Trainer Comparison", size="xs", fw=700, c="dimmed"),
             dmc.Text(
-                f"{'Pokemon' if height_ratio > 1 else 'You'} are taller!", size="sm"
+                f"{f'{name} is' if height_ratio > 1 else 'You are'} taller!", size="sm"
             ),
             dmc.Text(f"Ratio: {height_ratio:.1f}x", size="sm"),
         ],

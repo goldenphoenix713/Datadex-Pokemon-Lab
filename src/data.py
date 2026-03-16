@@ -1,7 +1,5 @@
 import duckdb
 import threading
-from loguru import logger
-from pathlib import Path
 from data_manager import load_and_clean_data
 from src.constants import STAT_OPTIONS
 from typing import Any
@@ -23,6 +21,7 @@ with db_lock:
 
 # Preparation for themed dropdowns with sprites
 pokemon_sprites = dict(zip(df["Name"].to_pylist(), df["Sprite_URL"].to_pylist()))
+pokemon_ids = dict(zip(df["Name"].to_pylist(), df["id"].to_pylist()))
 
 # Phase 3: Pre-process evolution chains into a species-to-forms map
 # This avoids doing SQL queries per click in the evolution lineage UI.

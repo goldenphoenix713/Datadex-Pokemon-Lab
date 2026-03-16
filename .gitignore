@@ -6,6 +6,13 @@ dist/
 wheels/
 *.egg-info
 
+# Caches
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# IDEs
 .vscode/
 
 # Virtual environments
@@ -13,7 +20,9 @@ wheels/
 
 # Assets Images
 assets/images/*.png
+assets/sprites/*.png
 !assets/images/*placeholder.png
+!assets/sprites/*pokeball_placeholder.png
 
 # Logs
 logs/

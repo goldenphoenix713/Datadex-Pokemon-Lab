@@ -28,7 +28,7 @@ def test_update_details_callback(mocker):
     mocker.patch(
         "src.callbacks.ensure_pokemon_image", return_value="assets/images/1.png"
     )
-    mocker.patch("src.callbacks.shiny_lookup", {1})
+    mocker.patch("src.callbacks.has_shiny_artwork", return_value=True)
     mocker.patch("src.callbacks.ctx", mocker.Mock(inputs_list=[]))
 
     result = update_details("Bulbasaur", False, 4.5, 150, True, True, True)
@@ -130,7 +130,7 @@ def test_update_details_callback_high_stat(mocker):
     mocker.patch(
         "src.callbacks.ensure_pokemon_image", return_value="assets/images/6.png"
     )
-    mocker.patch("src.callbacks.shiny_lookup", {6})
+    mocker.patch("src.callbacks.has_shiny_artwork", return_value=True)
     mocker.patch("src.callbacks.ctx", mocker.Mock(inputs_list=[]))
     # Mewtwo is in our mock DF? No, Bulbasaur and Charmander.
     # Let's mock the DF or use one with high stats.

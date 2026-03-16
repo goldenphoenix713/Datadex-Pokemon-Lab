@@ -1,12 +1,12 @@
 
 > Dash Mantine Components v2.6.0 Documentation for MultiSelect
-> See complete docs at <https://www.dash-mantine-components.com/assets/llms.txt>  
+> See complete docs at <https://www.dash-mantine-components.com/assets/llms.txt>
 > All relative links in this file should be resolved against <https://www.dash-mantine-components.com>
 
-## MultiSelect  
+## MultiSelect
 
-MultiSelect enables users to select multiple options in a dropdown.  
-Category: Combobox  
+MultiSelect enables users to select multiple options in a dropdown.
+Category: Combobox
 
 ### Made with Combobox
 
@@ -576,7 +576,7 @@ component = dmc.MultiSelect(
 
 ### Dropdown offset
 
-To change dropdown offset, set `offset` prop in `comboboxProps`:  
+To change dropdown offset, set `offset` prop in `comboboxProps`:
 
 ```python
 import dash_mantine_components as dmc

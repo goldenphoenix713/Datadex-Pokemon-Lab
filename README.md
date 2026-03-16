@@ -5,7 +5,7 @@ Welcome to the **DATA-DEX**, the high-tech research tool used by top Trainers to
 ---
 
 ## 🎮 How to Play
-1. **SCAN:** Use the **Search Box** to pick up to 3 Pokémon. 
+1. **SCAN:** Use the **Search Box** to pick up to 3 Pokémon.
 2. **SYNC:** Watch the **Scanner-Dex** slide their stats into view!
 3. **COMPARE:** Look at the **Radar Shape**. A bigger, rounder shape means a more balanced Pokémon. A "pointy" shape means a specialist!
 4. **DISCOVER:** Scroll down to the **Type Leaderboard** to see which Types (Fire, Water, etc.) are winning the math battle.
@@ -49,4 +49,3 @@ This lab runs on **Python**, **Dash**, and **Plotly**.
 ---
 
 **Built for future Data Champions. Gotta analyze 'em all!** 📊🔥
-

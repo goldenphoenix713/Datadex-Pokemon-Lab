@@ -96,45 +96,48 @@ def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
     fig = go.Figure()
 
     if not pokemon_names:
-        fig.update_layout(
-            polar=dict(radialaxis=dict(visible=True, range=[0, max_stat])),
-            showlegend=False,
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-        )
-        return fig
-
-    # Filter for the chosen Pokémon using SQL
-    names_list = ", ".join([f"'{n}'" for n in pokemon_names])
-    with db_lock:
-        selected_data = conn.execute(
-            f'SELECT * FROM pokemon WHERE "Name" IN ({names_list})'
-        ).to_arrow_table()
-
-    logger.debug(
-        f"Radar query found {selected_data.num_rows} match(es) for names: {pokemon_names}"
-    )
-    if selected_data.num_rows > 0:
-        logger.debug(f"Found names in data: {selected_data['Name'].to_pylist()}")
-
-    # Add a trace for each selected Pokémon
-    for row in selected_data.to_pylist():
-        stats = [row[cat] for cat in categories]
-        stats.append(stats[0])
-        closed_categories = categories + [categories[0]]
-
+        # Add a dummy trace with all categories to space axes correctly
         fig.add_trace(
             go.Scatterpolar(
-                r=stats,
-                theta=closed_categories,
-                fill="toself",
-                name=row["Name"],
-                hoverinfo="text",
-                text=[f"{cat}: {val}" for cat, val in zip(closed_categories, stats)],
+                r=[0] * len(categories),
+                theta=categories,
+                showlegend=False,
+                hoverinfo="skip",
+                marker=dict(opacity=0),
             )
         )
+    else:
+        # Filter for the chosen Pokémon using SQL
+        names_list = ", ".join([f"'{n}'" for n in pokemon_names])
+        with db_lock:
+            selected_data = conn.execute(
+                f'SELECT * FROM pokemon WHERE "Name" IN ({names_list})'
+            ).to_arrow_table()
 
-    # Style the polar axes and legend
+        logger.debug(
+            f"Radar query found {selected_data.num_rows} match(es) for names: {pokemon_names}"
+        )
+
+        # Add a trace for each selected Pokémon
+        for row in selected_data.to_pylist():
+            stats = [row[cat] for cat in categories]
+            stats.append(stats[0])
+            closed_categories = categories + [categories[0]]
+
+            fig.add_trace(
+                go.Scatterpolar(
+                    r=stats,
+                    theta=closed_categories,
+                    fill="toself",
+                    name=row["Name"],
+                    hoverinfo="text",
+                    text=[
+                        f"{cat}: {val}" for cat, val in zip(closed_categories, stats)
+                    ],
+                )
+            )
+
+    # Style the polar axes and legend - consolidated for consistency
     fig.update_layout(
         polar=dict(
             radialaxis=dict(
@@ -147,6 +150,7 @@ def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
                 tickfont=dict(size=12, color="gray"), rotation=90, direction="clockwise"
             ),
         ),
+        # Fix height and show legend even if empty to reserve space
         showlegend=True,
         legend=dict(
             orientation="h",
@@ -157,6 +161,7 @@ def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
             font=dict(color="white"),
         ),
         margin=dict(l=40, r=40, t=40, b=40),
+        height=400,  # Explicit height to match leaderboard and prevent jumps
         transition=dict(duration=500, easing="cubic-in-out"),
         paper_bgcolor="rgba(0,0,0,0)",
     )
@@ -199,8 +204,8 @@ def create_type_leaderboard(df: Any, stat_column: str) -> go.Figure:
 
     # Use SQL for grouping and averaging
     query = f"""
-    SELECT 
-        "Primary Type", 
+    SELECT
+        "Primary Type",
         AVG("{stat_column}") as avg_stat
     FROM pokemon
     GROUP BY "Primary Type"

@@ -14,7 +14,7 @@ layout = dmc.MantineProvider(
     theme=CUSTOM_THEME,
     forceColorScheme="dark",
     children=[
-        dcc.Store(id="team-store", data=["Bulbasaur", "Charmander"]),
+        dcc.Store(id="team-store", data=[], storage_type="session"),
         dmc.AppShell(
             header={"height": 100},
             navbar={
@@ -67,7 +67,7 @@ layout = dmc.MantineProvider(
                                 {"label": "Pokédex Number", "value": "number"},
                                 {"label": "Name", "value": "name"},
                             ],
-                            value="name",
+                            value="number",
                             mb="md",
                         ),
                         dmc.Divider(my="md"),
@@ -128,7 +128,7 @@ layout = dmc.MantineProvider(
                                 dmc.Switch(
                                     id="gmax-toggle",
                                     label="Show G-Max forms",
-                                    checked=True,
+                                    checked=False,
                                 ),
                             ],
                         ),
@@ -151,7 +151,7 @@ layout = dmc.MantineProvider(
                                     label="Your Weight (lbs)",
                                     value=150,
                                     min=10,
-                                    max=200,
+                                    max=500,
                                     step=1,
                                     debounce=500,
                                 ),

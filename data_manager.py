@@ -12,6 +12,9 @@ SHINY_ARTWORK_URL = (
     "https://raw.githubusercontent.com/PokeAPI/sprites/"
     + "master/sprites/pokemon/other/official-artwork/shiny/"
 )
+POKEAPI_SPRITE_URL = (
+    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+)
 
 METERS_TO_FEET = 3.28084
 KILOGRAMS_TO_POUNDS = 2.20462
@@ -27,7 +30,7 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet"):
 
     # Regional mapping logic
     region_case = """
-        CASE 
+        CASE
             WHEN "#" <= 151 THEN 'Kanto'
             WHEN "#" <= 251 THEN 'Johto'
             WHEN "#" <= 386 THEN 'Hoenn'
@@ -45,15 +48,15 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet"):
 
     # SQL query for comprehensive cleaning and transformation
     query = f"""
-    SELECT 
-        "#" as id, 
+    SELECT
+        "#" as id,
         "#" as "number",
-        "Name", 
+        "Name",
         "Type 1" as "Primary Type",
         COALESCE("Type 2", 'None') as "Secondary Type",
-        "HP", "Attack", "Defense", 
-        "Sp. Atk" as "Special Attack", 
-        "Sp. Def" as "Special Defense", 
+        "HP", "Attack", "Defense",
+        "Sp. Atk" as "Special Attack",
+        "Sp. Def" as "Special Defense",
         "Speed",
         ROUND("Height" * {METERS_TO_FEET} / 10, 1) as "Height",
         ROUND("Weight" * {KILOGRAMS_TO_POUNDS} / 10, 1) as "Weight",
@@ -134,11 +137,56 @@ def ensure_pokemon_image(
         except Exception as e:
             logger.error(f"Error downloading {image_name}: {e}")
 
-        return placeholder_path
+        return str(placeholder_path)
     else:
         # Image is already in cache
         logger.debug(f"Image {image_name} already exists for {pokemon_name}")
         return str(image_path)
+
+
+def ensure_pokemon_sprite(pokemon_id: int, pokemon_name: str = "Unknown") -> str:
+    """Check if a Pokémon sprite is cached locally, download it if not.
+
+    :param pokemon_id: The official ID of the Pokémon.
+    :type pokemon_id: int
+    :param pokemon_name: The name of the Pokémon for logging. Defaults to "Unknown".
+    :type pokemon_name: str
+    :return: The local path to the sprite, or a pokeball placeholder if download fails.
+    :rtype: str
+    """
+    assets_dir = Path("assets")
+    sprites_dir = assets_dir / "sprites"
+
+    # Ensure directories exist
+    sprites_dir.mkdir(parents=True, exist_ok=True)
+
+    sprite_name = f"{pokemon_id}.png"
+    sprite_url = f"{POKEAPI_SPRITE_URL}{pokemon_id}.png"
+    sprite_path = sprites_dir / sprite_name
+    placeholder_path = sprites_dir / "pokeball_placeholder.png"
+
+    # Only download if we don't already have it cached locally
+    if not sprite_path.exists():
+        try:
+            logger.info(f"Downloading sprite for {pokemon_name} (ID: {pokemon_id})...")
+            response = requests.get(sprite_url, timeout=10)
+            if response.status_code == 200:
+                with open(sprite_path, "wb") as f:
+                    f.write(response.content)
+                logger.debug(f"Successfully downloaded sprite: {sprite_name}")
+                return str(sprite_path)
+            else:
+                logger.warning(
+                    f"Failed to download sprite {sprite_name} (Status: {response.status_code})"
+                )
+        except Exception as e:
+            logger.error(f"Error downloading sprite {sprite_name}: {e}")
+
+        return str(placeholder_path)
+    else:
+        # Sprite is already in cache
+        logger.debug(f"Sprite {sprite_name} already exists for {pokemon_name}")
+        return str(sprite_path)
 
 
 def has_shiny_artwork(pokemon_id: int) -> bool:

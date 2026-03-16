@@ -12,7 +12,7 @@ document.addEventListener('error', function (event) {
         // Fallback for small sprites
         if (!event.target.src.includes('pokeball_placeholder.png')) {
             console.log('Falling back to small pokeball placeholder');
-            event.target.src = '/assets/images/pokeball_placeholder.png';
+            event.target.src = '/assets/sprites/pokeball_placeholder.png';
         }
     }
 }, true);
