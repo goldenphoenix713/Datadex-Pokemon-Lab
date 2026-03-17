@@ -27,4 +27,4 @@ assets/sprites/*.png
 # Logs
 logs/
 
-.coverage.coverage
+.coverage
