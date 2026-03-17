@@ -38,8 +38,10 @@ body {
 .mantine-Text-root,
 .mantine-Title-root,
 .mantine-Select-label,
-.mantine-MultiSelect-label {
+.mantine-MultiSelect-label,
+.mantine-NumberInput-label {
     color: #f8fafc !important;
+    padding-left: 5px;
     /* Slate 50 */
 }
 

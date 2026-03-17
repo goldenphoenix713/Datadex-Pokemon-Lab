@@ -59,10 +59,14 @@ radar_card = dmc.GridCol(
                     ],
                     mb="xl",
                 ),
-                dcc.Graph(
-                    id="radar-chart",
-                    config={"displayModeBar": False},
-                    style={"height": "500px"},
+                dcc.Loading(
+                    dcc.Graph(
+                        id="radar-chart",
+                        config={"displayModeBar": False},
+                        style={"height": "500px"},
+                    ),
+                    type="circle",
+                    color="yellow",
                 ),
             ],
         ),
@@ -143,10 +147,19 @@ pokemon_detail_card = dmc.GridCol(
                     disabled=True,  # Default to disabled if no selection
                 ),
                 dmc.Divider(my="md"),
-                dmc.Text("Evolution Lineage", size="sm", fw=700, mb="sm"),
-                html.Div(id="evolution-chain-display"),
-                dmc.Divider(my="md"),
-                html.Div(id="trainer-comparison-display"),
+                dcc.Loading(
+                    html.Div(
+                        id="details-loading-container",
+                        children=[
+                            dmc.Text("Evolution Lineage", size="sm", fw=700, mb="sm"),
+                            html.Div(id="evolution-chain-display"),
+                            dmc.Divider(my="md"),
+                            html.Div(id="trainer-comparison-display"),
+                        ],
+                    ),
+                    type="dot",
+                    color="yellow",
+                ),
             ],
         ),
     ],
@@ -180,9 +193,13 @@ type_leaderboard_card = dmc.GridCol(
                     value="Attack",
                     mb="md",
                 ),
-                dcc.Graph(
-                    id="leaderboard-chart",
-                    config={"displayModeBar": False},
+                dcc.Loading(
+                    dcc.Graph(
+                        id="leaderboard-chart",
+                        config={"displayModeBar": False},
+                    ),
+                    type="dot",
+                    color="yellow",
                 ),
             ],
         ),
@@ -228,9 +245,13 @@ world_exploration_card = dmc.GridCol(
                     ],
                     mb="md",
                 ),
-                dcc.Graph(
-                    id="scatter-plot",
-                    config={"displayModeBar": False},
+                dcc.Loading(
+                    dcc.Graph(
+                        id="scatter-plot",
+                        config={"displayModeBar": False},
+                    ),
+                    type="circle",
+                    color="yellow",
                 ),
             ],
         ),

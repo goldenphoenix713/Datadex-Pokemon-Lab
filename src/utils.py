@@ -9,6 +9,7 @@ def get_filtered_table(
     show_legendary: bool,
     show_mythical: bool,
     show_gmax: bool,
+    show_ultra_beasts: bool,
     selected_types: List[str],
     stat_ranges: dict,
 ) -> Any:
@@ -39,6 +40,9 @@ def get_filtered_table(
     if not show_gmax:
         where_clauses.append("NOT Is_GMax")
 
+    if not show_ultra_beasts:
+        where_clauses.append("NOT Is_Ultra_Beast")
+
     if selected_types:
         type_list = ", ".join([f"'{t}'" for t in selected_types])
         where_clauses.append(
@@ -47,10 +51,16 @@ def get_filtered_table(
 
     # Apply Stat Range Filters
     for stat, r in stat_ranges.items():
-        # Mapping for SQL column names if needed, but they match the table columns
         where_clauses.append(f'"{stat}" BETWEEN {r[0]} AND {r[1]}')
 
-    query = 'SELECT * FROM "pokemon"'
+    query = """
+    SELECT *,
+           CASE
+               WHEN "Secondary Type" = 'None' THEN "Primary Type"
+               ELSE "Primary Type" || '/' || "Secondary Type"
+           END AS "Typing"
+    FROM "pokemon"
+    """
     if where_clauses:
         query += " WHERE " + " AND ".join(where_clauses)
 

@@ -25,3 +25,32 @@ dmcfuncs.renderPokemonOption = function ({ option }, { sprites }) {
         )
     );
 };
+
+// Clientside callback helper for evolution clicks
+window.dash_clientside = window.dash_clientside || {};
+window.dash_clientside.clientside = window.dash_clientside.clientside || {};
+window.dash_clientside.clientside.handleEvolutionClick = function (evo_clicks) {
+    if (!evo_clicks || evo_clicks.length === 0) {
+        return window.dash_clientside.no_update;
+    }
+
+    // dash_clientside.callback_context.triggered gives us information about what was clicked
+    const triggered = window.dash_clientside.callback_context.triggered;
+    if (!triggered || triggered.length === 0) {
+        return window.dash_clientside.no_update;
+    }
+
+    const trigger = triggered[0];
+    // Property check for n_clicks > 0
+    if (trigger.value > 0) {
+        // ID is usually a dictionary for evo-links: {"name": "Bulbasaur", "type": "evo-link"}
+        try {
+            const id = JSON.parse(trigger.prop_id.split('.')[0]);
+            return id.name;
+        } catch (e) {
+            console.error("Failed to parse trigger ID", e);
+        }
+    }
+
+    return window.dash_clientside.no_update;
+};

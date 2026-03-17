@@ -2,6 +2,12 @@ import duckdb
 import requests  # type: ignore[import-untyped]
 from pathlib import Path
 from loguru import logger
+from diskcache import Cache
+
+# Initialize persistent cache directory
+cache_dir = Path(".cache")
+cache_dir.mkdir(exist_ok=True)
+registry_cache = Cache(str(cache_dir / "registry"))
 
 # Image URL for official artwork
 OFFICIAL_ARTWORK_URL = (
@@ -51,7 +57,21 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet"):
     SELECT
         "#" as id,
         "#" as "number",
-        "Name",
+        CASE
+            WHEN "Name" ILIKE '% Mega %' THEN 'Mega ' || regexp_replace("Name", ' (?i)Mega ', ' ')
+            WHEN "Name" ILIKE '% Mega' THEN 'Mega ' || regexp_replace("Name", ' (?i)Mega', '')
+            WHEN "Name" ILIKE '% Gmax %' THEN 'Gmax ' || regexp_replace("Name", ' (?i)Gmax ', ' ')
+            WHEN "Name" ILIKE '% Gmax' THEN 'Gmax ' || regexp_replace("Name", ' (?i)Gmax', '')
+            WHEN "Name" ILIKE '% Alola %' THEN 'Alolan ' || regexp_replace("Name", ' (?i)Alola ', ' ')
+            WHEN "Name" ILIKE '% Alola' THEN 'Alolan ' || regexp_replace("Name", ' (?i)Alola', '')
+            WHEN "Name" ILIKE '% Galar %' THEN 'Galarian ' || regexp_replace("Name", ' (?i)Galar ', ' ')
+            WHEN "Name" ILIKE '% Galar' THEN 'Galarian ' || regexp_replace("Name", ' (?i)Galar', '')
+            WHEN "Name" ILIKE '% Hisui %' THEN 'Hisuian ' || regexp_replace("Name", ' (?i)Hisui ', ' ')
+            WHEN "Name" ILIKE '% Hisui' THEN 'Hisuian ' || regexp_replace("Name", ' (?i)Hisui', '')
+            WHEN "Name" ILIKE '% Paldea %' THEN 'Paldean ' || regexp_replace("Name", ' (?i)Paldea ', ' ')
+            WHEN "Name" ILIKE '% Paldea' THEN 'Paldean ' || regexp_replace("Name", ' (?i)Paldea', '')
+            ELSE "Name"
+        END as "Name",
         "Type 1" as "Primary Type",
         COALESCE("Type 2", 'None') as "Secondary Type",
         "HP", "Attack", "Defense",
@@ -68,6 +88,7 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet"):
         "Name" ILIKE '%Gmax%' as "Is_GMax",
         "Name" ILIKE '%Mega%' as "Is_Mega",
         regexp_matches("Name", '(?i)Alola|Galar|Hisui|Paldea') as "Is_Regional",
+        "Name" IN ('Nihilego', 'Buzzwole', 'Pheromosa', 'Xurkitree', 'Celesteela', 'Kartana', 'Guzzlord', 'Poipole', 'Naganadel', 'Stakataka', 'Blacephalon') as "Is_Ultra_Beast",
         "Evolution_Chain_URL",
         "Evolution_Chain_Members",
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' || "#" || '.png' as "Sprite_URL",
@@ -197,18 +218,28 @@ def has_shiny_artwork(pokemon_id: int) -> bool:
     :return: True if shiny artwork exists, False otherwise.
     :rtype: bool
     """
-    # First check local cache
+    # 1. Check local cache (filesystem)
     assets_dir = Path("assets")
     images_dir = assets_dir / "images"
     cached_path = images_dir / f"{pokemon_id}_shiny.png"
     if cached_path.exists():
         return True
 
-    # If not cached, perform a quick HEAD request to the sprite repository
+    # 2. Check persistent registry (cross-process cache)
+    cache_key = f"shiny_exists_{pokemon_id}"
+    cached_result = registry_cache.get(cache_key)
+    if cached_result is not None:
+        return bool(cached_result)
+
+    # 3. Perform a quick HEAD request if not in registry
     url = f"{SHINY_ARTWORK_URL}{pokemon_id}.png"
+    exists = False
     try:
         response = requests.head(url, timeout=5)
-        return response.status_code == 200
+        exists = response.status_code == 200
+        # Store in persistent cache
+        registry_cache.set(cache_key, exists)
+        return exists
     except Exception as e:
         logger.error(f"Error checking shiny existence for {pokemon_id}: {e}")
         return False

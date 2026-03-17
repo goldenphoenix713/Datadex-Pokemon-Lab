@@ -70,27 +70,9 @@ def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
 
     max_stat = MAX_BASE_STAT
 
-    logger.debug(f"Categories for radar: {categories}")
-    # Efficiently find global max stat across all categories
-    stat_columns = ", ".join([f'"{c}"' for c in categories])
-    with db_lock:
-        res = (
-            conn.execute(f"SELECT MAX(GREATEST({stat_columns})) FROM pokemon")
-            .to_arrow_table()
-            .to_pylist()
-        )
+    from src.stats_logic import get_max_stat_value
 
-    # Safe extraction of the single scalar result
-    if res and res[0]:
-        # Get the first (and only) value from the first row dict
-        max_stat = list(res[0].values())[0]
-    else:
-        max_stat = 255
-
-    # Ensure max_stat is a number and not None
-    if max_stat is None or not isinstance(max_stat, (int, float)):
-        max_stat = 255
-
+    max_stat = get_max_stat_value(table, categories)
     logger.debug(f"Computed max_stat: {max_stat}")
 
     fig = go.Figure()
@@ -107,12 +89,22 @@ def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
             )
         )
     else:
-        # Filter for the chosen Pokémon using SQL
+        # Filter for the chosen Pokémon using the registered filtered set
+        from src.data import conn, db_lock
+
         names_list = ", ".join([f"'{n}'" for n in pokemon_names])
-        with db_lock:
-            selected_data = conn.execute(
-                f'SELECT * FROM pokemon WHERE "Name" IN ({names_list})'
-            ).to_arrow_table()
+        try:
+            with db_lock:
+                conn.register("radar_set_select", table)
+                selected_data = conn.execute(
+                    f'SELECT * FROM radar_set_select WHERE "Name" IN ({names_list})'
+                ).to_arrow_table()
+        finally:
+            with db_lock:
+                try:
+                    conn.unregister("radar_set_select")
+                except Exception:
+                    pass
 
         logger.debug(
             f"Radar query found {selected_data.num_rows} match(es) for names: {pokemon_names}"
@@ -200,25 +192,10 @@ def create_type_leaderboard(df: Any, stat_column: str) -> go.Figure:
         )
         return fig
 
-    from src.data import conn, db_lock
+    from src.stats_logic import compute_type_averages, get_global_avg
 
-    # Use SQL for grouping and averaging
-    query = f"""
-    SELECT
-        "Primary Type",
-        AVG("{stat_column}") as avg_stat
-    FROM pokemon
-    GROUP BY "Primary Type"
-    ORDER BY avg_stat DESC
-    """
-    with db_lock:
-        type_stats = conn.execute(query).to_arrow_table().to_pylist()
-        res = (
-            conn.execute(f'SELECT AVG("{stat_column}") FROM pokemon')
-            .to_arrow_table()
-            .to_pylist()
-        )
-    global_avg = res[0][list(res[0].keys())[0]] if res and res[0] else 0
+    type_stats = compute_type_averages(df, stat_column)
+    global_avg = get_global_avg(df, stat_column)
 
     if not type_stats:
         return fig
@@ -286,6 +263,11 @@ def create_scatter_plot(df: Any, x_col: str, y_col: str) -> go.Figure:
         y=y_col,
         color="Primary Type",
         hover_name="Name",
+        hover_data={
+            "Typing": True,
+            "Primary Type": False,
+            "Secondary Type": False,
+        },
         color_discrete_map=TYPE_COLORS,
         template="plotly_dark",
     )
