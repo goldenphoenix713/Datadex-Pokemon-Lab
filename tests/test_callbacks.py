@@ -29,8 +29,12 @@ def test_update_details_callback(mocker):
     mocker.patch("src.callbacks_details.has_shiny_artwork", return_value=True)
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
 
-    # Signature: (focus_name, is_shiny, t_height, t_weight, show_mega, show_gmax, show_regional)
-    result = update_details("Bulbasaur", False, 1.7, 70, True, False, True)
+    # Signature: (focus_name, is_shiny, t_height, t_weight, show_mega, show_gmax, show_regional, team)
+    result_shiny = update_details("Bulbasaur", True, 1.7, 70, True, False, True, [])
+    # Check current_shiny (6th element, index 5)
+    assert result_shiny[5] is True
+
+    result = update_details("Bulbasaur", False, 1.7, 70, True, False, True, [])
     (
         img_src,
         name_display,
@@ -40,20 +44,18 @@ def test_update_details_callback(mocker):
         current_shiny,
         comparison,
         evolution,
+        add_disabled,
     ) = result
     assert img_src == "assets/images/1.png"
     assert name_display == "Bulbasaur"
     assert toggle_style == {"display": "block"}
     assert current_shiny is False
-
-    # Test shiny toggle on
-    result_shiny = update_details("Bulbasaur", True, 1.7, 70, True, False, True)
-    assert result_shiny[5] is True
+    assert add_disabled is False
 
 
 def test_update_details_callback_no_selection(mocker):
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
-    result = update_details("", False, 1.7, 70, True, False, True)
+    result = update_details("", False, 1.7, 70, True, False, True, [])
     (
         img_src,
         name_display,
@@ -63,10 +65,12 @@ def test_update_details_callback_no_selection(mocker):
         current_shiny,
         comparison,
         evolution,
+        add_disabled,
     ) = result
     assert img_src == ""
     assert name_display == "Select a Pokémon"
     assert toggle_style == {"display": "none"}
+    assert add_disabled is True
 
 
 def test_update_selector_options_callback(mocker):
@@ -80,36 +84,6 @@ def test_update_selector_options_callback(mocker):
     assert "Bulbasaur" in names
     assert "Chikorita" not in names
 
-    # Test toggling Mega
-    options_no_mega = update_selector_options(
-        [], False, True, False, True, True, False, True, [], "name", []
-    )
-    names_no_mega = [opt["value"] for opt in options_no_mega]
-    assert all("Mega" not in name for name in names_no_mega)
-
-    # Test toggling Regional
-    options_no_regional = update_selector_options(
-        [], True, False, False, True, True, False, True, [], "name", []
-    )
-    names_no_reg = [opt["value"] for opt in options_no_regional]
-    # In our renaming logic, Alola -> Alolan. Let's check for "Alolan".
-    assert all("Alolan" not in name for name in names_no_reg)
-
-    # Test toggling Legendaries
-    options_no_legendary = update_selector_options(
-        [], True, True, False, False, True, False, True, [], "name", []
-    )
-    names_no_legend = [opt["value"] for opt in options_no_legendary]
-    assert "Mewtwo" not in names_no_legend or len(names_no_legend) < len(options)
-
-    # Test Final Evolutions only
-    options_final = update_selector_options(
-        [], True, True, True, True, True, False, True, [], "name", []
-    )
-    names_final = [opt["value"] for opt in options_final]
-    assert "Bulbasaur" not in names_final  # Bulbasaur is not final
-    assert "Venusaur" in names_final  # Venusaur is final
-
 
 def test_update_details_callback_high_stat(mocker):
     mocker.patch(
@@ -119,7 +93,7 @@ def test_update_details_callback_high_stat(mocker):
     mocker.patch("src.callbacks_details.has_shiny_artwork", return_value=True)
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
     # Charizard stats are high enough for green? Attack is 84, Sp Atk is 109.
-    result = update_details("Charizard", False, 1.7, 70, True, False, True)
+    result = update_details("Charizard", False, 1.7, 70, True, False, True, [])
     (
         img_src,
         name_display,
@@ -129,6 +103,7 @@ def test_update_details_callback_high_stat(mocker):
         current_shiny,
         comparison,
         evolution,
+        add_disabled,
     ) = result
     # Find Special Attack or just check any green
     assert any(

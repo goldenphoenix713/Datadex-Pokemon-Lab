@@ -27,6 +27,7 @@ def sample_pokemon_table():
         "Speed": [45, 65, 43],
         "Height": [7, 6, 5],
         "Weight": [69, 85, 90],
+        "Typing": ["Grass/Poison", "Fire", "Water"],
         "Image_URL": [
             "https://example.com/1.png",
             "https://example.com/4.png",

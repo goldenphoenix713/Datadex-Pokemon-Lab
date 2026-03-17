@@ -1,5 +1,5 @@
 import dash
-from typing import Any, Tuple
+from typing import Any, List
 from dash import callback, Input, Output, ctx, html
 import dash_mantine_components as dmc
 from loguru import logger
@@ -19,6 +19,7 @@ from visualizations import create_type_badge
     Output("shiny-toggle", "checked"),
     Output("trainer-comparison-display", "children"),
     Output("evolution-chain-display", "children"),
+    Output("add-pokemon-btn", "disabled"),
     Input("focus-selector", "value"),
     Input("shiny-toggle", "checked"),
     Input("trainer-height", "value"),
@@ -26,6 +27,7 @@ from visualizations import create_type_badge
     Input("mega-toggle", "checked"),
     Input("gmax-toggle", "checked"),
     Input("regional-toggle", "checked"),
+    Input("team-store", "data"),
 )
 def update_details(
     focus_name: str,
@@ -35,11 +37,22 @@ def update_details(
     show_mega: bool,
     show_gmax: bool,
     show_regional: bool,
-) -> Tuple[Any, Any, Any, Any, Any, Any, Any, Any]:
+    team: List[str],
+) -> Any:
     """Update the detail card for the focused Pokémon using DuckDB/Arrow."""
     if not focus_name:
         logger.debug("No Pokémon selected, showing placeholder detail view.")
-        return "", "Select a Pokémon", [], [], {"display": "none"}, False, "", ""
+        return (
+            "",
+            "Select a Pokémon",
+            [],
+            [],
+            {"display": "none"},
+            False,
+            "",
+            "",
+            True,
+        )
 
     triggered_id = ctx.triggered_id
     logger.debug(f"Updating detailed view. Triggered by: {triggered_id}")
@@ -66,7 +79,7 @@ def update_details(
                 dmc.Text(f"Ratio: {height_ratio:.1f}x", size="sm"),
             ],
         )
-        return (dash.no_update,) * 6 + (comparison_view, dash.no_update)
+        return (dash.no_update,) * 6 + (comparison_view, dash.no_update, dash.no_update)
 
     if triggered_id == "shiny-toggle":
         from src.data import conn, db_lock
@@ -87,6 +100,7 @@ def update_details(
             is_shiny,
             dash.no_update,
             dash.no_update,
+            dash.no_update,
         )
 
     name = focus_name
@@ -100,7 +114,7 @@ def update_details(
                 .to_pylist()[0]
             )
     except (IndexError, KeyError):
-        return "", "Select a Pokémon", [], [], {"display": "none"}, False, "", ""
+        return "", "Select a Pokémon", [], [], {"display": "none"}, False, "", "", True
 
     evolution_display = []
     if "Evolution_Chain_Members" in p_data and p_data["Evolution_Chain_Members"]:
@@ -233,6 +247,8 @@ def update_details(
     if p_data["Secondary Type"] != "None":
         types.append(p_data["Secondary Type"])
 
+    add_disabled = name in team or len(team) >= 6
+
     return (
         ensure_pokemon_image(p_id, name, shiny=current_shiny),
         name,
@@ -242,4 +258,5 @@ def update_details(
         current_shiny,
         comparison_view,
         evolution_display,
+        add_disabled,
     )
