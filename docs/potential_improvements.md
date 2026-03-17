@@ -13,7 +13,7 @@ Allow users to create a selection of up to 6 Pokémon to analyze team-wide stren
 - **Implementation**: Add a "Add to Team" button to the detail card. Store selections in a `dcc.Store`.
 - **Feature**: A **Weakness Heatmap** showing cumulative type weaknesses and resistances across the team.
 
-### 2. 🧬 Evolution Chains
+### 2. 🧬 Evolution Chains - COMPLETED
 
 Display the visual evolution lineage for the selected Pokémon.
 
@@ -21,9 +21,9 @@ Display the visual evolution lineage for the selected Pokémon.
 
 ---
 
-## � Advanced Discovery & Filtering
+## Advanced Discovery & Filtering
 
-### 7. � Smart Search & Accessibility
+### 7.  Smart Search & Accessibility - COMPLETED
 
 - **Quick-Search**: Enhance the dropdown with faster indexing or a persistent search bar.
 - **Touch-Friendly**: Optimize button spacing and sizing for use on tablets (e.g., STEAM Night demonstrations).
@@ -46,14 +46,14 @@ Improve type analysis to account for synergy and weaknesses in dual-type Pokémo
 
 ### 10. 📐 Stat Correlations & BMI
 
-- **BMI Calculation**: Introduce the concept of "Body Mass Index" using height and weight.
+- **BMI Calculation**: Introduce the concept of "Body Mass Index" using height and weight. - SKIPPED
 - **Outlier Detection**: Automatically highlight "Tiny Titans" (High stats, low weight) or "Heavy Hitters."
 
 ---
 
 ## 🏆 Engagement & Gamification
 
-### 11. 🎖️ Achievement & Specialist Badges
+### 11. 🎖️ Achievement & Specialist Badges - SKIPPED
 
 Implement virtual badges for discovery milestones:
 
@@ -95,38 +95,38 @@ Use `pytest-dash` to simulate user interactions and verify that all charts updat
 
 ## 🚀 Pro-Tier & Experimental Features
 
-### 19. 🧮 Individual Value (IV) & Effort Value (EV) Simulator
+### 19. 🧮 Individual Value (IV) & Effort Value (EV) Simulator - SKIPPED
 
 Move beyond base stats to calculated raw stats.
 
 - **Stat Calculator**: Add inputs for Level (1-100), Nature, IVs, and EVs to show the *actual* final stats a Pokémon would have in-game.
 
-### 20. 🎬 Visual Immersion & Animations
+### 20. 🎬 Visual Immersion & Animations - SKIPPED
 
 - **Animated Sprites**: Where available (e.g., Generation 5 style), swap static images for animated GIFs from PokeAPI to make the dashboard feel alive.
 - **3D Model Viewer**: Integrate a `<model-viewer>` component for Pokémon with available 3D assets to allow 360-degree rotation in the detail card.
 
-### 21. ⚔️ Offensive Coverage Tool
+### 21. ⚔️ Offensive Coverage Tool - SKIPPED
 
 - **Move-Set Analysis**: List common moves for a Pokémon and visualize their offensive coverage (e.g., "This move-set is Super Effective against 14/18 types").
 
 ### 22. 💾 Data Portability & Reporting
 
-- **Showdown Export**: Add a "Copy to Clipboard" button that formats the Pokémon's details into the standard format used by Pokémon Showdown.
+- **Showdown Export**: Add a "Copy to Clipboard" button that formats the Pokémon's details into the standard format used by Pokémon Showdown. - SKIPPED
 - **PDF Research Report**: Generate a polished "Research Summary" PDF for a selected Pokémon, including all its charts and stats—perfect for students to take home from a STEAM event.
 
-### 23. 🗺️ Habitat Geography
+### 23. 🗺️ Habitat Geography - SKIPPED
 
 - **Interactive Map**: Show which regions and specific routes the Pokémon can be found in, using a zoomable map of the Pokémon world.
 
 ### 24. 🔊 Audio Integration (The "Dex" Experience)
 
 - **Pokémon Cries**: Add a "Play Cry" button to hear the unique digital sound of the selected Pokémon.
-- **Text-to-Speech**: A robotic "Pokédex voice" that reads out the name and flavor text.
+- **Text-to-Speech**: A robotic "Pokédex voice" that reads out the name and flavor text.- SKIPPED
 
 ### 25. 🤖 Cutting-Edge AI & Mobile
 
-- **AI Image Recognition**: A "Scan Pokémon" feature where users can upload a photo, and a lightweight Machine Learning model identifies the species.
+- **AI Image Recognition**: A "Scan Pokémon" feature where users can upload a photo, and a lightweight Machine Learning model identifies the species. - SKIPPED
 - **Progressive Web App (PWA)**: Optimize the dashboard so it can be "installed" on mobile devices and tablets for offline use during events.
 
 ---
