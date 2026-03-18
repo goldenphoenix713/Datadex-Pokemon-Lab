@@ -54,3 +54,14 @@ window.dash_clientside.clientside.handleEvolutionClick = function (evo_clicks) {
 
     return window.dash_clientside.no_update;
 };
+
+window.dash_clientside.clientside.playPokemonCry = function(n_clicks) {
+    if (n_clicks > 0) {
+        const audioElement = document.getElementById('pokemon-cry-audio');
+        if (audioElement) {
+            audioElement.currentTime = 0;
+            audioElement.play();
+        }
+    }
+    return window.dash_clientside.no_update;
+};

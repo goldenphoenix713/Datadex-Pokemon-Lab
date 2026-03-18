@@ -2,6 +2,7 @@
 
 import dash_mantine_components as dmc
 from dash import dcc, html
+from dash_iconify import DashIconify
 from src.data import pokemon_sprites
 from src.constants import STAT_OPTIONS
 
@@ -29,7 +30,7 @@ radar_card = dmc.GridCol(
                             id="clear-team-btn",
                             variant="subtle",
                             color="gray",
-                            leftSection=html.I(className="fas fa-trash"),
+                            leftSection=DashIconify(icon="tabler:trash"),
                         ),
                     ],
                     mb="md",
@@ -96,10 +97,32 @@ pokemon_detail_card = dmc.GridCol(
                     },
                     searchable=True,
                 ),
-                dmc.Title(
-                    id="pokemon-name-display",
-                    order=2,
-                    className="pokemon-section-title",
+                dmc.Group(
+                    justify="space-between",
+                    align="center",
+                    mb="xs",
+                    children=[
+                        dmc.Title(
+                            id="pokemon-name-display",
+                            order=2,
+                            className="pokemon-section-title",
+                            style={"margin": 0},
+                        ),
+                        dmc.ActionIcon(
+                            DashIconify(icon="tabler:volume"),
+                            id="play-cry-btn",
+                            variant="subtle",
+                            color="blue",
+                            size="lg",
+                            radius="xl",
+                        ),
+                    ],
+                ),
+                html.Audio(
+                    id="pokemon-cry-audio",
+                    src="",
+                    autoPlay=True,
+                    style={"display": "none"},
                 ),
                 dmc.Center(
                     children=[
@@ -142,7 +165,7 @@ pokemon_detail_card = dmc.GridCol(
                     fullWidth=True,
                     size="lg",
                     radius="md",
-                    leftSection=html.I(className="fas fa-plus"),
+                    leftSection=DashIconify(icon="tabler:plus"),
                     mb="md",
                     disabled=True,  # Default to disabled if no selection
                 ),

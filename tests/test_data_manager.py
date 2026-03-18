@@ -174,6 +174,8 @@ def test_has_shiny_artwork_exception(mocker):
     # Mock Path.exists to False
     # Mock requests.head to raise an exception
     mocker.patch("data_manager.Path.exists", return_value=False)
+    # Mock registry_cache.get to return None so it proceeds to the network call
+    mocker.patch("data_manager.registry_cache.get", return_value=None)
     mocker.patch("requests.head", side_effect=Exception("Network Error"))
 
     from data_manager import has_shiny_artwork
@@ -232,3 +234,32 @@ def test_ensure_pokemon_sprite_download_failure(mocker):
 
     path = ensure_pokemon_sprite(1, "Bulbasaur")
     assert "pokeball_placeholder.png" in path
+
+
+def test_ensure_pokemon_cry_download_success(mocker):
+    # Mock Path.exists to False (not in cache)
+    mocker.patch("data_manager.Path.exists", return_value=False)
+    mocker.patch("data_manager.Path.mkdir")
+
+    mock_resp = mocker.Mock()
+    mock_resp.status_code = 200
+    mock_resp.content = b"fake_cry_content"
+    mocker.patch("requests.get", return_value=mock_resp)
+
+    mocker.patch("builtins.open", mocker.mock_open())
+
+    from data_manager import ensure_pokemon_cry
+
+    path = ensure_pokemon_cry(1, "Bulbasaur")
+    assert "1.ogg" in path
+    assert "sounds" in path
+
+
+def test_ensure_pokemon_cry_cache_hit(mocker):
+    # Mock Path.exists to return True for the cry
+    mocker.patch("data_manager.Path.exists", return_value=True)
+    from data_manager import ensure_pokemon_cry
+
+    path = ensure_pokemon_cry(1, "Bulbasaur")
+    assert "1.ogg" in path
+    assert "sounds" in path

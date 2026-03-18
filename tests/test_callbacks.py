@@ -27,6 +27,9 @@ def test_update_details_callback(mocker):
         return_value="assets/images/1.png",
     )
     mocker.patch("src.callbacks_details.has_shiny_artwork", return_value=True)
+    mocker.patch(
+        "src.callbacks_details.ensure_pokemon_cry", return_value="assets/sounds/1.ogg"
+    )
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
 
     # Signature: (focus_name, is_shiny, t_height, t_weight, show_mega, show_gmax, show_regional, team)
@@ -45,12 +48,16 @@ def test_update_details_callback(mocker):
         comparison,
         evolution,
         add_disabled,
+        cry_src,
+        cry_icon,
+        cry_disabled,
     ) = result
     assert img_src == "assets/images/1.png"
     assert name_display == "Bulbasaur"
     assert toggle_style == {"display": "block"}
     assert current_shiny is False
     assert add_disabled is False
+    assert cry_src == "assets/sounds/1.ogg"
 
 
 def test_update_details_callback_no_selection(mocker):
@@ -66,11 +73,15 @@ def test_update_details_callback_no_selection(mocker):
         comparison,
         evolution,
         add_disabled,
+        cry_src,
+        cry_icon,
+        cry_disabled,
     ) = result
     assert img_src == ""
     assert name_display == "Select a Pokémon"
     assert toggle_style == {"display": "none"}
     assert add_disabled is True
+    assert cry_src == ""
 
 
 def test_update_selector_options_callback(mocker):
@@ -91,6 +102,9 @@ def test_update_details_callback_high_stat(mocker):
         return_value="assets/images/6.png",
     )
     mocker.patch("src.callbacks_details.has_shiny_artwork", return_value=True)
+    mocker.patch(
+        "src.callbacks_details.ensure_pokemon_cry", return_value="assets/sounds/6.ogg"
+    )
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
     # Charizard stats are high enough for green? Attack is 84, Sp Atk is 109.
     result = update_details("Charizard", False, 1.7, 70, True, False, True, [])
@@ -104,6 +118,9 @@ def test_update_details_callback_high_stat(mocker):
         comparison,
         evolution,
         add_disabled,
+        cry_src,
+        cry_icon,
+        cry_disabled,
     ) = result
     # Find Special Attack or just check any green
     assert any(

@@ -21,6 +21,7 @@ wheels/
 # Assets Images
 assets/images/*.png
 assets/sprites/*.png
+assets/sounds/*.ogg
 !assets/images/*placeholder.png
 !assets/sprites/*pokeball_placeholder.png
 

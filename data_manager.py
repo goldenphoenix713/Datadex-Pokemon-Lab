@@ -21,6 +21,9 @@ SHINY_ARTWORK_URL = (
 POKEAPI_SPRITE_URL = (
     "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
 )
+POKEAPI_CRY_URL = (
+    "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/"
+)
 
 METERS_TO_FEET = 3.28084
 KILOGRAMS_TO_POUNDS = 2.20462
@@ -208,6 +211,50 @@ def ensure_pokemon_sprite(pokemon_id: int, pokemon_name: str = "Unknown") -> str
         # Sprite is already in cache
         logger.debug(f"Sprite {sprite_name} already exists for {pokemon_name}")
         return str(sprite_path)
+
+
+def ensure_pokemon_cry(pokemon_id: int, pokemon_name: str = "Unknown") -> str:
+    """Check if a Pokémon cry is cached locally, download it if not.
+
+    :param pokemon_id: The official ID of the Pokémon.
+    :type pokemon_id: int
+    :param pokemon_name: The name of the Pokémon for logging. Defaults to "Unknown".
+    :type pokemon_name: str
+    :return: The local path to the cry (.ogg), or empty string if download fails.
+    :rtype: str
+    """
+    assets_dir = Path("assets")
+    sounds_dir = assets_dir / "sounds"
+
+    # Ensure directories exist
+    sounds_dir.mkdir(parents=True, exist_ok=True)
+
+    cry_name = f"{pokemon_id}.ogg"
+    cry_url = f"{POKEAPI_CRY_URL}{pokemon_id}.ogg"
+    cry_path = sounds_dir / cry_name
+
+    # Only download if we don't already have it cached locally
+    if not cry_path.exists():
+        try:
+            logger.info(f"Downloading cry for {pokemon_name} (ID: {pokemon_id})...")
+            response = requests.get(cry_url, timeout=10)
+            if response.status_code == 200:
+                with open(cry_path, "wb") as f:
+                    f.write(response.content)
+                logger.debug(f"Successfully downloaded cry: {cry_name}")
+                return str(cry_path)
+            else:
+                logger.warning(
+                    f"Failed to download cry {cry_name} (Status: {response.status_code})"
+                )
+        except Exception as e:
+            logger.error(f"Error downloading cry {cry_name}: {e}")
+
+        return ""
+    else:
+        # Cry is already in cache
+        logger.debug(f"Cry {cry_name} already exists for {pokemon_name}")
+        return str(cry_path)
 
 
 def has_shiny_artwork(pokemon_id: int) -> bool:

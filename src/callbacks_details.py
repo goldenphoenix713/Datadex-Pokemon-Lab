@@ -2,11 +2,17 @@ import dash
 from typing import Any, List
 from dash import callback, Input, Output, ctx, html
 import dash_mantine_components as dmc
+from dash_iconify import DashIconify
 from loguru import logger
 
 from src.data import evolution_map
 from src.constants import STAT_OPTIONS
-from data_manager import ensure_pokemon_image, has_shiny_artwork, ensure_pokemon_sprite
+from data_manager import (
+    ensure_pokemon_image,
+    has_shiny_artwork,
+    ensure_pokemon_sprite,
+    ensure_pokemon_cry,
+)
 from visualizations import create_type_badge
 
 
@@ -20,6 +26,9 @@ from visualizations import create_type_badge
     Output("trainer-comparison-display", "children"),
     Output("evolution-chain-display", "children"),
     Output("add-pokemon-btn", "disabled"),
+    Output("pokemon-cry-audio", "src"),
+    Output("play-cry-btn", "children"),
+    Output("play-cry-btn", "disabled"),
     Input("focus-selector", "value"),
     Input("shiny-toggle", "checked"),
     Input("trainer-height", "value"),
@@ -52,6 +61,9 @@ def update_details(
             "",
             "",
             True,
+            "",
+            DashIconify(icon="tabler:volume-off"),
+            True,
         )
 
     triggered_id = ctx.triggered_id
@@ -66,7 +78,17 @@ def update_details(
             ).fetchone()
 
         p_height = row[0] if row else 0
-        t_height_f = float(t_height)
+        try:
+            t_height_f = float(t_height)
+        except (ValueError, TypeError):
+            return (dash.no_update,) * 6 + (
+                "",
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+            )
         height_ratio = p_height / t_height_f if t_height_f > 0 else 1
         comparison_view = dmc.Stack(
             gap=4,
@@ -79,7 +101,14 @@ def update_details(
                 dmc.Text(f"Ratio: {height_ratio:.1f}x", size="sm"),
             ],
         )
-        return (dash.no_update,) * 6 + (comparison_view, dash.no_update, dash.no_update)
+        return (dash.no_update,) * 6 + (
+            comparison_view,
+            dash.no_update,
+            dash.no_update,
+            dash.no_update,
+            dash.no_update,
+            dash.no_update,
+        )
 
     if triggered_id == "shiny-toggle":
         from src.data import conn, db_lock
@@ -101,6 +130,9 @@ def update_details(
             dash.no_update,
             dash.no_update,
             dash.no_update,
+            dash.no_update,
+            dash.no_update,
+            dash.no_update,
         )
 
     name = focus_name
@@ -114,7 +146,20 @@ def update_details(
                 .to_pylist()[0]
             )
     except (IndexError, KeyError):
-        return "", "Select a Pokémon", [], [], {"display": "none"}, False, "", "", True
+        return (
+            "",
+            "Select a Pokémon",
+            [],
+            [],
+            {"display": "none"},
+            False,
+            "",
+            "",
+            True,
+            "",
+            DashIconify(icon="tabler:volume-off"),
+            True,
+        )
 
     evolution_display = []
     if "Evolution_Chain_Members" in p_data and p_data["Evolution_Chain_Members"]:
@@ -249,6 +294,14 @@ def update_details(
 
     add_disabled = name in team or len(team) >= 6
 
+    cry_src = ensure_pokemon_cry(p_id, name)
+    has_cry = bool(cry_src)
+    cry_icon = (
+        DashIconify(icon="tabler:volume")
+        if has_cry
+        else DashIconify(icon="tabler:volume-off")
+    )
+
     return (
         ensure_pokemon_image(p_id, name, shiny=current_shiny),
         name,
@@ -259,4 +312,18 @@ def update_details(
         comparison_view,
         evolution_display,
         add_disabled,
+        cry_src,
+        cry_icon,
+        not has_cry,
     )
+
+
+dash.clientside_callback(
+    """
+    function(n_clicks) {
+        return window.dash_clientside.clientside.playPokemonCry(n_clicks);
+    }
+    """,
+    Output("play-cry-btn", "id"),
+    Input("play-cry-btn", "n_clicks"),
+)

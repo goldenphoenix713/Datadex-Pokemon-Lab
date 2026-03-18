@@ -17,7 +17,10 @@ logger.add(sys.stderr, level="DEBUG")
 dash._dash_renderer._set_react_version("18.2.0")  # type: ignore[possibly-missing-attribute]
 
 # Initialize the Dash app
-app = dash.Dash(__name__, title="Data-Dex: Ultimate Stat Lab")
+app = dash.Dash(
+    __name__,
+    title="Data-Dex: Ultimate Stat Lab",
+)
 
 # Import layout and callbacks to register them
 from src.layout import layout  # noqa: E402

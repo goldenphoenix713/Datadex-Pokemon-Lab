@@ -1,6 +1,7 @@
 from typing import List, Any
-from dash import callback, Input, Output, ctx, ALL, State, html
+from dash import callback, Input, Output, ctx, ALL, State
 import dash_mantine_components as dmc
+from dash_iconify import DashIconify
 from loguru import logger
 
 
@@ -92,7 +93,7 @@ def render_team_list(team: List[str]) -> Any:
                         variant="subtle",
                         color="red",
                         size="sm",
-                        children=html.I(className="fas fa-times"),
+                        children=DashIconify(icon="tabler:x"),
                     ),
                 ],
             )
