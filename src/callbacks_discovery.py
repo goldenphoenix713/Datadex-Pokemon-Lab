@@ -1,7 +1,7 @@
 import dash
 from typing import List, Any
 from dash import callback, Input, Output, ALL, ctx
-from src.utils import get_filtered_table as get_filtered_df
+from src.utils import get_filtered_table as get_filtered_pokemon_table
 
 
 @callback(
@@ -40,7 +40,7 @@ def update_focus_options(
         if isinstance(item["id"], dict) and item["id"].get("type") == "stat"
     }
 
-    filtered_table = get_filtered_df(
+    filtered_table = get_filtered_pokemon_table(
         regions,
         show_mega,
         show_regional,

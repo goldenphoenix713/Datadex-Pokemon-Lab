@@ -9,6 +9,7 @@ from src.components import (
     type_leaderboard_card,
     world_exploration_card,
 )
+from src.data import pokemon_ids, pokemon_table
 
 layout = dmc.MantineProvider(
     theme=CUSTOM_THEME,
@@ -16,6 +17,13 @@ layout = dmc.MantineProvider(
     children=[
         dcc.Store(id="current-pokemon-data", data={}, storage_type="memory"),
         dcc.Store(id="team-store", data=[], storage_type="session"),
+        dcc.Store(id="pokemon-id-map", data=pokemon_ids, storage_type="memory"),
+        dcc.Store(
+            id="full-pokemon-data",
+            data=pokemon_table.to_pylist(),
+            storage_type="memory",
+        ),
+        dcc.Store(id="stats-names-store", data=STAT_OPTIONS, storage_type="memory"),
         dmc.AppShell(
             header={"height": 100},
             navbar={

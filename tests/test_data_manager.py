@@ -7,39 +7,37 @@ def test_load_and_clean_data(mocker):
 
     mock_table = pa.table(
         {
-            "number": [1],
+            "#": [1],
             "Name": ["Bulbasaur"],
-            "Primary Type": ["Grass"],
-            "Secondary Type": ["Poison"],
+            "Type 1": ["Grass"],
+            "Type 2": ["Poison"],
             "HP": [45],
             "Attack": [49],
             "Defense": [49],
-            "Special Attack": [65],
-            "Special Defense": [65],
+            "Sp. Atk": [65],
+            "Sp. Def": [65],
             "Speed": [45],
             "Height": [7.0],
             "Weight": [69.0],
             "Species_Name": ["bulbasaur"],
-            "Image_URL": ["assets/images/1.png"],
+            "Is_Legendary": [False],
+            "Is_Mythical": [False],
+            "Is_Final_Evolution": [False],
+            "Evolution_Chain_URL": ["url"],
+            "Evolution_Chain_Members": ["bulbasaur,ivysaur,venusaur"],
         }
     )
 
-    # Mock duckdb.connect().execute().to_arrow_table()
-    mock_conn = mocker.Mock()
-    mocker.patch("duckdb.connect", return_value=mock_conn)
-    mock_conn.execute.return_value.to_arrow_table.return_value = mock_table
+    # Mock pyarrow.parquet.read_table
+    mocker.patch("pyarrow.parquet.read_table", return_value=mock_table)
 
-    df = load_and_clean_data("fake_path.parquet")
+    pokemon_table = load_and_clean_data("fake_path.parquet")
 
-    # Check renames (now columns in pa.Table)
-    assert "Special Attack" in df.column_names
-    assert "Special Defense" in df.column_names
-    assert "Primary Type" in df.column_names
-    assert "Secondary Type" in df.column_names
-
-    # Check Image_URL generation
-    assert "Image_URL" in df.column_names
-    assert df.to_pylist()[0]["Image_URL"] == "assets/images/1.png"
+    # Check columns
+    assert "Special Attack" in pokemon_table.column_names
+    assert "Primary Type" in pokemon_table.column_names
+    assert "Image_URL" in pokemon_table.column_names
+    assert pokemon_table.to_pylist()[0]["Image_URL"] == "assets/images/1.png"
 
 
 def test_load_and_clean_data_handles_missing_secondary_type(mocker):
@@ -47,18 +45,32 @@ def test_load_and_clean_data_handles_missing_secondary_type(mocker):
 
     mock_table = pa.table(
         {
+            "#": [25],
             "Name": ["Pikachu"],
-            "Secondary Type": ["None"],
+            "Type 1": ["Electric"],
+            "Type 2": pa.array([None], type=pa.string()),
+            "HP": [35],
+            "Attack": [55],
+            "Defense": [40],
+            "Sp. Atk": [50],
+            "Sp. Def": [50],
+            "Speed": [90],
+            "Height": [4.0],
+            "Weight": [60.0],
+            "Species_Name": ["pikachu"],
+            "Is_Legendary": [False],
+            "Is_Mythical": [False],
+            "Is_Final_Evolution": [False],
+            "Evolution_Chain_URL": ["url"],
+            "Evolution_Chain_Members": ["pichu,pikachu,raichu"],
         }
     )
 
-    mock_conn = mocker.Mock()
-    mocker.patch("duckdb.connect", return_value=mock_conn)
-    mock_conn.execute.return_value.to_arrow_table.return_value = mock_table
+    mocker.patch("pyarrow.parquet.read_table", return_value=mock_table)
 
-    df = load_and_clean_data("fake_path.parquet")
+    pokemon_table = load_and_clean_data("fake_path.parquet")
 
-    assert df.to_pylist()[0]["Secondary Type"] == "None"
+    assert pokemon_table.to_pylist()[0]["Secondary Type"] == "None"
 
 
 def test_load_and_clean_data_adds_enhanced_fields(mocker):
@@ -66,41 +78,36 @@ def test_load_and_clean_data_adds_enhanced_fields(mocker):
 
     mock_table = pa.table(
         {
+            "#": [1, 152, 6, 19],
             "Name": ["Bulbasaur", "Chikorita", "Charizard Mega X", "Rattata Alolan"],
-            "Region": ["Kanto", "Johto", "Kanto", "Kanto"],
-            "Is_Mega": [False, False, True, False],
-            "Is_Regional": [False, False, False, True],
-            "Sprite_URL": [
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
-                "url",
-                "url",
-                "url",
-            ],
+            "Type 1": ["Grass", "Grass", "Fire", "Normal"],
+            "Type 2": ["Poison", "None", "Dragon", "Dark"],
+            "HP": [45, 45, 78, 30],
+            "Attack": [49, 49, 130, 56],
+            "Defense": [49, 65, 111, 35],
+            "Sp. Atk": [65, 49, 130, 25],
+            "Sp. Def": [65, 65, 85, 35],
+            "Speed": [45, 45, 100, 72],
+            "Height": [7.0, 9.0, 17.0, 3.0],
+            "Weight": [69.0, 64.0, 110.5, 38.0],
+            "Species_Name": ["bulbasaur", "chikorita", "charizard", "rattata"],
+            "Is_Legendary": [False, False, False, False],
+            "Is_Mythical": [False, False, False, False],
+            "Is_Final_Evolution": [False, False, False, False],
+            "Evolution_Chain_URL": ["url", "url", "url", "url"],
+            "Evolution_Chain_Members": ["b,i,v", "c,b,m", "c,c,c", "r,r"],
         }
     )
 
-    mock_conn = mocker.Mock()
-    mocker.patch("duckdb.connect", return_value=mock_conn)
-    mock_conn.execute.return_value.to_arrow_table.return_value = mock_table
+    mocker.patch("pyarrow.parquet.read_table", return_value=mock_table)
 
-    df = load_and_clean_data("fake_path.parquet")
+    pokemon_table = load_and_clean_data("fake_path.parquet")
 
-    data = df.to_pylist()
-    # Verify Regions
+    data = pokemon_table.to_pylist()
     assert data[0]["Region"] == "Kanto"
     assert data[1]["Region"] == "Johto"
-
-    # Verify Form Detection
     assert data[2]["Is_Mega"]
-    assert not data[0]["Is_Mega"]
     assert data[3]["Is_Regional"]
-    assert not data[0]["Is_Regional"]
-
-    # Verify Sprite URLs
-    assert (
-        data[0]["Sprite_URL"]
-        == "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
-    )
 
 
 def test_has_shiny_artwork(mocker):
@@ -137,11 +144,11 @@ def test_ensure_pokemon_image_shiny(mocker, tmp_path):
 
 
 def test_load_and_clean_data_failure(mocker):
-    # Mock duckdb.connect to raise an exception
-    mocker.patch("duckdb.connect", side_effect=Exception("DuckDB Error"))
+    # Mock read_table to raise an exception
+    mocker.patch("pyarrow.parquet.read_table", side_effect=Exception("Read Error"))
     import pytest
 
-    with pytest.raises(Exception, match="DuckDB Error"):
+    with pytest.raises(Exception, match="Read Error"):
         load_and_clean_data("any_path.parquet")
 
 

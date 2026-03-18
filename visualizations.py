@@ -1,7 +1,6 @@
 from typing import Any, List
 import plotly.express as px
 import plotly.graph_objects as go
-from loguru import logger
 
 # Canonical Pokemon Type Colors
 TYPE_COLORS = {
@@ -26,6 +25,15 @@ TYPE_COLORS = {
     "None": "#68A090",
 }
 
+RADAR_CATEGORIES = [
+    "HP",
+    "Attack",
+    "Defense",
+    "Speed",
+    "Special Defense",
+    "Special Attack",
+]
+
 
 def create_type_badge(pokemon_type: str) -> Any:
     """Create a Mantine Badge component for a given Pokémon type.
@@ -49,92 +57,38 @@ def create_type_badge(pokemon_type: str) -> Any:
     )
 
 
-def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
-    """Create a radar chart comparing stats of selected Pokémon using DuckDB for speed.
+def get_radar_dummy_trace() -> go.Scatterpolar:
+    """Return a hidden dummy trace to keep the radar chart in polar mode."""
+    return go.Scatterpolar(
+        r=[0] * len(RADAR_CATEGORIES),
+        theta=RADAR_CATEGORIES,
+        showlegend=False,
+        hoverinfo="skip",
+        marker=dict(opacity=0),
+    )
 
-    :param table: The Pokémon PyArrow Table.
-    :param pokemon_names: A list of Pokémon names to compare.
-    :return: A Plotly radar chart.
-    """
-    logger.debug(f"Creating radar chart for {len(pokemon_names)} Pokémon.")
-    categories = [
-        "HP",
-        "Attack",
-        "Defense",
-        "Speed",
-        "Special Defense",
-        "Special Attack",
-    ]
 
-    from src.data import conn, MAX_BASE_STAT, db_lock
-
-    max_stat = MAX_BASE_STAT
-
-    from src.stats_logic import get_max_stat_value
-
-    max_stat = get_max_stat_value(table, categories)
-    logger.debug(f"Computed max_stat: {max_stat}")
+def get_radar_base_figure() -> go.Figure:
+    """Create a radar chart base with layout and styling but no data."""
+    from src.data import MAX_BASE_STAT
 
     fig = go.Figure()
-
-    if not pokemon_names:
-        # Add a dummy trace with all categories to space axes correctly
-        fig.add_trace(
-            go.Scatterpolar(
-                r=[0] * len(categories),
-                theta=categories,
-                showlegend=False,
-                hoverinfo="skip",
-                marker=dict(opacity=0),
-            )
+    # Add a dummy trace with all categories to space axes correctly
+    fig.add_trace(
+        go.Scatterpolar(
+            r=[0] * len(RADAR_CATEGORIES),
+            theta=RADAR_CATEGORIES,
+            showlegend=False,
+            hoverinfo="skip",
+            marker=dict(opacity=0),
         )
-    else:
-        # Filter for the chosen Pokémon using the registered filtered set
-        from src.data import conn, db_lock
+    )
 
-        names_list = ", ".join([f"'{n}'" for n in pokemon_names])
-        try:
-            with db_lock:
-                conn.register("radar_set_select", table)
-                selected_data = conn.execute(
-                    f'SELECT * FROM radar_set_select WHERE "Name" IN ({names_list})'
-                ).to_arrow_table()
-        finally:
-            with db_lock:
-                try:
-                    conn.unregister("radar_set_select")
-                except Exception:
-                    pass
-
-        logger.debug(
-            f"Radar query found {selected_data.num_rows} match(es) for names: {pokemon_names}"
-        )
-
-        # Add a trace for each selected Pokémon
-        for row in selected_data.to_pylist():
-            stats = [row[cat] for cat in categories]
-            stats.append(stats[0])
-            closed_categories = categories + [categories[0]]
-
-            fig.add_trace(
-                go.Scatterpolar(
-                    r=stats,
-                    theta=closed_categories,
-                    fill="toself",
-                    name=row["Name"],
-                    hoverinfo="text",
-                    text=[
-                        f"{cat}: {val}" for cat, val in zip(closed_categories, stats)
-                    ],
-                )
-            )
-
-    # Style the polar axes and legend - consolidated for consistency
     fig.update_layout(
         polar=dict(
             radialaxis=dict(
                 visible=True,
-                range=[0, max_stat],
+                range=[0, MAX_BASE_STAT],
                 showticklabels=False,
                 gridcolor="lightgrey",
             ),
@@ -142,7 +96,6 @@ def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
                 tickfont=dict(size=12, color="gray"), rotation=90, direction="clockwise"
             ),
         ),
-        # Fix height and show legend even if empty to reserve space
         showlegend=True,
         legend=dict(
             orientation="h",
@@ -153,112 +106,163 @@ def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
             font=dict(color="white"),
         ),
         margin=dict(l=40, r=40, t=40, b=40),
-        height=400,  # Explicit height to match leaderboard and prevent jumps
+        height=400,
         transition=dict(duration=500, easing="cubic-in-out"),
         paper_bgcolor="rgba(0,0,0,0)",
     )
     return fig
 
 
-def create_type_leaderboard(df: Any, stat_column: str) -> go.Figure:
-    """Create a bar chart showing averaged stats by Pokémon primary type using DuckDB."""
-    logger.debug(f"Creating type leaderboard for stat: {stat_column}")
+def get_radar_traces(table: Any, pokemon_names: List[str]) -> List[go.Scatterpolar]:
+    """Generate radar traces for selected Pokémon."""
+    if not pokemon_names:
+        return []
+
+    import pyarrow.compute as pc
+
+    selected_data = table.filter(pc.field("Name").isin(pokemon_names))
+    traces = []
+
+    for row in selected_data.to_pylist():
+        stats = [row[cat] for cat in RADAR_CATEGORIES]
+        stats.append(stats[0])
+        closed_categories = RADAR_CATEGORIES + [RADAR_CATEGORIES[0]]
+
+        traces.append(
+            go.Scatterpolar(
+                r=stats,
+                theta=closed_categories,
+                fill="toself",
+                name=row["Name"],
+                hoverinfo="text",
+                text=[f"{cat}: {val}" for cat, val in zip(closed_categories, stats)],
+            )
+        )
+    return traces
+
+
+def create_radar_chart(table: Any, pokemon_names: List[str]) -> go.Figure:
+    """Create a radar chart by combining base figure and data traces."""
+    fig = get_radar_base_figure()
+    traces = get_radar_traces(table, pokemon_names)
+    if traces:
+        # Replace the dummy trace if we have real data
+        fig.data = traces
+    return fig
+
+
+def get_leaderboard_base_figure(stat_column: str = "Attack") -> go.Figure:
+    """Create a bar chart base with layout and styling but no data."""
     fig = go.Figure()
-
-    if not stat_column:
-        return fig
-
-    # Verify stat column exists
-    if df is None:
-        logger.warning("No data provided to leaderboard.")
-        return fig
-
-    # Support both PyArrow/DuckDB and Pandas
-    # ARROW/DUCKDB FIRST to avoid property collision where Table has .columns property (RecordBatch)
-    if hasattr(df, "column_names"):
-        cols = df.column_names
-    elif hasattr(df, "columns"):
-        cols = df.columns
-    else:
-        cols = []
-
-    if stat_column not in cols:
-        logger.warning(f"Stat column '{stat_column}' not found in data.")
-        fig.update_layout(
-            title=dict(
-                text=f"Stat '{stat_column}' not found to compare",
-                font=dict(color="white"),
-            ),
-        )
-        return fig
-
-    from src.stats_logic import compute_type_averages, get_global_avg
-
-    type_stats = compute_type_averages(df, stat_column)
-    global_avg = get_global_avg(df, stat_column)
-
-    if not type_stats:
-        return fig
-
-    # Add horizontal bars colored by the type palette
-    fig.add_trace(
-        go.Bar(
-            x=[row["avg_stat"] for row in type_stats],
-            y=[row["Primary Type"] for row in type_stats],
-            orientation="h",
-            marker_color=[
-                TYPE_COLORS.get(row["Primary Type"], "#68A090") for row in type_stats
-            ],
-            text=[round(row["avg_stat"], 1) for row in type_stats],
-            textposition="auto",
-            name="Type Average",
-            textfont=dict(color="white"),
-        )
-    )
-
-    # Add a global benchmark line for comparison
-    fig.add_vline(
-        x=global_avg,
-        line_dash="dot",
-        line_color="white",
-        annotation_text=f"Global Average: {global_avg:.1f}",
-        annotation_position="bottom right",
-        annotation_font=dict(color="white", size=12),
-    )
-
     fig.update_layout(
         title=dict(text=f"Top {stat_column} by Type", font=dict(color="white")),
         xaxis=dict(
-            title=stat_column,
+            title=dict(text=stat_column, font=dict(color="white")),
             gridcolor="rgba(255,255,255,0.1)",
             tickfont=dict(color="white"),
             title_font=dict(color="white"),
         ),
-        yaxis=dict(title="", autorange="reversed", tickfont=dict(color="white")),
+        yaxis=dict(
+            title=dict(text="", font=dict(color="white")),
+            autorange="reversed",
+            tickfont=dict(color="white"),
+        ),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         margin=dict(l=0, r=0, t=40, b=0),
         height=400,
         showlegend=False,
+        transition=dict(duration=500, easing="cubic-in-out"),
     )
-
     return fig
 
 
-def create_scatter_plot(df: Any, x_col: str, y_col: str) -> go.Figure:
-    """Create a scatter plot comparing two stats using Plotly's Arrow support."""
+def get_leaderboard_data(pokemon_table: Any, stat_column: str) -> dict:
+    """Generate bar trace and global average line for the leaderboard."""
+    from src.stats_logic import compute_type_averages, get_global_avg
+
+    type_stats = compute_type_averages(pokemon_table, stat_column)
+    global_avg = get_global_avg(pokemon_table, stat_column)
+
+    if not type_stats:
+        return {"trace": None, "global_avg": None}
+
+    trace = go.Bar(
+        x=[row["avg_stat"] for row in type_stats],
+        y=[row["Primary Type"] for row in type_stats],
+        orientation="h",
+        marker_color=[
+            TYPE_COLORS.get(row["Primary Type"], "#68A090") for row in type_stats
+        ],
+        text=[round(row["avg_stat"], 1) for row in type_stats],
+        textposition="auto",
+        name="Type Average",
+        textfont=dict(color="white"),
+    )
+
+    return {"trace": trace, "global_avg": global_avg}
+
+
+def create_type_leaderboard(pokemon_table: Any, stat_column: str) -> go.Figure:
+    """Create a type leaderboard by combining base figure and data elements."""
+    fig = get_leaderboard_base_figure(stat_column)
+    data = get_leaderboard_data(pokemon_table, stat_column)
+
+    if data["trace"]:
+        fig.add_trace(data["trace"])
+        fig.add_vline(
+            x=data["global_avg"],
+            line_dash="dot",
+            line_color="white",
+            annotation_text=f"Global Average: {data['global_avg']:.1f}",
+            annotation_position="bottom right",
+            annotation_font=dict(color="white", size=12),
+        )
+    return fig
+
+
+def get_scatter_base_figure(x_col: str = "Weight", y_col: str = "Speed") -> go.Figure:
+    """Create a scatter plot base with layout and styling but no data."""
+    fig = go.Figure()
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=0, r=0, t=40, b=0),
+        legend=dict(
+            title=dict(text="Type", font=dict(color="white")),
+            orientation="h",
+            y=-0.2,
+            font=dict(color="white"),
+        ),
+        xaxis=dict(
+            title=dict(text=x_col, font=dict(color="white")),
+            gridcolor="rgba(255,255,255,0.1)",
+            autorange=True,
+        ),
+        yaxis=dict(
+            title=dict(text=y_col, font=dict(color="white")),
+            gridcolor="rgba(255,255,255,0.1)",
+            autorange=True,
+        ),
+        template="plotly_dark",
+        transition=dict(duration=500, easing="cubic-in-out"),
+    )
+    return fig
+
+
+def create_scatter_plot(pokemon_table: Any, x_col: str, y_col: str) -> go.Figure:
+    """Create a scatter plot by combining base figure and px.scatter data."""
     if not x_col or not y_col:
-        fig = go.Figure()
+        fig = get_scatter_base_figure()
         fig.update_layout(
-            title=dict(text="Select both axes to explore", font=dict(color="white")),
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
+            title=dict(text="Select both axes to explore", font=dict(color="white"))
         )
         return fig
 
     # Plotly 6.0+ handles Arrow tables directly
-    fig = px.scatter(
-        df,
+    # px.scatter handles the complex color mapping and hover data logic
+    px_fig = px.scatter(
+        pokemon_table,
         x=x_col,
         y=y_col,
         color="Primary Type",
@@ -272,21 +276,9 @@ def create_scatter_plot(df: Any, x_col: str, y_col: str) -> go.Figure:
         template="plotly_dark",
     )
 
-    fig.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=0, r=0, t=40, b=0),
-        legend=dict(
-            title=dict(text="Type", font=dict(color="white")),
-            orientation="h",
-            y=-0.2,
-            font=dict(color="white"),
-        ),
-        xaxis=dict(gridcolor="rgba(255,255,255,0.1)"),
-        yaxis=dict(gridcolor="rgba(255,255,255,0.1)"),
-    )
-
-    # Style data points: solid marker with white outline for visibility
+    fig = get_scatter_base_figure(x_col, y_col)
+    fig.data = px_fig.data
+    # Re-apply point styling
     fig.update_traces(
         marker=dict(size=10, opacity=0.7, line=dict(width=1, color="white"))
     )

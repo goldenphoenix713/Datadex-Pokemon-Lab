@@ -2,6 +2,7 @@ from app import app
 import time
 import pytest
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 pytestmark = pytest.mark.slow
 
@@ -14,43 +15,64 @@ def test_001_initial_load(dash_duo):
     dash_duo.wait_for_text_to_equal("#pokemon-name-display", "Bulbasaur", timeout=15)
 
     assert dash_duo.driver.title == "Data-Dex: Ultimate Stat Lab"
-    focus_selector = dash_duo.find_element("#focus-selector")
-    assert focus_selector.is_displayed()
+    assert dash_duo.find_element("#focus-selector").is_displayed()
 
 
 def select_pokemon(dash_duo, name):
     """Helper to select a specific Pokemon from the searchable focus-selector."""
-    # In Mantine 7 / DMC 0.14, the ID is often on the input itself if searchable
-    selector_input = dash_duo.wait_for_element("#focus-selector", timeout=15)
+    # Wait for the selector to be ready
+    selector = dash_duo.wait_for_element("#focus-selector", timeout=20)
 
-    # If it's not the input, find the input inside
-    if selector_input.tag_name != "input":
-        selector_input = selector_input.find_element(By.TAG_NAME, "input")
+    # In Mantine Select, the click target is often the wrapper or the input
+    dash_duo.driver.execute_script("arguments[0].click();", selector)
+    time.sleep(0.5)
 
-    # Clear and type
+    # Find the actual input
+    selector_input = selector
+    if selector.tag_name != "input":
+        selector_input = selector.find_element(By.TAG_NAME, "input")
+
+    # Clear input aggressively
+    selector_input.send_keys(Keys.COMMAND + "a")
+    selector_input.send_keys(Keys.BACKSPACE)
     dash_duo.driver.execute_script("arguments[0].value = '';", selector_input)
     selector_input.send_keys(name)
-    time.sleep(2)
+    time.sleep(3)
 
-    # Find the EXACT option from the dropdown (portal)
-    # Role 'option' is standard for Mantine/Combobox
-    dash_duo.wait_for_element("[role='option']", timeout=10)
-    options = dash_duo.find_elements(By.CSS_SELECTOR, "[role='option']")
+    # Wait for any option to appear in the portal
+    # Role 'option' is standard for Mantine
+    dash_duo.wait_for_element("[role='option']", timeout=20)
+
+    # Try finding the target option multiple times
     target = None
-    for opt in options:
-        if opt.text.strip() == name:
-            target = opt
+    for _ in range(3):
+        options = dash_duo.find_elements("[role='option']")
+        if not options:
+            time.sleep(1)
+            continue
+
+        for opt in options:
+            txt = opt.text.strip()
+            if txt == name or name == txt:
+                target = opt
+                break
+        if target:
             break
+        time.sleep(1)
 
     if not target:
+        # Fallback: check if any option contains the name
+        options = dash_duo.find_elements("[role='option']")
         for opt in options:
-            if name in opt.text:
+            if name.lower() in opt.text.lower():
                 target = opt
                 break
 
-    assert target, f"Could not find option for {name}"
+    assert (
+        target
+    ), f"Could not find option for {name}. Found texts: {[o.text for o in options]}"
     dash_duo.driver.execute_script("arguments[0].click();", target)
-    time.sleep(1.5)
+    time.sleep(2)
 
 
 def test_002_focus_switching(dash_duo):
@@ -66,7 +88,7 @@ def test_003_evolution_chain_click(dash_duo):
     dash_duo.wait_for_text_to_equal("#pokemon-name-display", "Bulbasaur", timeout=15)
 
     dash_duo.wait_for_element(".evolution-node", timeout=15)
-    evo_nodes = dash_duo.find_elements(By.CLASS_NAME, "evolution-node")
+    evo_nodes = dash_duo.find_elements(".evolution-node")
 
     ivysaur_node = None
     for node in evo_nodes:
@@ -98,7 +120,7 @@ def test_004_filter_toggles(dash_duo):
     time.sleep(2)
 
     # Verify Mega is gone
-    elements = dash_duo.find_elements(By.CSS_SELECTOR, f"[id='{mega_idx}']")
+    elements = dash_duo.find_elements(f"[id='{mega_idx}']")
     assert len(elements) == 0, "Mega Charizard Y should be removed from lineage"
 
 

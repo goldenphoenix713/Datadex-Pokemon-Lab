@@ -4,7 +4,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Optional
 
-import requests  # type: ignore[import-untyped]
+import requests  # type: ignore[import]
 from loguru import logger
 import pyarrow as pa
 import duckdb

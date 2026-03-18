@@ -5,6 +5,11 @@ from dash import dcc, html
 from dash_iconify import DashIconify
 from src.data import pokemon_sprites
 from src.constants import STAT_OPTIONS
+from visualizations import (
+    get_radar_base_figure,
+    get_leaderboard_base_figure,
+    get_scatter_base_figure,
+)
 
 # Left Column: User Selection and Radar Comparison
 radar_card = dmc.GridCol(
@@ -63,6 +68,7 @@ radar_card = dmc.GridCol(
                 dcc.Loading(
                     dcc.Graph(
                         id="radar-chart",
+                        figure=get_radar_base_figure(),
                         config={"displayModeBar": False},
                         style={"height": "500px"},
                     ),
@@ -126,11 +132,24 @@ pokemon_detail_card = dmc.GridCol(
                 ),
                 dmc.Center(
                     children=[
-                        html.Img(
-                            id="pokemon-image",
-                            src="",
-                            style={"height": "200px"},
-                            className="pokemon-artwork",
+                        dmc.Box(
+                            pos="relative",
+                            children=[
+                                dmc.LoadingOverlay(
+                                    visible=False,
+                                    id="image-loading-overlay",
+                                    overlayProps={"radius": "sm", "blur": 2},
+                                    zIndex=100,
+                                ),
+                                dmc.Image(
+                                    id="pokemon-image",
+                                    src="",
+                                    h=200,
+                                    w="auto",
+                                    fit="contain",
+                                    className="pokemon-artwork",
+                                ),
+                            ],
                         )
                     ]
                 ),
@@ -170,18 +189,14 @@ pokemon_detail_card = dmc.GridCol(
                     disabled=True,  # Default to disabled if no selection
                 ),
                 dmc.Divider(my="md"),
-                dcc.Loading(
-                    html.Div(
-                        id="details-loading-container",
-                        children=[
-                            dmc.Text("Evolution Lineage", size="sm", fw=700, mb="sm"),
-                            html.Div(id="evolution-chain-display"),
-                            dmc.Divider(my="md"),
-                            html.Div(id="trainer-comparison-display"),
-                        ],
-                    ),
-                    type="dot",
-                    color="yellow",
+                html.Div(
+                    id="details-loading-container",
+                    children=[
+                        dmc.Text("Evolution Lineage", size="sm", fw=700, mb="sm"),
+                        html.Div(id="evolution-chain-display"),
+                        dmc.Divider(my="md"),
+                        html.Div(id="trainer-comparison-display"),
+                    ],
                 ),
             ],
         ),
@@ -219,6 +234,7 @@ type_leaderboard_card = dmc.GridCol(
                 dcc.Loading(
                     dcc.Graph(
                         id="leaderboard-chart",
+                        figure=get_leaderboard_base_figure(),
                         config={"displayModeBar": False},
                     ),
                     type="dot",
@@ -271,6 +287,7 @@ world_exploration_card = dmc.GridCol(
                 dcc.Loading(
                     dcc.Graph(
                         id="scatter-plot",
+                        figure=get_scatter_base_figure(),
                         config={"displayModeBar": False},
                     ),
                     type="circle",

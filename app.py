@@ -7,6 +7,7 @@ layouts, and callbacks from the src/ directory.
 import dash
 from loguru import logger
 import sys
+from flask_compress import Compress
 
 # Configure logging
 logger.remove()
@@ -21,6 +22,7 @@ app = dash.Dash(
     __name__,
     title="Data-Dex: Ultimate Stat Lab",
 )
+Compress(app.server)
 
 # Import layout and callbacks to register them
 from src.layout import layout  # noqa: E402
@@ -31,4 +33,4 @@ app.layout = layout
 if __name__ == "__main__":
     logger.info("Data-Dex Dash application starting...")
     # Start the server (debug=True enables hot reloading)
-    app.run(debug=True, port=8050, use_reloader=False)
+    app.run(debug=True, port=8050, use_reloader=False, threaded=True)

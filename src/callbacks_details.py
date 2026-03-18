@@ -1,23 +1,60 @@
 import dash
 from typing import Any, List
-from dash import callback, Input, Output, ctx, html
+from dash import callback, Input, Output, ctx, html, Patch
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 from loguru import logger
+import time
 
-from src.data import evolution_map
-from src.constants import STAT_OPTIONS
+from src.data import (
+    evolution_map,
+    STAT_OPTIONS,
+    MAX_BASE_STAT,
+    name_to_pokemon,
+)
 from data_manager import (
     ensure_pokemon_image,
     has_shiny_artwork,
     ensure_pokemon_sprite,
     ensure_pokemon_cry,
+    POKEAPI_CRY_URL,
 )
 from visualizations import create_type_badge
 
+# In-memory caches for the current session to avoid repeated disk/DB/Calc work
+_evolution_ui_cache: dict[str, Any] = {}
+_asset_existence_cache: dict[str, Any] = {}
+
+
+def _cached_has_shiny(p_id: int) -> bool:
+    key = f"shiny_{p_id}"
+    if key not in _asset_existence_cache:
+        _asset_existence_cache[key] = has_shiny_artwork(p_id)
+    return _asset_existence_cache[key]
+
+
+def _cached_image(p_id: int, name: str, shiny: bool) -> str:
+    key = f"img_{p_id}_{shiny}"
+    if key not in _asset_existence_cache:
+        _asset_existence_cache[key] = ensure_pokemon_image(p_id, name, shiny)
+    return _asset_existence_cache[key]
+
+
+def _cached_sprite(p_id: int, name: str) -> str:
+    key = f"sprite_{p_id}"
+    if key not in _asset_existence_cache:
+        _asset_existence_cache[key] = ensure_pokemon_sprite(p_id, name)
+    return _asset_existence_cache[key]
+
+
+def _cached_cry(p_id: int, name: str) -> str:
+    key = f"cry_{p_id}"
+    if key not in _asset_existence_cache:
+        _asset_existence_cache[key] = ensure_pokemon_cry(p_id, name)
+    return _asset_existence_cache[key]
+
 
 @callback(
-    Output("pokemon-image", "src"),
     Output("pokemon-name-display", "children"),
     Output("pokemon-types", "children"),
     Output("stat-progress-bars", "children"),
@@ -49,10 +86,10 @@ def update_details(
     team: List[str],
 ) -> Any:
     """Update the detail card for the focused Pokémon using DuckDB/Arrow."""
+    start_time = time.time()
     if not focus_name:
         logger.debug("No Pokémon selected, showing placeholder detail view.")
         return (
-            "",
             "Select a Pokémon",
             [],
             [],
@@ -70,25 +107,14 @@ def update_details(
     logger.debug(f"Updating detailed view. Triggered by: {triggered_id}")
 
     if triggered_id in ["trainer-height", "trainer-weight"]:
-        from src.data import conn, db_lock
-
-        with db_lock:
-            row = conn.execute(
-                f'SELECT "Height" FROM pokemon WHERE "Name" = \'{focus_name}\''
-            ).fetchone()
-
-        p_height = row[0] if row else 0
         try:
             t_height_f = float(t_height)
         except (ValueError, TypeError):
-            return (dash.no_update,) * 6 + (
-                "",
-                dash.no_update,
-                dash.no_update,
-                dash.no_update,
-                dash.no_update,
-                dash.no_update,
-            )
+            return (dash.no_update,) * 11
+
+        p_data = name_to_pokemon.get(focus_name)
+        p_height = p_data["Height"] if p_data else 0
+
         height_ratio = p_height / t_height_f if t_height_f > 0 else 1
         comparison_view = dmc.Stack(
             gap=4,
@@ -101,7 +127,7 @@ def update_details(
                 dmc.Text(f"Ratio: {height_ratio:.1f}x", size="sm"),
             ],
         )
-        return (dash.no_update,) * 6 + (
+        return (dash.no_update,) * 5 + (
             comparison_view,
             dash.no_update,
             dash.no_update,
@@ -110,44 +136,10 @@ def update_details(
             dash.no_update,
         )
 
-    if triggered_id == "shiny-toggle":
-        from src.data import conn, db_lock
-
-        with db_lock:
-            row = conn.execute(
-                f"SELECT id FROM pokemon WHERE \"Name\" = '{focus_name}'"
-            ).fetchone()
-
-        p_id = row[0] if row else 0
-        image_src = ensure_pokemon_image(int(p_id), focus_name, shiny=is_shiny)
-        return (
-            image_src,
-            dash.no_update,
-            dash.no_update,
-            dash.no_update,
-            dash.no_update,
-            is_shiny,
-            dash.no_update,
-            dash.no_update,
-            dash.no_update,
-            dash.no_update,
-            dash.no_update,
-            dash.no_update,
-        )
-
     name = focus_name
-    from src.data import conn, db_lock
-
-    try:
-        with db_lock:
-            p_data = (
-                conn.execute(f"SELECT * FROM pokemon WHERE \"Name\" = '{name}'")
-                .to_arrow_table()
-                .to_pylist()[0]
-            )
-    except (IndexError, KeyError):
+    p_data = name_to_pokemon.get(name)
+    if not p_data:
         return (
-            "",
             "Select a Pokémon",
             [],
             [],
@@ -161,8 +153,15 @@ def update_details(
             True,
         )
 
-    evolution_display = []
-    if "Evolution_Chain_Members" in p_data and p_data["Evolution_Chain_Members"]:
+    # Use a cache key that includes filter toggles
+    evo_cache_key = f"{p_data['Name']}_{show_mega}_{show_gmax}_{show_regional}"
+    evolution_display = _evolution_ui_cache.get(evo_cache_key)
+
+    if (
+        not evolution_display
+        and "Evolution_Chain_Members" in p_data
+        and p_data["Evolution_Chain_Members"]
+    ):
         members_list = p_data["Evolution_Chain_Members"].split(",")
         chain_items = []
         for member_species in members_list:
@@ -192,9 +191,7 @@ def update_details(
                             },
                             children=[
                                 dmc.Image(
-                                    src=ensure_pokemon_sprite(
-                                        base_form["id"], base_form["Name"]
-                                    ),
+                                    src=base_form["Sprite_URL"],
                                     fallbackSrc="/assets/sprites/pokeball_placeholder.png",
                                     h=64,
                                     w="auto",
@@ -225,9 +222,7 @@ def update_details(
                                     style={"cursor": "pointer"},
                                     children=[
                                         dmc.Image(
-                                            src=ensure_pokemon_sprite(
-                                                v["id"], v["Name"]
-                                            ),
+                                            src=v["Sprite_URL"],
                                             fallbackSrc="/assets/sprites/pokeball_placeholder.png",
                                             h=32,
                                             w="auto",
@@ -246,6 +241,7 @@ def update_details(
                 dmc.Stack(gap=4, align="center", children=stage_children)
             )
         evolution_display = dmc.Group(gap="sm", justify="center", children=chain_items)
+        _evolution_ui_cache[evo_cache_key] = evolution_display
 
     p_id, p_height = int(p_data["id"]), p_data["Height"]
     t_height_val = float(t_height)
@@ -262,11 +258,9 @@ def update_details(
         ],
     )
 
-    shiny_exists = has_shiny_artwork(p_id)
+    shiny_exists = _cached_has_shiny(p_id)
     toggle_style = {"display": "block"} if shiny_exists else {"display": "none"}
     current_shiny = is_shiny if shiny_exists else False
-
-    from src.data import MAX_BASE_STAT
 
     progress_bars = []
     for stat in STAT_OPTIONS:
@@ -294,7 +288,7 @@ def update_details(
 
     add_disabled = name in team or len(team) >= 6
 
-    cry_src = ensure_pokemon_cry(p_id, name)
+    cry_src = f"{POKEAPI_CRY_URL}{p_id}.ogg"
     has_cry = bool(cry_src)
     cry_icon = (
         DashIconify(icon="tabler:volume")
@@ -302,11 +296,25 @@ def update_details(
         else DashIconify(icon="tabler:volume-off")
     )
 
+    end_time = time.time()
+    logger.debug(f"Update details duration: {end_time - start_time}")
+
+    # Patch for types list
+    patch_types = Patch()
+    patch_types.clear()
+    for t in types:
+        patch_types.append(create_type_badge(t))
+
+    # Patch for progress bars
+    patch_stats = Patch()
+    patch_stats.clear()
+    for bar in progress_bars:
+        patch_stats.append(bar)
+
     return (
-        ensure_pokemon_image(p_id, name, shiny=current_shiny),
         name,
-        [create_type_badge(t) for t in types],
-        progress_bars,
+        patch_types,
+        patch_stats,
         toggle_style,
         current_shiny,
         comparison_view,
@@ -316,6 +324,44 @@ def update_details(
         cry_icon,
         not has_cry,
     )
+
+
+@callback(
+    Output("pokemon-image", "src"),
+    Input("focus-selector", "value"),
+    Input("shiny-toggle", "checked"),
+)
+def update_pokemon_image(focus_name: str, is_shiny: bool) -> str | dash.NoUpdate:
+    """Async callback to load the high-res Pokémon artwork."""
+    if not focus_name:
+        return ""
+
+    triggered_id = ctx.triggered_id
+    logger.debug(f"Updating Pokémon image. Triggered by: {triggered_id}")
+
+    p_data = name_to_pokemon.get(focus_name)
+    if not p_data:
+        return ""
+
+    p_id = int(p_data["id"])
+
+    # If it's a shiny toggle, check if shiny artwork exists first
+    if triggered_id == "shiny-toggle":
+        if not _cached_has_shiny(p_id):
+            return dash.no_update
+
+    return _cached_image(p_id, focus_name, shiny=is_shiny)
+
+
+dash.clientside_callback(
+    """
+    function(loading) {
+        return !!(loading && loading.is_loading);
+    }
+    """,
+    Output("image-loading-overlay", "visible"),
+    Input("pokemon-image", "loading_state"),
+)
 
 
 dash.clientside_callback(

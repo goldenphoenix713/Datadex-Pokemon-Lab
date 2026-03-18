@@ -1,7 +1,14 @@
-from typing import List, Any
-from dash import callback, Input, Output, ctx, ALL, State
-import dash_mantine_components as dmc
-from dash_iconify import DashIconify
+from typing import List
+from dash import (
+    callback,
+    Input,
+    Output,
+    ctx,
+    ALL,
+    State,
+    ClientsideFunction,
+    clientside_callback,
+)
 from loguru import logger
 
 
@@ -48,55 +55,9 @@ def update_team(
     return current_team
 
 
-@callback(
+clientside_callback(
+    ClientsideFunction(namespace="clientside", function_name="render_team_list"),
     Output("team-list", "children"),
     Input("team-store", "data"),
+    Input("pokemon-id-map", "data"),
 )
-def render_team_list(team: List[str]) -> Any:
-    """Render the team members as badges with remove buttons."""
-    if not team:
-        return dmc.Text(
-            "No Pokémon in your team yet. Add some from the Detail view!",
-            c="dimmed",
-            size="sm",
-            fs="italic",
-        )
-
-    from data_manager import ensure_pokemon_sprite
-    from src.data import pokemon_ids
-
-    badges = []
-    for name in team:
-        p_id = pokemon_ids.get(name, 0)
-        badges.append(
-            dmc.Paper(
-                withBorder=True,
-                shadow="xs",
-                p=4,
-                radius="sm",
-                style={
-                    "display": "flex",
-                    "alignItems": "center",
-                    "gap": "8px",
-                    "backgroundColor": "rgba(255, 255, 255, 0.05)",
-                },
-                children=[
-                    dmc.Image(
-                        src=ensure_pokemon_sprite(int(p_id), name),
-                        h=30,
-                        w=30,
-                        fallbackSrc="/assets/sprites/pokeball_placeholder.png",
-                    ),
-                    dmc.Text(name, size="sm", fw=500, style={"flex": 1}),
-                    dmc.ActionIcon(
-                        id={"type": "remove-team", "name": name},
-                        variant="subtle",
-                        color="red",
-                        size="sm",
-                        children=DashIconify(icon="tabler:x"),
-                    ),
-                ],
-            )
-        )
-
-    return dmc.Group(gap="xs", children=badges)
