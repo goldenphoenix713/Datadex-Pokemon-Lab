@@ -1,5 +1,6 @@
 import dash
 from typing import Any, List
+from pathlib import Path
 from dash import callback, Input, Output, ctx, html, Patch
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
@@ -13,45 +14,30 @@ from src.data import (
     name_to_pokemon,
 )
 from data_manager import (
-    ensure_pokemon_image,
-    has_shiny_artwork,
-    ensure_pokemon_sprite,
-    ensure_pokemon_cry,
+    OFFICIAL_ARTWORK_URL,
+    SHINY_ARTWORK_URL,
     POKEAPI_CRY_URL,
 )
 from visualizations import create_type_badge
 
 # In-memory caches for the current session to avoid repeated disk/DB/Calc work
 _evolution_ui_cache: dict[str, Any] = {}
-_asset_existence_cache: dict[str, Any] = {}
 
 
-def _cached_has_shiny(p_id: int) -> bool:
-    key = f"shiny_{p_id}"
-    if key not in _asset_existence_cache:
-        _asset_existence_cache[key] = has_shiny_artwork(p_id)
-    return _asset_existence_cache[key]
+def _get_artwork_url(p_id: int, shiny: bool) -> str:
+    """Return the local cached path if it exists, otherwise fall back to the CDN URL.
 
+    This keeps the Dash server completely out of the download path — the browser
+    fetches and caches the image from GitHub's CDN when no local copy exists.
+    """
 
-def _cached_image(p_id: int, name: str, shiny: bool) -> str:
-    key = f"img_{p_id}_{shiny}"
-    if key not in _asset_existence_cache:
-        _asset_existence_cache[key] = ensure_pokemon_image(p_id, name, shiny)
-    return _asset_existence_cache[key]
+    suffix = "_shiny" if shiny else ""
+    local_path = Path(f"assets/images/{p_id}{suffix}.png")
+    if local_path.exists():
+        return str(local_path)
 
-
-def _cached_sprite(p_id: int, name: str) -> str:
-    key = f"sprite_{p_id}"
-    if key not in _asset_existence_cache:
-        _asset_existence_cache[key] = ensure_pokemon_sprite(p_id, name)
-    return _asset_existence_cache[key]
-
-
-def _cached_cry(p_id: int, name: str) -> str:
-    key = f"cry_{p_id}"
-    if key not in _asset_existence_cache:
-        _asset_existence_cache[key] = ensure_pokemon_cry(p_id, name)
-    return _asset_existence_cache[key]
+    base_url = SHINY_ARTWORK_URL if shiny else OFFICIAL_ARTWORK_URL
+    return f"{base_url}{p_id}.png"
 
 
 @callback(
@@ -258,7 +244,7 @@ def update_details(
         ],
     )
 
-    shiny_exists = _cached_has_shiny(p_id)
+    shiny_exists = bool(p_data.get("Has_Shiny", False))
     toggle_style = {"display": "block"} if shiny_exists else {"display": "none"}
     current_shiny = is_shiny if shiny_exists else False
 
@@ -347,10 +333,10 @@ def update_pokemon_image(focus_name: str, is_shiny: bool) -> str | dash.NoUpdate
 
     # If it's a shiny toggle, check if shiny artwork exists first
     if triggered_id == "shiny-toggle":
-        if not _cached_has_shiny(p_id):
+        if not bool(p_data.get("Has_Shiny", False)):
             return dash.no_update
 
-    return _cached_image(p_id, focus_name, shiny=is_shiny)
+    return _get_artwork_url(p_id, shiny=is_shiny)
 
 
 dash.clientside_callback(

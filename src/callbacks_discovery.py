@@ -1,6 +1,14 @@
 import dash
-from typing import List, Any
-from dash import callback, Input, Output, ALL, ctx
+from typing import List
+from dash import (
+    callback,
+    Input,
+    Output,
+    ALL,
+    ctx,
+    ClientsideFunction,
+    clientside_callback,
+)
 from src.utils import get_filtered_table as get_filtered_pokemon_table
 
 
@@ -94,7 +102,10 @@ dash.clientside_callback(
 )
 
 
-@callback(
+# "Reset All Filters" — handled fully client-side, no server round-trip.
+# The JS function returns the default values for all filter components directly.
+clientside_callback(
+    ClientsideFunction(namespace="clientside", function_name="reset_filters"),
     Output("region-filter", "value"),
     Output("type-filter", "value"),
     Output("mega-toggle", "checked"),
@@ -108,9 +119,3 @@ dash.clientside_callback(
     Input("reset-filters-btn", "n_clicks"),
     prevent_initial_call=True,
 )
-def reset_filters(n_clicks: int) -> Any:
-    """Reset all filters to their default values."""
-    if not n_clicks:
-        return dash.no_update
-    # Default values: [], [], True, True, False, True, True, False, True, [[0, 255]]*6
-    return [], [], True, True, False, True, True, False, True, [[0, 255]] * 6

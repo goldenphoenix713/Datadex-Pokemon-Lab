@@ -4,12 +4,6 @@ import pyarrow.compute as pc
 import pyarrow.parquet as pq
 from pathlib import Path
 from loguru import logger
-from diskcache import Cache
-
-# Initialize persistent cache directory
-cache_dir = Path(".cache")
-cache_dir.mkdir(exist_ok=True)
-registry_cache = Cache(str(cache_dir / "registry"))
 
 # Image URL for official artwork
 OFFICIAL_ARTWORK_URL = (
@@ -47,80 +41,64 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet"):
         mask = pc.invert(pc.match_substring_regex(table["Name"], exclude_regex))
         table = table.filter(mask)
 
-        # 2. Name formatting logic
+        # 2. Name formatting logic — pure PyArrow vectorized (no Python loops, no pandas)
+        # Strategy: for each variant pattern, detect matching rows, strip the suffix
+        # keyword, and prepend the canonical prefix — all in C++ via PyArrow compute.
         names = table["Name"]
 
-        # Helper to apply regex replacement patterns
-        def apply_name_rules(arr):
-            # Mega
-            arr = pc.replace_substring_regex(arr, "(?i) (Mega) ", " Mega ")
-            arr = pc.replace_substring_regex(arr, " Mega ", " Mega ")
-            # In the SQL, it was 'Mega ' || regexp_replace("Name", ' (?i)Mega ', ' ')
-            # We can do this more simply by just normalizing the strings if the pattern matches
+        def _normalize_prefix(arr, detect_pat: str, strip_pat: str, prefix: str):
+            """Vectorized: rewrite 'Base Suffix' → 'Prefix Base' across an Arrow string column."""
+            is_match = pc.match_substring_regex(arr, detect_pat)
+            stripped = pc.utf8_trim(
+                pc.replace_substring_regex(arr, strip_pat, ""), characters=" "
+            )
+            prefixed = pc.binary_join_element_wise(pa.scalar(prefix), stripped, "")
+            return pc.if_else(is_match, prefixed, arr)
 
-            # Simple approach: Replicate the CASE WHEN logic
-            # This is complex in PyArrow, so let's use a series of replacements or a map
-            # Actually, standardizing labels (Mega, Gmax, Alolan...)
-            new_names = []
-            for n in arr.to_pylist():
-                low_n = n.lower()
-                if " mega " in low_n or n.endswith(" Mega"):
-                    n = "Mega " + n.replace(" Mega", "").replace(" mega", "").strip()
-                elif " gmax " in low_n or n.endswith(" Gmax"):
-                    n = "Gmax " + n.replace(" Gmax", "").replace(" gmax", "").strip()
-                elif " alola " in low_n or n.endswith(" Alola"):
-                    n = (
-                        "Alolan "
-                        + n.replace(" Alola", "").replace(" alola", "").strip()
-                    )
-                elif " galar " in low_n or n.endswith(" Galar"):
-                    n = (
-                        "Galarian "
-                        + n.replace(" Galar", "").replace(" galar", "").strip()
-                    )
-                elif " hisui " in low_n or n.endswith(" Hisui"):
-                    n = (
-                        "Hisuian "
-                        + n.replace(" Hisui", "").replace(" hisui", "").strip()
-                    )
-                elif " paldea " in low_n or n.endswith(" Paldea"):
-                    n = (
-                        "Paldean "
-                        + n.replace(" Paldea", "").replace(" paldea", "").strip()
-                    )
-                new_names.append(n)
-            return pa.array(new_names)
+        names = _normalize_prefix(names, r"(?i) mega( |$)", r"(?i) [Mm]ega", "Mega ")
+        names = _normalize_prefix(names, r"(?i) gmax( |$)", r"(?i) [Gg]max", "Gmax ")
+        names = _normalize_prefix(
+            names, r"(?i) alola[n]?( |$)", r"(?i) [Aa]lola[n]?", "Alolan "
+        )
+        names = _normalize_prefix(
+            names, r"(?i) galar(ian)?( |$)", r"(?i) [Gg]alar(ian)?", "Galarian "
+        )
+        names = _normalize_prefix(
+            names, r"(?i) hisui(an)?( |$)", r"(?i) [Hh]isui(an)?", "Hisuian "
+        )
+        names = _normalize_prefix(
+            names, r"(?i) paldea[n]?( |$)", r"(?i) [Pp]aldea[n]?", "Paldean "
+        )
 
-        clean_names = apply_name_rules(names)
+        clean_names = names
 
         # 3. Calculated Columns
         ids = table["#"]
 
-        # Region Case
-        def get_region(id_val):
-            if id_val <= 151:
-                region = "Kanto"
-            elif id_val <= 251:
-                region = "Johto"
-            elif id_val <= 386:
-                region = "Hoenn"
-            elif id_val <= 493:
-                region = "Sinnoh"
-            elif id_val <= 649:
-                region = "Unova"
-            elif id_val <= 721:
-                region = "Kalos"
-            elif id_val <= 809:
-                region = "Alola"
-            elif id_val <= 898:
-                region = "Galar"
-            elif id_val <= 1025:
-                region = "Paldea"
-            else:
-                region = "Unknown"
-            return region
-
-        regions = pa.array([get_region(i) for i in ids.to_pylist()])
+        # Region mapping — vectorized with pc.case_when (no Python loop)
+        regions = pc.case_when(
+            pc.make_struct(
+                pc.less_equal(ids, 151),
+                pc.less_equal(ids, 251),
+                pc.less_equal(ids, 386),
+                pc.less_equal(ids, 493),
+                pc.less_equal(ids, 649),
+                pc.less_equal(ids, 721),
+                pc.less_equal(ids, 809),
+                pc.less_equal(ids, 898),
+                pc.less_equal(ids, 1025),
+            ),
+            "Kanto",
+            "Johto",
+            "Hoenn",
+            "Sinnoh",
+            "Unova",
+            "Kalos",
+            "Alola",
+            "Galar",
+            "Paldea",
+            "Unknown",
+        )
 
         # Boolean Flags
         is_gmax = pc.match_substring_regex(table["Name"], "(?i)Gmax")
@@ -144,26 +122,23 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet"):
         ]
         is_ub = pc.is_in(table["Name"], value_set=pa.array(ub_list))
 
-        # Typing string
+        # Typing string — vectorized with pc.if_else (no Python loop)
         type2 = pc.coalesce(table["Type 2"], pa.scalar("None"))
-
-        def get_typing(t1, t2):
-            if t2 == "None" or t2 is None:
-                return t1
-            return f"{t1}/{t2}"
-
-        typings = pa.array(
-            [
-                get_typing(r[0], r[1])
-                for r in zip(table["Type 1"].to_pylist(), type2.to_pylist())
-            ]
+        has_type2 = pc.not_equal(type2, pa.scalar("None"))
+        typings = pc.if_else(
+            has_type2,
+            pc.binary_join_element_wise(table["Type 1"], type2, "/"),
+            table["Type 1"],
         )
 
-        # URLs
-        sprite_urls = pa.array(
-            [f"{POKEAPI_SPRITE_URL}{i}.png" for i in ids.to_pylist()]
+        # URLs — vectorized with pc.binary_join_element_wise (no Python loop)
+        ids_str = pc.cast(ids, pa.string())
+        sprite_urls = pc.binary_join_element_wise(
+            pa.scalar(POKEAPI_SPRITE_URL), ids_str, pa.scalar(".png"), ""
         )
-        image_urls = pa.array([f"assets/images/{i}.png" for i in ids.to_pylist()])
+        image_urls = pc.binary_join_element_wise(
+            pa.scalar("assets/images/"), ids_str, pa.scalar(".png"), ""
+        )
 
         # 4. National Dex (Window function MIN(#) PARTITION BY Species_Name)
         # Group by species and find min ID
@@ -206,6 +181,13 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet"):
             "Image_URL": image_urls,
             "Typing": typings,
             "National_Dex": national_dex,
+            # Has_Shiny was added in a later schema version; fall back to False for
+            # older Parquet files (until fetch_api_data.py is re-run).
+            "Has_Shiny": (
+                table["Has_Shiny"]
+                if "Has_Shiny" in table.schema.names
+                else pa.array([False] * table.num_rows, type=pa.bool_())
+            ),
         }
 
         result_table = pa.table(final_columns)
@@ -222,7 +204,14 @@ def load_and_clean_data(filepath: str = "data/pokemon.parquet"):
 def ensure_pokemon_image(
     pokemon_id: int, pokemon_name: str = "Unknown", shiny: bool = False
 ) -> str:
-    """Check if a Pokémon image is cached locally, download it if not."""
+    """Download a Pokémon image to the local cache and return the local path.
+
+    .. deprecated::
+        Do NOT call this from Dash callbacks. The app now resolves images via
+        CDN URLs served directly to the browser (see ``_get_artwork_url`` in
+        ``src/callbacks_details.py``). Use ``scripts/prefetch_assets.py`` to
+        warm the cache offline before deployment.
+    """
     assets_dir = Path("assets")
     images_dir = assets_dir / "images"
     images_dir.mkdir(parents=True, exist_ok=True)
@@ -259,7 +248,12 @@ def ensure_pokemon_image(
 
 
 def ensure_pokemon_sprite(pokemon_id: int, pokemon_name: str = "Unknown") -> str:
-    """Check if a Pokémon sprite is cached locally, download it if not."""
+    """Download a Pokémon mini sprite to the local cache and return the local path.
+
+    .. deprecated::
+        Do NOT call this from Dash callbacks. Sprites are served via CDN URLs.
+        Use ``scripts/prefetch_assets.py`` to warm the cache offline.
+    """
     assets_dir = Path("assets")
     sprites_dir = assets_dir / "sprites"
     sprites_dir.mkdir(parents=True, exist_ok=True)
@@ -291,7 +285,12 @@ def ensure_pokemon_sprite(pokemon_id: int, pokemon_name: str = "Unknown") -> str
 
 
 def ensure_pokemon_cry(pokemon_id: int, pokemon_name: str = "Unknown") -> str:
-    """Check if a Pokémon cry is cached locally, download it if not."""
+    """Download a Pokémon cry audio file to the local cache and return the local path.
+
+    .. deprecated::
+        Do NOT call this from Dash callbacks. Cry audio is served via CDN URLs.
+        Use ``scripts/prefetch_assets.py`` to warm the cache offline.
+    """
     assets_dir = Path("assets")
     sounds_dir = assets_dir / "sounds"
     sounds_dir.mkdir(parents=True, exist_ok=True)
@@ -319,30 +318,6 @@ def ensure_pokemon_cry(pokemon_id: int, pokemon_name: str = "Unknown") -> str:
     else:
         logger.debug(f"Cry {cry_name} already exists for {pokemon_name}")
         return str(cry_path)
-
-
-def has_shiny_artwork(pokemon_id: int) -> bool:
-    """Check if a shiny official artwork exists for the given Pokémon ID."""
-    assets_dir = Path("assets")
-    images_dir = assets_dir / "images"
-    cached_path = images_dir / f"{pokemon_id}_shiny.png"
-    if cached_path.exists():
-        return True
-
-    cache_key = f"shiny_exists_{pokemon_id}"
-    cached_result = registry_cache.get(cache_key)
-    if cached_result is not None:
-        return bool(cached_result)
-
-    url = f"{SHINY_ARTWORK_URL}{pokemon_id}.png"
-    try:
-        response = requests.head(url, timeout=5)
-        exists = response.status_code == 200
-        registry_cache.set(cache_key, exists)
-        return exists
-    except Exception as e:
-        logger.error(f"Error checking shiny existence for {pokemon_id}: {e}")
-        return False
 
 
 if __name__ == "__main__":

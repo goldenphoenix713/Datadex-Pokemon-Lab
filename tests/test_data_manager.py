@@ -25,6 +25,7 @@ def test_load_and_clean_data(mocker):
             "Is_Final_Evolution": [False],
             "Evolution_Chain_URL": ["url"],
             "Evolution_Chain_Members": ["bulbasaur,ivysaur,venusaur"],
+            "Has_Shiny": [True],
         }
     )
 
@@ -63,6 +64,7 @@ def test_load_and_clean_data_handles_missing_secondary_type(mocker):
             "Is_Final_Evolution": [False],
             "Evolution_Chain_URL": ["url"],
             "Evolution_Chain_Members": ["pichu,pikachu,raichu"],
+            "Has_Shiny": [True],
         }
     )
 
@@ -96,6 +98,7 @@ def test_load_and_clean_data_adds_enhanced_fields(mocker):
             "Is_Final_Evolution": [False, False, False, False],
             "Evolution_Chain_URL": ["url", "url", "url", "url"],
             "Evolution_Chain_Members": ["b,i,v", "c,b,m", "c,c,c", "r,r"],
+            "Has_Shiny": [True, True, True, True],
         }
     )
 
@@ -108,20 +111,6 @@ def test_load_and_clean_data_adds_enhanced_fields(mocker):
     assert data[1]["Region"] == "Johto"
     assert data[2]["Is_Mega"]
     assert data[3]["Is_Regional"]
-
-
-def test_has_shiny_artwork(mocker):
-    # Mock requests.head
-    mock_response = mocker.Mock()
-    mock_response.status_code = 200
-    mocker.patch("requests.head", return_value=mock_response)
-
-    from data_manager import has_shiny_artwork
-
-    assert has_shiny_artwork(1) is True
-
-    mock_response.status_code = 404
-    assert has_shiny_artwork(9999) is False
 
 
 def test_ensure_pokemon_image_shiny(mocker, tmp_path):
@@ -175,27 +164,6 @@ def test_ensure_pokemon_image_download_failure(mocker):
 
     path = ensure_pokemon_image(1, "Bulbasaur")
     assert "placeholder.png" in path
-
-
-def test_has_shiny_artwork_exception(mocker):
-    # Mock Path.exists to False
-    # Mock requests.head to raise an exception
-    mocker.patch("data_manager.Path.exists", return_value=False)
-    # Mock registry_cache.get to return None so it proceeds to the network call
-    mocker.patch("data_manager.registry_cache.get", return_value=None)
-    mocker.patch("requests.head", side_effect=Exception("Network Error"))
-
-    from data_manager import has_shiny_artwork
-
-    assert has_shiny_artwork(1) is False
-
-
-def test_has_shiny_artwork_cache_hit(mocker):
-    # Mock Path.exists to return True (closes data_manager.py line 175)
-    mocker.patch("data_manager.Path.exists", return_value=True)
-    from data_manager import has_shiny_artwork
-
-    assert has_shiny_artwork(1) is True
 
 
 def test_ensure_pokemon_sprite_cache_hit(mocker):

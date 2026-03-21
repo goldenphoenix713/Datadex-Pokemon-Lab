@@ -69,7 +69,6 @@ def test_update_selector_options_callback(mocker):
 
 
 def test_update_details_callback_high_stat(mocker):
-    mocker.patch("src.callbacks_details.has_shiny_artwork", return_value=True)
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
 
     result = update_details("Charizard", False, 1.7, 70, True, False, True, [])
@@ -91,11 +90,11 @@ def test_update_details_callback_high_stat(mocker):
 
 
 def test_update_pokemon_image_callback(mocker):
-    mocker.patch(
-        "src.callbacks_details.ensure_pokemon_image",
-        return_value="assets/images/1.png",
-    )
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
+    # Mock Path.exists to False to force the CDN URL path
+    mocker.patch("src.callbacks_details.Path.exists", return_value=False)
 
+    # Should return CDN URL by default if local doesn't exist
     img_src = update_pokemon_image("Bulbasaur", False)
-    assert img_src == "assets/images/1.png"
+    assert "https://raw.githubusercontent.com/PokeAPI/sprites" in img_src
+    assert "1.png" in img_src

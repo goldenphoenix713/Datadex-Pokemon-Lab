@@ -350,6 +350,56 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
                     "margin": { "l": 40, "r": 40, "t": 40, "b": 40 }
                 }
             };
+        },
+
+        // Reset all sidebar filters to their default values — no server round-trip needed.
+        // Default values must mirror the Python reset_filters defaults exactly.
+        reset_filters: function (_n_clicks) {
+            // [region-filter, type-filter, mega, regional, final-only, legendary, mythical, gmax, ultra-beast, stat-ranges x6]
+            const defaultStatRanges = [[0, 255], [0, 255], [0, 255], [0, 255], [0, 255], [0, 255]];
+            return [[], [], true, true, false, true, true, false, true, defaultStatRanges];
+        },
+
+        // Update team store in the browser — no server round-trip needed.
+        // Reads window.dash_clientside.callback_context.triggered to determine the action.
+        update_team: function (add_clicks, clear_clicks, remove_clicks, focus_pokemon, current_team) {
+            const ctx = window.dash_clientside.callback_context;
+            if (!ctx || !ctx.triggered || ctx.triggered.length === 0) {
+                return window.dash_clientside.no_update;
+            }
+
+            const prop_id = ctx.triggered[0].prop_id || "";
+
+            // Clear team
+            if (prop_id === "clear-team-btn.n_clicks") {
+                return [];
+            }
+
+            // Add Pokémon
+            if (prop_id === "add-pokemon-btn.n_clicks") {
+                if (!focus_pokemon) return window.dash_clientside.no_update;
+                const team = current_team ? [...current_team] : [];
+                if (!team.includes(focus_pokemon) && team.length < 6) {
+                    team.push(focus_pokemon);
+                }
+                return team;
+            }
+
+            // Remove individual Pokémon (pattern-matched id)
+            if (prop_id.includes("remove-team")) {
+                try {
+                    // prop_id format: '{"name":"Pikachu","type":"remove-team"}.n_clicks'
+                    const id_str = prop_id.replace(".n_clicks", "");
+                    const id_obj = JSON.parse(id_str);
+                    const name = id_obj.name;
+                    const team = current_team ? [...current_team] : [];
+                    return team.filter(p => p !== name);
+                } catch (e) {
+                    return window.dash_clientside.no_update;
+                }
+            }
+
+            return window.dash_clientside.no_update;
         }
     }
 });
