@@ -38,6 +38,8 @@ dash._dash_renderer._set_react_version("18.2.0")  # type: ignore[possibly-missin
 
 app = dash.Dash(__name__, title="Data-Dex: Ultimate Stat Lab")
 
+server = app.server
+
 # Load and prepare data on startup
 df = load_and_clean_data()
 pokemon_names = sorted(df["Name"].unique())
