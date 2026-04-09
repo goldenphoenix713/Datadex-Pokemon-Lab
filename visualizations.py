@@ -235,12 +235,26 @@ def get_scatter_base_figure(x_col: str = "Weight", y_col: str = "Speed") -> go.F
             font=dict(color="white"),
         ),
         xaxis=dict(
-            title=dict(text=x_col, font=dict(color="white")),
+            title=dict(
+                text=f"{x_col} (lbs)"
+                if x_col == "Weight"
+                else f"{x_col} (ft)"
+                if x_col == "Height"
+                else x_col,
+                font=dict(color="white"),
+            ),
             gridcolor="rgba(255,255,255,0.1)",
             autorange=True,
         ),
         yaxis=dict(
-            title=dict(text=y_col, font=dict(color="white")),
+            title=dict(
+                text=f"{y_col} (lbs)"
+                if y_col == "Weight"
+                else f"{y_col} (ft)"
+                if y_col == "Height"
+                else y_col,
+                font=dict(color="white"),
+            ),
             gridcolor="rgba(255,255,255,0.1)",
             autorange=True,
         ),

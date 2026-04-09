@@ -22,7 +22,9 @@ app = dash.Dash(
     __name__,
     title="Data-Dex: Ultimate Stat Lab",
 )
-Compress(app.server)
+server = app.server
+
+Compress(server)
 
 # Import layout and callbacks to register them
 from src.layout import layout  # noqa: E402
