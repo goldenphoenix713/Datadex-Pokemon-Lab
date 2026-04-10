@@ -4,48 +4,35 @@ from dash import (
     callback,
     Input,
     Output,
-    ALL,
-    ctx,
-    ClientsideFunction,
-    clientside_callback,
 )
 from src.utils import get_filtered_table as get_filtered_pokemon_table
+from src.filters import FILTER_STORE_DEFAULTS
 
 
 @callback(
     Output("focus-selector", "data"),
-    Input("region-filter", "value"),
-    Input("mega-toggle", "checked"),
-    Input("regional-toggle", "checked"),
-    Input("final-evolution-toggle", "checked"),
-    Input("legendary-toggle", "checked"),
-    Input("mythical-toggle", "checked"),
-    Input("gmax-toggle", "checked"),
-    Input("ultra-beast-toggle", "checked"),
-    Input("type-filter", "value"),
-    Input("sort-order", "value"),
-    Input({"type": "stat", "name": ALL}, "value"),
+    Input("filter-store", "data"),
 )
-def update_focus_options(
-    regions: List[str],
-    show_mega: bool,
-    show_regional: bool,
-    final_only: bool,
-    show_legendary: bool,
-    show_mythical: bool,
-    show_gmax: bool,
-    show_ultra_beasts: bool,
-    selected_types: List[str],
-    sort_by: str,
-    stat_values: List[List[int]],
-) -> List[dict]:
+def update_focus_options(filter_store: dict) -> List[dict]:
     """Filter the list of available Pokémon names for the focus selector."""
+    filters = (filter_store or {}).get("filters", FILTER_STORE_DEFAULTS["filters"])
+    toggles = (filter_store or {}).get("toggles", FILTER_STORE_DEFAULTS["toggles"])
+
+    regions = filters.get("region-filter", [])
+    selected_types = filters.get("type-filter", [])
+    sort_by = filters.get("sort-order", "number")
+    show_mega = toggles.get("mega-toggle", True)
+    show_regional = toggles.get("regional-toggle", True)
+    final_only = toggles.get("final-evolution-toggle", False)
+    show_legendary = toggles.get("legendary-toggle", True)
+    show_mythical = toggles.get("mythical-toggle", True)
+    show_gmax = toggles.get("gmax-toggle", False)
+    show_ultra_beasts = toggles.get("ultra-beast-toggle", True)
+
     stat_ranges = {
-        item["id"]["name"]: item["value"]
-        for item in ctx.inputs_list
-        if isinstance(item, list)
-        for item in item
-        if isinstance(item["id"], dict) and item["id"].get("type") == "stat"
+        key.removeprefix("stat-"): value
+        for key, value in filters.items()
+        if key.startswith("stat-")
     }
 
     filtered_table = get_filtered_pokemon_table(
@@ -97,25 +84,6 @@ dash.clientside_callback(
         namespace="clientside", function_name="handleEvolutionClick"
     ),
     Output("focus-selector", "value"),
-    Input({"type": "evo-link", "name": ALL}, "n_clicks"),
-    prevent_initial_call=True,
-)
-
-
-# "Reset All Filters" — handled fully client-side, no server round-trip.
-# The JS function returns the default values for all filter components directly.
-clientside_callback(
-    ClientsideFunction(namespace="clientside", function_name="reset_filters"),
-    Output("region-filter", "value"),
-    Output("type-filter", "value"),
-    Output("mega-toggle", "checked"),
-    Output("regional-toggle", "checked"),
-    Output("final-evolution-toggle", "checked"),
-    Output("legendary-toggle", "checked"),
-    Output("mythical-toggle", "checked"),
-    Output("gmax-toggle", "checked"),
-    Output("ultra-beast-toggle", "checked"),
-    Output({"type": "stat", "name": ALL}, "value"),
-    Input("reset-filters-btn", "n_clicks"),
+    Input({"type": "evo-link", "name": dash.ALL}, "n_clicks"),
     prevent_initial_call=True,
 )

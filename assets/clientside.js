@@ -217,8 +217,25 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             };
         },
 
-        update_leaderboard_clientside: function (all_data, regions, show_mega, show_regional, final_only, show_legendary, show_mythical, show_gmax, show_ultra_beasts, selected_types, stat_values, stat_names, stat) {
-            const filtered = window.dash_clientside.clientside.get_filtered_data(all_data, regions, show_mega, show_regional, final_only, show_legendary, show_mythical, show_gmax, show_ultra_beasts, selected_types, stat_values, stat_names);
+        update_leaderboard_clientside: function (all_data, filter_store, stat_names, stat) {
+            const filters = (filter_store && filter_store.filters) || {};
+            const toggles = (filter_store && filter_store.toggles) || {};
+            const stat_values = stat_names ? stat_names.map(name => filters["stat-" + name] || [0, 255]) : [];
+
+            const filtered = window.dash_clientside.clientside.get_filtered_data(
+                all_data,
+                filters["region-filter"] || [],
+                toggles["mega-toggle"] !== undefined ? toggles["mega-toggle"] : true,
+                toggles["regional-toggle"] !== undefined ? toggles["regional-toggle"] : true,
+                toggles["final-evolution-toggle"] || false,
+                toggles["legendary-toggle"] !== undefined ? toggles["legendary-toggle"] : true,
+                toggles["mythical-toggle"] !== undefined ? toggles["mythical-toggle"] : true,
+                toggles["gmax-toggle"] || false,
+                toggles["ultra-beast-toggle"] !== undefined ? toggles["ultra-beast-toggle"] : true,
+                filters["type-filter"] || [],
+                stat_values,
+                stat_names
+            );
 
             if (filtered.length === 0) {
                 return {
@@ -292,7 +309,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             return { "data": [trace], "layout": layout };
         },
 
-        update_scatter_clientside: function (all_data, regions, show_mega, show_regional, final_only, show_legendary, show_mythical, show_gmax, show_ultra_beasts, selected_types, stat_values, stat_names, x_stat, y_stat) {
+        update_scatter_clientside: function (all_data, filter_store, stat_names, x_stat, y_stat) {
             if (!x_stat || !y_stat) return {
                 "data": [],
                 "layout": {
@@ -303,7 +320,24 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
                 }
             };
 
-            const filtered = window.dash_clientside.clientside.get_filtered_data(all_data, regions, show_mega, show_regional, final_only, show_legendary, show_mythical, show_gmax, show_ultra_beasts, selected_types, stat_values, stat_names);
+            const filters = (filter_store && filter_store.filters) || {};
+            const toggles = (filter_store && filter_store.toggles) || {};
+            const stat_values = stat_names ? stat_names.map(name => filters["stat-" + name] || [0, 255]) : [];
+
+            const filtered = window.dash_clientside.clientside.get_filtered_data(
+                all_data,
+                filters["region-filter"] || [],
+                toggles["mega-toggle"] !== undefined ? toggles["mega-toggle"] : true,
+                toggles["regional-toggle"] !== undefined ? toggles["regional-toggle"] : true,
+                toggles["final-evolution-toggle"] || false,
+                toggles["legendary-toggle"] !== undefined ? toggles["legendary-toggle"] : true,
+                toggles["mythical-toggle"] !== undefined ? toggles["mythical-toggle"] : true,
+                toggles["gmax-toggle"] || false,
+                toggles["ultra-beast-toggle"] !== undefined ? toggles["ultra-beast-toggle"] : true,
+                filters["type-filter"] || [],
+                stat_values,
+                stat_names
+            );
 
             if (filtered.length === 0) {
                 return {
@@ -351,12 +385,108 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             };
         },
 
-        // Reset all sidebar filters to their default values — no server round-trip needed.
-        // Default values must mirror the Python reset_filters defaults exactly.
-        reset_filters: function (_n_clicks) {
-            // [region-filter, type-filter, mega, regional, final-only, legendary, mythical, gmax, ultra-beast, stat-ranges x6]
-            const defaultStatRanges = [[0, 255], [0, 255], [0, 255], [0, 255], [0, 255], [0, 255]];
-            return [[], [], true, true, false, true, true, false, true, defaultStatRanges];
+        sync_filters_clientside: function (_drawer_val, _navbar_val, filter_store) {
+            const ctx = window.dash_clientside.callback_context;
+            if (!ctx || !ctx.triggered || ctx.triggered.length === 0) {
+                return window.dash_clientside.no_update;
+            }
+
+            const trigger = ctx.triggered[0];
+            const trigger_id = JSON.parse(trigger.prop_id.split('.')[0]);
+            const group = trigger_id.group;
+            const filter_id = trigger_id.id;
+            const value = trigger.value;
+
+            const new_store = JSON.parse(JSON.stringify(filter_store));
+            new_store.filters[filter_id] = value;
+            new_store.last_updated_id = filter_id;
+            new_store.last_updated_value = value;
+            new_store.modified = Date.now();
+
+            if (group === 'navbar') {
+                return [window.dash_clientside.no_update, value, new_store];
+            } else {
+                return [value, window.dash_clientside.no_update, new_store];
+            }
+        },
+
+        sync_toggles_clientside: function (_drawer_checked, _navbar_checked, filter_store) {
+            const ctx = window.dash_clientside.callback_context;
+            if (!ctx || !ctx.triggered || ctx.triggered.length === 0) {
+                return window.dash_clientside.no_update;
+            }
+
+            const trigger = ctx.triggered[0];
+            const trigger_id = JSON.parse(trigger.prop_id.split('.')[0]);
+            const group = trigger_id.group;
+            const toggle_id = trigger_id.id;
+            const value = trigger.value;
+
+            const new_store = JSON.parse(JSON.stringify(filter_store));
+            new_store.toggles[toggle_id] = value;
+            new_store.last_updated_id = toggle_id;
+            new_store.last_updated_value = value;
+            new_store.modified = Date.now();
+
+            if (group === 'navbar') {
+                return [window.dash_clientside.no_update, value, new_store];
+            } else {
+                return [value, window.dash_clientside.no_update, new_store];
+            }
+        },
+
+        reset_filters_clientside: function (_n_clicks_nav, _n_clicks_drawer) {
+            const stat_options = ["HP", "Attack", "Defense", "Speed", "Special Defense", "Special Attack"];
+            const filters = {
+                "region-filter": [],
+                "type-filter": [],
+                "sort-order": "number",
+                "trainer-height": 4.5,
+                "trainer-weight": 150
+            };
+            stat_options.forEach(stat => {
+                filters[`stat-${stat}`] = [0, 255];
+            });
+
+            const toggles = {
+                "mega-toggle": true,
+                "regional-toggle": true,
+                "final-evolution-toggle": false,
+                "legendary-toggle": true,
+                "mythical-toggle": true,
+                "gmax-toggle": false,
+                "ultra-beast-toggle": true
+            };
+
+            const store_defaults = {
+                "filters": filters,
+                "toggles": toggles,
+                "modified": Date.now(),
+                "last_updated_id": null,
+                "last_updated_value": null
+            };
+
+            const filter_values = [
+                filters["region-filter"],
+                filters["type-filter"],
+                filters["sort-order"],
+                filters["trainer-height"],
+                filters["trainer-weight"],
+                ...stat_options.map(s => filters[`stat-${s}`])
+            ];
+
+            const toggle_values = [
+                toggles["mega-toggle"],
+                toggles["regional-toggle"],
+                toggles["final-evolution-toggle"],
+                toggles["legendary-toggle"],
+                toggles["mythical-toggle"],
+                toggles["gmax-toggle"],
+                toggles["ultra-beast-toggle"]
+            ];
+
+            const group_defaults = [...filter_values, ...toggle_values];
+            return [...group_defaults, ...group_defaults, store_defaults];
         },
 
         // Update team store in the browser — no server round-trip needed.

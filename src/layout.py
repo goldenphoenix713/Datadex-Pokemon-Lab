@@ -2,7 +2,8 @@
 
 import dash_mantine_components as dmc
 from dash import dcc, html
-from src.constants import CUSTOM_THEME, REGIONS, TYPES, STAT_OPTIONS
+from src.filters import create_filter_stack, FILTER_STORE_DEFAULTS
+from src.constants import CUSTOM_THEME, STAT_OPTIONS
 from src.components import (
     radar_card,
     pokemon_detail_card,
@@ -25,6 +26,7 @@ layout = dmc.MantineProvider(
             storage_type="memory",
         ),
         dcc.Store(id="stats-names-store", data=STAT_OPTIONS, storage_type="memory"),
+        dcc.Store(id="filter-store", data=FILTER_STORE_DEFAULTS, storage_type="memory"),
         dmc.AppShell(
             header={"height": 100},
             navbar={
@@ -50,227 +52,13 @@ layout = dmc.MantineProvider(
                     ]
                 ),
                 dmc.AppShellNavbar(
-                    p="md",
-                    style={"overflowY": "auto"},
                     children=[
-                        dmc.Button(
-                            "Reset All Filters",
-                            id="reset-filters-btn",
-                            variant="subtle",
-                            color="gray",
-                            size="compact-xs",
-                            fullWidth=True,
-                            mb="sm",
-                        ),
-                        dmc.Accordion(
-                            multiple=True,
-                            value=["basic-filters"],
-                            styles={
-                                "label": {
-                                    "overflow": "visible",
-                                    "paddingLeft": "15px",
-                                },
-                                "control": {"overflow": "visible"},
-                            },
-                            children=[
-                                dmc.AccordionItem(
-                                    value="basic-filters",
-                                    children=[
-                                        dmc.AccordionControl(
-                                            "Basic Filters",
-                                            className="pokemon-section-title",
-                                        ),
-                                        dmc.AccordionPanel(
-                                            children=[
-                                                dmc.MultiSelect(
-                                                    id="region-filter",
-                                                    label="Regions",
-                                                    placeholder="Select Regions",
-                                                    data=REGIONS,
-                                                    value=[],
-                                                    mb="md",
-                                                ),
-                                                dmc.MultiSelect(
-                                                    id="type-filter",
-                                                    label="Types",
-                                                    placeholder="Select Types",
-                                                    data=TYPES,
-                                                    value=[],
-                                                    mb="md",
-                                                ),
-                                                dmc.Select(
-                                                    id="sort-order",
-                                                    label="Sort By",
-                                                    data=[
-                                                        {
-                                                            "label": "Pokédex Number",
-                                                            "value": "number",
-                                                        },
-                                                        {
-                                                            "label": "Name",
-                                                            "value": "name",
-                                                        },
-                                                    ],
-                                                    value="number",
-                                                    mb="md",
-                                                ),
-                                            ]
-                                        ),
-                                    ],
-                                ),
-                                dmc.AccordionItem(
-                                    value="stat-ranges",
-                                    children=[
-                                        dmc.AccordionControl(
-                                            "Stat Ranges",
-                                            className="pokemon-section-title",
-                                        ),
-                                        dmc.AccordionPanel(
-                                            children=[
-                                                html.Div(
-                                                    children=[
-                                                        html.Div(
-                                                            [
-                                                                dmc.Text(
-                                                                    f"{stat} Range",
-                                                                    size="sm",
-                                                                    mb=5,
-                                                                ),
-                                                                dmc.RangeSlider(
-                                                                    id={
-                                                                        "type": "stat",
-                                                                        "name": stat,
-                                                                    },
-                                                                    value=[0, 255],
-                                                                    min=0,
-                                                                    max=255,
-                                                                    step=1,
-                                                                    marks=[
-                                                                        {
-                                                                            "value": 0,
-                                                                            "label": "0",
-                                                                        },
-                                                                        {
-                                                                            "value": 128,
-                                                                            "label": "128",
-                                                                        },
-                                                                        {
-                                                                            "value": 255,
-                                                                            "label": "255",
-                                                                        },
-                                                                    ],
-                                                                    updatemode="mouseup",
-                                                                    mb="xl",
-                                                                ),
-                                                            ]
-                                                        )
-                                                        for stat in STAT_OPTIONS
-                                                    ]
-                                                ),
-                                            ]
-                                        ),
-                                    ],
-                                ),
-                                dmc.AccordionItem(
-                                    value="form-filters",
-                                    children=[
-                                        dmc.AccordionControl(
-                                            "Special Variants",
-                                            className="pokemon-section-title",
-                                        ),
-                                        dmc.AccordionPanel(
-                                            children=[
-                                                dmc.Stack(
-                                                    gap="xs",
-                                                    children=[
-                                                        dmc.Switch(
-                                                            id="mega-toggle",
-                                                            label="Show Mega evolutions",
-                                                            checked=True,
-                                                        ),
-                                                        dmc.Switch(
-                                                            id="regional-toggle",
-                                                            label="Show Regional forms",
-                                                            checked=True,
-                                                        ),
-                                                        dmc.Switch(
-                                                            id="final-evolution-toggle",
-                                                            label="Final Evolutions Only",
-                                                            checked=False,
-                                                        ),
-                                                        dmc.Switch(
-                                                            id="legendary-toggle",
-                                                            label="Include Legendaries",
-                                                            checked=True,
-                                                        ),
-                                                        dmc.Switch(
-                                                            id="mythical-toggle",
-                                                            label="Include Mythicals",
-                                                            checked=True,
-                                                        ),
-                                                        dmc.Switch(
-                                                            id="gmax-toggle",
-                                                            label="Show G-Max forms",
-                                                            checked=False,
-                                                        ),
-                                                        dmc.Switch(
-                                                            id="ultra-beast-toggle",
-                                                            label="Show Ultra Beasts",
-                                                            checked=True,
-                                                        ),
-                                                    ],
-                                                ),
-                                            ]
-                                        ),
-                                    ],
-                                ),
-                                dmc.AccordionItem(
-                                    value="trainer-comparison",
-                                    children=[
-                                        dmc.AccordionControl(
-                                            "Trainer Comparison",
-                                            className="pokemon-section-title",
-                                        ),
-                                        dmc.AccordionPanel(
-                                            children=[
-                                                dmc.Group(
-                                                    grow=True,
-                                                    children=[
-                                                        dmc.NumberInput(
-                                                            id="trainer-height",
-                                                            label="Your Height (ft)",
-                                                            value=4.5,
-                                                            min=2,
-                                                            max=7,
-                                                            step=0.01,
-                                                            debounce=500,
-                                                        ),
-                                                        dmc.NumberInput(
-                                                            id="trainer-weight",
-                                                            label="Your Weight (lbs)",
-                                                            value=150,
-                                                            min=10,
-                                                            max=500,
-                                                            step=1,
-                                                            debounce=500,
-                                                        ),
-                                                    ],
-                                                    mb="md",
-                                                ),
-                                            ]
-                                        ),
-                                    ],
-                                ),
-                            ],
-                        ),
-                        dmc.Divider(my="md"),
-                        dmc.Text("Selection Helper", size="xs", c="dimmed", mb="xs"),
-                        dmc.Text(
-                            "Use these filters to narrow down the list of Pokémon in the team selector.",
-                            size="xs",
-                            c="dimmed",
-                        ),
-                    ],
+                        dmc.ScrollArea(
+                            h="100%",
+                            offsetScrollbars=True,
+                            children=[create_filter_stack("navbar")],
+                        )
+                    ]
                 ),
                 dmc.AppShellMain(
                     children=[
@@ -287,7 +75,18 @@ layout = dmc.MantineProvider(
                                     ],
                                 ),
                             ],
-                        )
+                        ),
+                        dmc.Drawer(
+                            id="filter-drawer",
+                            title="Filters",
+                            children=[
+                                dmc.ScrollArea(
+                                    h="calc(100vh - 80px)",
+                                    offsetScrollbars=True,
+                                    children=[create_filter_stack("drawer")],
+                                )
+                            ],
+                        ),
                     ]
                 ),
                 dmc.AppShellFooter(

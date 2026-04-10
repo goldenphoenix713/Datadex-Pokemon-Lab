@@ -54,25 +54,26 @@ def _get_artwork_url(p_id: int, shiny: bool) -> str:
     Output("play-cry-btn", "disabled"),
     Input("focus-selector", "value"),
     Input("shiny-toggle", "checked"),
-    Input("trainer-height", "value"),
-    Input("trainer-weight", "value"),
-    Input("mega-toggle", "checked"),
-    Input("gmax-toggle", "checked"),
-    Input("regional-toggle", "checked"),
+    Input("filter-store", "data"),
     Input("team-store", "data"),
 )
 def update_details(
     focus_name: str,
     is_shiny: bool,
-    t_height: float | str,
-    t_weight: float | str,
-    show_mega: bool,
-    show_gmax: bool,
-    show_regional: bool,
+    filter_store: dict,
     team: List[str],
 ) -> Any:
     """Update the detail card for the focused Pokémon using DuckDB/Arrow."""
     start_time = time.time()
+
+    filters = (filter_store or {}).get("filters", {})
+    toggles = (filter_store or {}).get("toggles", {})
+    t_height = filters.get("trainer-height", 4.5)
+    t_weight = filters.get("trainer-weight", 150)
+    show_mega = toggles.get("mega-toggle", True)
+    show_gmax = toggles.get("gmax-toggle", False)
+    show_regional = toggles.get("regional-toggle", True)
+
     if not focus_name:
         logger.debug("No Pokémon selected, showing placeholder detail view.")
         return (
@@ -92,25 +93,57 @@ def update_details(
     triggered_id = ctx.triggered_id
     logger.debug(f"Updating detailed view. Triggered by: {triggered_id}")
 
-    if triggered_id in ["trainer-height", "trainer-weight"]:
+    last_updated = (filter_store or {}).get("last_updated_id", "")
+    if triggered_id == "filter-store" and last_updated in [
+        "trainer-height",
+        "trainer-weight",
+    ]:
         try:
             t_height_f = float(t_height)
+            t_weight_f = float(t_weight)
         except (ValueError, TypeError):
             return (dash.no_update,) * 11
 
         p_data = name_to_pokemon.get(focus_name)
         p_height = p_data["Height"] if p_data else 0
+        p_weight = p_data["Weight"] if p_data else 0
 
         height_ratio = p_height / t_height_f if t_height_f > 0 else 1
+        weight_ratio = p_weight / t_weight_f if t_weight_f > 0 else 1
+
         comparison_view = dmc.Stack(
             gap=4,
             children=[
                 dmc.Text("Trainer Comparison", size="xs", fw=700, c="dimmed"),
-                dmc.Text(
-                    f"{f'{focus_name} is' if height_ratio > 1 else 'You are'} taller!",
-                    size="sm",
+                dmc.Group(
+                    grow=True,
+                    children=[
+                        dmc.Stack(
+                            gap=0,
+                            children=[
+                                dmc.Text(
+                                    f"{f'{focus_name} is' if height_ratio > 1 else 'You are'} taller!",
+                                    size="sm",
+                                ),
+                                dmc.Text(
+                                    f"Ratio: {height_ratio:.1f}x", size="xs", c="dimmed"
+                                ),
+                            ],
+                        ),
+                        dmc.Stack(
+                            gap=0,
+                            children=[
+                                dmc.Text(
+                                    f"{f'{focus_name} is' if weight_ratio > 1 else 'You are'} heavier!",
+                                    size="sm",
+                                ),
+                                dmc.Text(
+                                    f"Ratio: {weight_ratio:.1f}x", size="xs", c="dimmed"
+                                ),
+                            ],
+                        ),
+                    ],
                 ),
-                dmc.Text(f"Ratio: {height_ratio:.1f}x", size="sm"),
             ],
         )
         return (dash.no_update,) * 5 + (
@@ -229,18 +262,45 @@ def update_details(
         evolution_display = dmc.Group(gap="sm", justify="center", children=chain_items)
         _evolution_ui_cache[evo_cache_key] = evolution_display
 
-    p_id, p_height = int(p_data["id"]), p_data["Height"]
+    p_id, p_height, p_weight = int(p_data["id"]), p_data["Height"], p_data["Weight"]
     t_height_val = float(t_height)
+    t_weight_val = float(t_weight)
     height_ratio = p_height / t_height_val if t_height_val > 0 else 1
+    weight_ratio = p_weight / t_weight_val if t_weight_val > 0 else 1
+
     comparison_view = dmc.Stack(
         gap=4,
         children=[
             dmc.Text("Trainer Comparison", size="xs", fw=700, c="dimmed"),
-            dmc.Text(
-                f"{f'{name} is' if height_ratio > 1 else 'You are'} taller!",
-                size="sm",
+            dmc.Group(
+                grow=True,
+                children=[
+                    dmc.Stack(
+                        gap=0,
+                        children=[
+                            dmc.Text(
+                                f"{f'{name} is' if height_ratio > 1 else 'You are'} taller!",
+                                size="sm",
+                            ),
+                            dmc.Text(
+                                f"Ratio: {height_ratio:.1f}x", size="xs", c="dimmed"
+                            ),
+                        ],
+                    ),
+                    dmc.Stack(
+                        gap=0,
+                        children=[
+                            dmc.Text(
+                                f"{f'{name} is' if weight_ratio > 1 else 'You are'} heavier!",
+                                size="sm",
+                            ),
+                            dmc.Text(
+                                f"Ratio: {weight_ratio:.1f}x", size="xs", c="dimmed"
+                            ),
+                        ],
+                    ),
+                ],
             ),
-            dmc.Text(f"Ratio: {height_ratio:.1f}x", size="sm"),
         ],
     )
 

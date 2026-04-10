@@ -115,7 +115,9 @@ def test_004_filter_toggles(dash_duo):
     dash_duo.wait_for_element(f"[id='{mega_idx}']", timeout=15)
 
     # Toggle Mega OFF
-    mega_toggle = dash_duo.find_element("#mega-toggle")
+    # The ID is now pattern-matched: {"group":"navbar","id":"mega-toggle","type":"toggle"}
+    mega_selector = '[id=\'{"group":"navbar","id":"mega-toggle","type":"toggle"}\']'
+    mega_toggle = dash_duo.find_element(mega_selector)
     dash_duo.driver.execute_script("arguments[0].click();", mega_toggle)
     time.sleep(2)
 

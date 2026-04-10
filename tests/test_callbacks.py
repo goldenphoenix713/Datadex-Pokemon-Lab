@@ -6,12 +6,16 @@ from src.callbacks_discovery import update_focus_options as update_selector_opti
 def test_update_details_callback(mocker):
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
 
-    # Signature: (focus_name, is_shiny, t_height, t_weight, show_mega, show_gmax, show_regional, team)
-    result_shiny = update_details("Bulbasaur", True, 1.7, 70, True, False, True, [])
+    # Signature: (focus_name, is_shiny, filter_store, team)
+    store = {
+        "filters": {"trainer-height": 1.7, "trainer-weight": 70},
+        "toggles": {"mega-toggle": True, "gmax-toggle": False, "regional-toggle": True},
+    }
+    result_shiny = update_details("Bulbasaur", True, store, [])
     # Check current_shiny (5th element, index 4)
     assert result_shiny[4] is True
 
-    result = update_details("Bulbasaur", False, 1.7, 70, True, False, True, [])
+    result = update_details("Bulbasaur", False, store, [])
     (
         name_display,
         type_badges,
@@ -36,7 +40,11 @@ def test_update_details_callback(mocker):
 
 def test_update_details_callback_no_selection(mocker):
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
-    result = update_details("", False, 1.7, 70, True, False, True, [])
+    store = {
+        "filters": {"trainer-height": 1.7, "trainer-weight": 70},
+        "toggles": {"mega-toggle": True, "gmax-toggle": False, "regional-toggle": True},
+    }
+    result = update_details("", False, store, [])
     (
         name_display,
         type_badges,
@@ -57,12 +65,21 @@ def test_update_details_callback_no_selection(mocker):
 
 
 def test_update_selector_options_callback(mocker):
-    mocker.patch("src.callbacks_discovery.ctx", mocker.Mock(inputs_list=[]))
     # Test filtering by Region (Kanto entries #1-151)
-    # Signature: (regions, show_mega, show_regional, final_only, show_legendary, show_mythical, show_gmax, show_ultra_beasts, types, sort, stat_values)
-    options = update_selector_options(
-        ["Kanto"], True, True, False, True, True, False, True, [], "name", []
-    )
+    # Signature: (filter_store)
+    store = {
+        "filters": {"region-filter": ["Kanto"]},
+        "toggles": {
+            "mega-toggle": True,
+            "regional-toggle": True,
+            "final-evolution-toggle": False,
+            "legendary-toggle": True,
+            "mythical-toggle": True,
+            "gmax-toggle": False,
+            "ultra-beast-toggle": True,
+        },
+    }
+    options = update_selector_options(store)
     names = [opt["value"] for opt in options]
     assert "Bulbasaur" in names
     assert "Chikorita" not in names
@@ -71,7 +88,11 @@ def test_update_selector_options_callback(mocker):
 def test_update_details_callback_high_stat(mocker):
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
 
-    result = update_details("Charizard", False, 1.7, 70, True, False, True, [])
+    store = {
+        "filters": {"trainer-height": 1.7, "trainer-weight": 70},
+        "toggles": {"mega-toggle": True, "gmax-toggle": False, "regional-toggle": True},
+    }
+    result = update_details("Charizard", False, store, [])
     (
         name_display,
         type_badges,
