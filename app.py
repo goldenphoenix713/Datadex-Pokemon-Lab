@@ -35,4 +35,4 @@ app.layout = layout
 if __name__ == "__main__":
     logger.info("Data-Dex Dash application starting...")
     # Start the server (debug=True enables hot reloading)
-    app.run(debug=True, port=8050, use_reloader=False, threaded=True)
+    app.run(debug=False, port=8050, use_reloader=False, threaded=True)

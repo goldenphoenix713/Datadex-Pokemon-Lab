@@ -9,7 +9,7 @@ from src.components import (
     type_leaderboard_card,
     world_exploration_card,
 )
-from src.data import pokemon_ids, pokemon_table
+from src.data import pokemon_ids, pokemon_sprites, pokemon_table
 
 layout = dmc.MantineProvider(
     theme=CUSTOM_THEME,
@@ -18,6 +18,7 @@ layout = dmc.MantineProvider(
         dcc.Store(id="current-pokemon-data", data={}, storage_type="memory"),
         dcc.Store(id="team-store", data=[], storage_type="session"),
         dcc.Store(id="pokemon-id-map", data=pokemon_ids, storage_type="memory"),
+        dcc.Store(id="pokemon-sprite-map", data=pokemon_sprites, storage_type="memory"),
         dcc.Store(
             id="full-pokemon-data",
             data=pokemon_table.to_pylist(),

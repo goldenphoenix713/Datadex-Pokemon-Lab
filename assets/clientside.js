@@ -41,7 +41,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             };
         },
 
-        render_team_list: function (team_names, name_id_map) {
+        render_team_list: function (team_names, sprite_map) {
             if (!team_names || team_names.length === 0) {
                 return {
                     "props": {
@@ -56,8 +56,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             }
 
             const badges = team_names.map(name => {
-                const p_id = name_id_map ? name_id_map[name] : 0;
-                const sprite_url = `/assets/sprites/${p_id}.png`;
+                const sprite_url = sprite_map ? sprite_map[name] : "";
 
                 return {
                     "props": {

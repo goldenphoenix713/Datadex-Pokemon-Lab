@@ -26,5 +26,5 @@ clientside_callback(
     ClientsideFunction(namespace="clientside", function_name="render_team_list"),
     Output("team-list", "children"),
     Input("team-store", "data"),
-    Input("pokemon-id-map", "data"),
+    Input("pokemon-sprite-map", "data"),
 )
