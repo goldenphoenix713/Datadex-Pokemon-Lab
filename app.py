@@ -11,8 +11,8 @@ from flask_compress import Compress
 
 # Configure logging
 logger.remove()
-logger.add("logs/app.log", level="DEBUG")
-logger.add(sys.stderr, level="DEBUG")
+logger.add("logs/app.log", level="INFO")
+logger.add(sys.stderr, level="INFO")
 
 # Enforce React 18.2.0 for DMC compatibility
 dash._dash_renderer._set_react_version("18.2.0")  # type: ignore[possibly-missing-attribute]
