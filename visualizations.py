@@ -93,9 +93,12 @@ def get_radar_base_figure() -> go.Figure:
                 gridcolor="lightgrey",
             ),
             angularaxis=dict(
-                tickfont=dict(size=12, color="gray"), rotation=90, direction="clockwise"
+                tickfont=dict(size=12, color="gray"),
+                rotation=90,
+                direction="clockwise",
             ),
         ),
+        dragmode=False,
         showlegend=True,
         legend=dict(
             orientation="h",
@@ -161,11 +164,13 @@ def get_leaderboard_base_figure(stat_column: str = "Attack") -> go.Figure:
             gridcolor="rgba(255,255,255,0.1)",
             tickfont=dict(color="white"),
             title_font=dict(color="white"),
+            fixedrange=True,
         ),
         yaxis=dict(
             title=dict(text="", font=dict(color="white")),
             autorange="reversed",
             tickfont=dict(color="white"),
+            fixedrange=True,
         ),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
@@ -245,6 +250,7 @@ def get_scatter_base_figure(x_col: str = "Weight", y_col: str = "Speed") -> go.F
             ),
             gridcolor="rgba(255,255,255,0.1)",
             autorange=True,
+            fixedrange=True,
         ),
         yaxis=dict(
             title=dict(
@@ -257,6 +263,7 @@ def get_scatter_base_figure(x_col: str = "Weight", y_col: str = "Speed") -> go.F
             ),
             gridcolor="rgba(255,255,255,0.1)",
             autorange=True,
+            fixedrange=True,
         ),
         template="plotly_dark",
         transition=dict(duration=500, easing="cubic-in-out"),

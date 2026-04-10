@@ -69,7 +69,7 @@ radar_card = dmc.GridCol(
                     dcc.Graph(
                         id="radar-chart",
                         figure=get_radar_base_figure(),
-                        config={"displayModeBar": False},
+                        config={"displayModeBar": False, "scrollZoom": False},
                         style={"height": "500px"},
                     ),
                     type="circle",
@@ -235,7 +235,7 @@ type_leaderboard_card = dmc.GridCol(
                     dcc.Graph(
                         id="leaderboard-chart",
                         figure=get_leaderboard_base_figure(),
-                        config={"displayModeBar": False},
+                        config={"displayModeBar": False, "scrollZoom": False},
                     ),
                     type="dot",
                     color="yellow",
@@ -288,7 +288,7 @@ world_exploration_card = dmc.GridCol(
                     dcc.Graph(
                         id="scatter-plot",
                         figure=get_scatter_base_figure(),
-                        config={"displayModeBar": False},
+                        config={"displayModeBar": False, "scrollZoom": False},
                     ),
                     type="circle",
                     color="yellow",
