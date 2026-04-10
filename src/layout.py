@@ -1,7 +1,7 @@
 """Main layout assembly for the Data-Dex application."""
 
 import dash_mantine_components as dmc
-from dash import dcc, html
+from dash import dcc, html, Output, Input, clientside_callback
 from src.filters import create_filter_stack, FILTER_STORE_DEFAULTS
 from src.constants import CUSTOM_THEME, STAT_OPTIONS
 from src.components import (
@@ -39,14 +39,26 @@ layout = dmc.MantineProvider(
             children=[
                 dmc.AppShellHeader(
                     children=[
-                        dmc.Center(
-                            style={"height": "100%"},
+                        dmc.Group(
+                            h="100%",
+                            px="md",
+                            justify="space-between",
                             children=[
-                                html.H1(
-                                    "Data-Dex: Ultimate Stat Lab",
-                                    className="pokemon-title",
-                                    style={"margin": 0},
-                                )
+                                dmc.Group(
+                                    children=[
+                                        dmc.Burger(
+                                            id="drawer-burger",
+                                            opened=False,
+                                            hiddenFrom="sm",
+                                            size="sm",
+                                        ),
+                                        html.H1(
+                                            "Data-Dex: Ultimate Stat Lab",
+                                            className="pokemon-title",
+                                            style={"margin": 0},
+                                        ),
+                                    ]
+                                ),
                             ],
                         )
                     ]
@@ -79,6 +91,7 @@ layout = dmc.MantineProvider(
                         dmc.Drawer(
                             id="filter-drawer",
                             title="Filters",
+                            opened=False,
                             children=[
                                 dmc.ScrollArea(
                                     h="calc(100vh - 80px)",
@@ -117,4 +130,27 @@ layout = dmc.MantineProvider(
             ],
         ),
     ],
+)
+
+clientside_callback(
+    """
+    function(burger_opened, drawer_opened) {
+        const ctx = window.dash_clientside.callback_context;
+        if (!ctx.triggered || ctx.triggered.length === 0) {
+            return [window.dash_clientside.no_update, window.dash_clientside.no_update];
+        }
+        const trigger = ctx.triggered[0].prop_id;
+        if (trigger.includes("drawer-burger")) {
+            return [burger_opened, burger_opened];
+        }
+        if (trigger.includes("filter-drawer")) {
+            return [drawer_opened, drawer_opened];
+        }
+        return [window.dash_clientside.no_update, window.dash_clientside.no_update];
+    }
+    """,
+    Output("drawer-burger", "opened"),
+    Output("filter-drawer", "opened"),
+    Input("drawer-burger", "opened"),
+    Input("filter-drawer", "opened"),
 )
