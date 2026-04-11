@@ -6,6 +6,7 @@ import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 from loguru import logger
 import time
+import diskcache
 
 from src.data import (
     evolution_map,
@@ -17,10 +18,15 @@ from data_manager import (
     OFFICIAL_ARTWORK_URL,
     SHINY_ARTWORK_URL,
     POKEAPI_CRY_URL,
+    ensure_pokemon_cry,
 )
 from visualizations import create_type_badge
 
-# In-memory caches for the current session to avoid repeated disk/DB/Calc work
+# Persistent cache for tracking Pokémon variants that lack audio files on the CDN
+# This prevents repeated slow network attempts for confirmed missing cries.
+cry_cache = diskcache.Cache(".cache/failed_cries")
+
+# In-memory caches for the current session for UI-specific objects
 _evolution_ui_cache: dict[str, Any] = {}
 
 
@@ -334,8 +340,26 @@ def update_details(
 
     add_disabled = name in team or len(team) >= 6
 
-    cry_src = f"{POKEAPI_CRY_URL}{p_id}.ogg"
-    has_cry = bool(cry_src)
+    # Audio Logic: On-demand download with persistent failure caching
+    p_id_int = int(p_id)
+
+    # 1. Check persistent failure cache first
+    if p_id_int in cry_cache:
+        has_cry = False
+        cry_src = ""
+    else:
+        # 2. Check local file or attempt download
+        local_path_str = ensure_pokemon_cry(p_id_int, name)
+        if local_path_str:
+            has_cry = True
+            # Use the CDN URL for the browser (better for production/caching)
+            cry_src = f"{POKEAPI_CRY_URL}{p_id_int}.ogg"
+        else:
+            # 3. Mark as persistent failure if download failed (404/Timeout)
+            cry_cache.set(p_id_int, True)
+            has_cry = False
+            cry_src = ""
+
     cry_icon = (
         DashIconify(icon="tabler:volume")
         if has_cry

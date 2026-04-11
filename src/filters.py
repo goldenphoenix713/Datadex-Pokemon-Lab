@@ -303,7 +303,7 @@ def create_filter_stack(group_name: str):
             dmc.Divider(my="md"),
             dmc.Text("Selection Helper", size="xs", c="dimmed", mb="xs"),
             dmc.Text(
-                "Use these filters to narrow down the list of Pokémon in the team selector.",
+                "Use these filters to narrow down the list of Pokémon in the selector.",
                 size="xs",
                 c="dimmed",
             ),

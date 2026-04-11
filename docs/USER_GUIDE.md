@@ -8,7 +8,7 @@ Welcome to the **Data-Dex Lab**! This tool is designed to help you explore Poké
 
 **Goal:** Compare the strengths of different Pokémon.
 
-1. **Select Pokémon:** Use the search box in the sidebar to pick up to **6 Pokémon** for your team.
+1. **Select Pokémon:** Use the search box in the sidebar to pick up to **6 Pokémon** to compare.
 2. **Analyze the Shape:** Look at the colored shapes on the radar.
     - A **wider, rounder** shape means a Pokémon is an all-rounder.
     - A **pointy** shape means they specialize in one stat (like high Speed).
@@ -33,8 +33,8 @@ Welcome to the **Data-Dex Lab**! This tool is designed to help you explore Poké
 
 1. **Set the Axes:** Pick two different things to compare (like **Weight (lbs)** vs. **Height (ft)**).
 2. **Find the Outliers:** Look for points that are far away from the others.
-    - Who is the heaviest Pokémon?
-    - Is there someone who is both very small and very strong?
+    - Find a **Tiny Titan**: Who is the smallest Pokémon with the highest Attack (hint: Kartana)?
+    - Find a **Deceptive Appearance**: Is there a Pokémon that is tiny but weighs as much as a car (hint: Cosmoem)?
 3. **Identify:** Hover over any dot to see which Pokémon it is and what their exact stats are.
 
 ---

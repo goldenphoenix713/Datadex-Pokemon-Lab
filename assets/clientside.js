@@ -45,7 +45,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             if (!team_names || team_names.length === 0) {
                 return {
                     "props": {
-                        "children": "No Pokémon in your team yet. Add some from the Detail view!",
+                        "children": "No Pokémon in your comparison yet. Add some from the Detail view!",
                         "c": "dimmed",
                         "size": "sm",
                         "fs": "italic"

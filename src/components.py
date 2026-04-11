@@ -31,7 +31,7 @@ radar_card = dmc.GridCol(
                             className="pokemon-section-title",
                         ),
                         dmc.Button(
-                            "Clear Team",
+                            "Clear Comparison",
                             id="clear-team-btn",
                             variant="subtle",
                             color="gray",
@@ -41,7 +41,7 @@ radar_card = dmc.GridCol(
                     mb="md",
                 ),
                 dmc.Text(
-                    "Compare your team's stats side-by-side.",
+                    "Compare your favorite Pokémon's stats side-by-side.",
                     c="dimmed",
                     mb="md",
                 ),
@@ -55,7 +55,7 @@ radar_card = dmc.GridCol(
                             gap="xs",
                             children=[
                                 dmc.Text(
-                                    "No Pokémon in your team yet. Add some from the Detail view!",
+                                    "No Pokémon in your comparison yet. Add some from the Detail view!",
                                     c="dimmed",
                                     size="sm",
                                     fs="italic",
@@ -106,13 +106,20 @@ pokemon_detail_card = dmc.GridCol(
                 dmc.Group(
                     justify="space-between",
                     align="center",
+                    wrap="nowrap",
                     mb="xs",
                     children=[
                         dmc.Title(
                             id="pokemon-name-display",
                             order=2,
                             className="pokemon-section-title",
-                            style={"margin": 0},
+                            style={
+                                "margin": 0,
+                                "overflow": "hidden",
+                                "textOverflow": "ellipsis",
+                                "whiteSpace": "nowrap",
+                                "flex": 1,
+                            },
                         ),
                         dmc.ActionIcon(
                             DashIconify(icon="tabler:volume"),
@@ -179,7 +186,7 @@ pokemon_detail_card = dmc.GridCol(
                 html.Div(id="stat-progress-bars"),
                 dmc.Space(h="md"),
                 dmc.Button(
-                    "Add to Team",
+                    "Add to Comparison",
                     id="add-pokemon-btn",
                     fullWidth=True,
                     size="lg",

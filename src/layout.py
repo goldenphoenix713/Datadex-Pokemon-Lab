@@ -39,25 +39,32 @@ layout = dmc.MantineProvider(
             children=[
                 dmc.AppShellHeader(
                     children=[
-                        dmc.Group(
+                        dmc.Box(
+                            pos="relative",
                             h="100%",
-                            px="md",
-                            justify="space-between",
                             children=[
-                                dmc.Group(
+                                dmc.Burger(
+                                    id="drawer-burger",
+                                    opened=False,
+                                    hiddenFrom="sm",
+                                    size="sm",
+                                    pos="absolute",
+                                    left="md",
+                                    top="50%",
+                                    style={
+                                        "transform": "translateY(-50%)",
+                                        "zIndex": 100,
+                                    },
+                                ),
+                                dmc.Center(
+                                    h="100%",
                                     children=[
-                                        dmc.Burger(
-                                            id="drawer-burger",
-                                            opened=False,
-                                            hiddenFrom="sm",
-                                            size="sm",
-                                        ),
                                         html.H1(
                                             "Data-Dex: Ultimate Stat Lab",
                                             className="pokemon-title",
                                             style={"margin": 0},
-                                        ),
-                                    ]
+                                        )
+                                    ],
                                 ),
                             ],
                         )

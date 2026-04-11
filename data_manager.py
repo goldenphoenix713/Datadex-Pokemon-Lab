@@ -287,9 +287,7 @@ def ensure_pokemon_sprite(pokemon_id: int, pokemon_name: str = "Unknown") -> str
 def ensure_pokemon_cry(pokemon_id: int, pokemon_name: str = "Unknown") -> str:
     """Download a Pokémon cry audio file to the local cache and return the local path.
 
-    .. deprecated::
-        Do NOT call this from Dash callbacks. Cry audio is served via CDN URLs.
-        Use ``scripts/prefetch_assets.py`` to warm the cache offline.
+    Used on-demand by callbacks to fetch missing audio for specific variants.
     """
     assets_dir = Path("assets")
     sounds_dir = assets_dir / "sounds"
@@ -302,7 +300,8 @@ def ensure_pokemon_cry(pokemon_id: int, pokemon_name: str = "Unknown") -> str:
     if not cry_path.exists():
         try:
             logger.info(f"Downloading cry for {pokemon_name} (ID: {pokemon_id})...")
-            response = requests.get(cry_url, timeout=10)
+            # Using 2s timeout to avoid blocking Dash callbacks for too long
+            response = requests.get(cry_url, timeout=2)
             if response.status_code == 200:
                 with open(cry_path, "wb") as f:
                     f.write(response.content)
@@ -312,11 +311,11 @@ def ensure_pokemon_cry(pokemon_id: int, pokemon_name: str = "Unknown") -> str:
                 logger.warning(
                     f"Failed to download cry {cry_name} (Status: {response.status_code})"
                 )
+                return ""
         except Exception as e:
             logger.error(f"Error downloading cry {cry_name}: {e}")
-        return ""
+            return ""
     else:
-        logger.debug(f"Cry {cry_name} already exists for {pokemon_name}")
         return str(cry_path)
 
 

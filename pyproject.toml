@@ -3,6 +3,9 @@ name = "datadex-pokemon-lab"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
+
+[project.urls]
+Deployment = "https://datadex.famruiz.com"
 requires-python = ">=3.12"
 dependencies = [
     "dash",

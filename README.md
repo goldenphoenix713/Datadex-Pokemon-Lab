@@ -2,11 +2,13 @@
 
 Welcome to the **DATA-DEX**, the high-tech research tool used by top Trainers to find the hidden power in every Pokémon! This isn't just a Pokédex—it's a **Data Lab** where numbers tell the story of who is truly the strongest.
 
+**🚀 Live Demo:** [datadex.famruiz.com](https://datadex.famruiz.com)
+
 ---
 
 ## 🎮 How to Play
 
-1. **SCAN:** Use the **Search Box** to pick up to 3 Pokémon.
+1. **SCAN:** Use the **Search Box** to pick up to 6 Pokémon to compare.
 2. **SYNC:** Watch the **Scanner-Dex** slide their stats into view!
 3. **COMPARE:** Look at the **Radar Shape**. A bigger, rounder shape means a more balanced Pokémon. A "pointy" shape means a specialist!
 4. **DISCOVER:** Scroll down to the **Type Leaderboard** to see which Types (Fire, Water, etc.) are winning the math battle.
@@ -19,18 +21,19 @@ Welcome to the **DATA-DEX**, the high-tech research tool used by top Trainers to
 
 ### 🔍 Level 1: Basic Navigation
 
-* **The Tiny Titan:** Find a Pokémon shorter than **1'8" (0.5m)** with an **Attack** over 100.
+* **The Tiny Titan:** Use the **'Exploring the World'** scatter plot to find a Pokémon shorter than **1'8" (0.5m)** with an **Attack** over 100.
 * **Speed King:** Check the **Type Leaderboard**. Which Type has the highest average **Speed**?
 
 ### 📊 Level 2: Comparing Data
 
-* **The Shape-Shifter:** Compare a "Heavyweight" (like Snorlax) and a "Speedster" (like Pikachu) on the **Radar Chart**. Describe their Radar Chart shapes.
-* **Above the Bar:** Pick your favorite Pokémon. Is its **HP** above or below the **Global Average** line?
+* **The Shape of Stats:** Both Mew and Deoxys (Normal Forme) have a total base stat of 600. Use the **Radar Chart** to compare them. How are they different?
+* **Above the Bar:** Pick your favorite Pokémon. Is its **HP** above or below the **Global Average** line found in the Type Leaderboard?
+* **Trainer vs Pokémon:** Add your height and weight to the **"Trainer Comparison"** section in the sidebar. How do you stack up against your favorite Pokémon?
 
 ### 📈 Level 3: Finding Outliers
 
-* **The Rule Breaker:** Find a very heavy Pokémon (over **440 lbs / 200kg**) that is tiny (under **1'8" / 0.5m**).
-* **The Specialist:** Find a Pokémon with one **HUGE** stat spike but very weak stats elsewhere. What is the specialist's best stat?
+* **Deceptive Appearances:** Find a tiny (under **6" / 0.15m**) but very heavy (over **2200 lbs / 999kg**) Pokémon.
+* **The Unbreakable Wall:** Find a Pokémon that has extremely high (**200+**) defense and special defense stats, but very low stats otherwise.
 
 ---
 
@@ -42,7 +45,9 @@ This lab runs on **Python**, **Dash**, and **Plotly**.
 
 1. Install dependencies: `uv sync`
 2. Run the lab: `python app.py`
-3. Open your browser to: `http://127.0.0.1:8050`
+3. Open your browser to:
+   * **Hosted:** [datadex.famruiz.com](https://datadex.famruiz.com)
+   * **Local:** `http://127.0.0.1:8050`
 
 ### 📂 Project Map
 
