@@ -8,7 +8,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
 ASSETS_DIR = PROJECT_ROOT / "assets"
 FONT_PATH = ASSETS_DIR / "pokemon_solid.ttf"
-OUTPUT_PATH = PROJECT_ROOT / "data_quests_worksheet.pdf"
+OUTPUT_PATH = ASSETS_DIR / "data_quests_worksheet.pdf"
 
 
 class WorksheetPDF(FPDF):

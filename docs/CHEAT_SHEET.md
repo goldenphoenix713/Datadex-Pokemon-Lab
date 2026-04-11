@@ -35,10 +35,4 @@ This cheat sheet provides the "answers" to the Data Quests. Keep this handy duri
 
 ---
 
-## Presentation "Pro-Moves"
-
-* **The Speed of Light:** Mention **Regieleki**. It’s the fastest Pokémon ever found, with a Speed stat of 200.
-* **The Glass Cannon:** **Deoxys (Attack Forme)** has 180 Attack but only 20 Defense. It hits like a truck but breaks like a window!
-* **The All-Rounder:** **Arceus** (The Alpha Pokémon) has 120 in every single stat.
-
-Good luck with your 30-minute lab! You’re ready to lead these trainers. 📊✨
+Good luck with your 30-minute lab! You're ready to lead these trainers. 📊✨

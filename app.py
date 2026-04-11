@@ -29,6 +29,10 @@ Compress(server)
 # Import layout and callbacks to register them
 from src.layout import layout  # noqa: E402
 import src.callbacks  # noqa: E402, F401
+from worksheet import register_worksheet_routes  # noqa: E402
+
+# Register custom Flask routes
+register_worksheet_routes(server)
 
 app.layout = layout
 
