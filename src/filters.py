@@ -2,7 +2,6 @@
 
 from dash import (
     html,
-    MATCH,
     Output,
     Input,
     State,
@@ -311,28 +310,55 @@ def create_filter_stack(group_name: str):
     )
 
 
-clientside_callback(
-    ClientsideFunction(namespace="clientside", function_name="sync_filters_clientside"),
-    Output({"group": "navbar", "type": "filter", "id": MATCH}, "value"),
-    Output({"group": "drawer", "type": "filter", "id": MATCH}, "value"),
-    Output("filter-store", "data", allow_duplicate=True),
-    Input({"group": "drawer", "type": "filter", "id": MATCH}, "value"),
-    Input({"group": "navbar", "type": "filter", "id": MATCH}, "value"),
-    State("filter-store", "data"),
-    prevent_initial_call=True,
-)
+# Sync Navbar and Drawer filters via individual callbacks to avoid MATCH wildcard mismatches in recent Dash versions
+for f_id in FILTER_STORE_DEFAULTS["filters"].keys():  # type: ignore[attr-defined]
+    # Sync Navbar to Drawer and Store
+    clientside_callback(
+        ClientsideFunction(
+            namespace="clientside", function_name="sync_filters_clientside"
+        ),
+        Output({"group": "drawer", "type": "filter", "id": f_id}, "value"),
+        Output("filter-store", "data", allow_duplicate=True),
+        Input({"group": "navbar", "type": "filter", "id": f_id}, "value"),
+        State("filter-store", "data"),
+        prevent_initial_call=True,
+    )
+    # Sync Drawer to Navbar and Store
+    clientside_callback(
+        ClientsideFunction(
+            namespace="clientside", function_name="sync_filters_clientside"
+        ),
+        Output({"group": "navbar", "type": "filter", "id": f_id}, "value"),
+        Output("filter-store", "data", allow_duplicate=True),
+        Input({"group": "drawer", "type": "filter", "id": f_id}, "value"),
+        State("filter-store", "data"),
+        prevent_initial_call=True,
+    )
 
-
-clientside_callback(
-    ClientsideFunction(namespace="clientside", function_name="sync_toggles_clientside"),
-    Output({"group": "navbar", "type": "toggle", "id": MATCH}, "checked"),
-    Output({"group": "drawer", "type": "toggle", "id": MATCH}, "checked"),
-    Output("filter-store", "data", allow_duplicate=True),
-    Input({"group": "drawer", "type": "toggle", "id": MATCH}, "checked"),
-    Input({"group": "navbar", "type": "toggle", "id": MATCH}, "checked"),
-    State("filter-store", "data"),
-    prevent_initial_call=True,
-)
+# Sync Navbar and Drawer toggles
+for t_id in FILTER_STORE_DEFAULTS["toggles"].keys():  # type: ignore[attr-defined]
+    # Sync Navbar to Drawer and Store
+    clientside_callback(
+        ClientsideFunction(
+            namespace="clientside", function_name="sync_toggles_clientside"
+        ),
+        Output({"group": "drawer", "type": "toggle", "id": t_id}, "checked"),
+        Output("filter-store", "data", allow_duplicate=True),
+        Input({"group": "navbar", "type": "toggle", "id": t_id}, "checked"),
+        State("filter-store", "data"),
+        prevent_initial_call=True,
+    )
+    # Sync Drawer to Navbar and Store
+    clientside_callback(
+        ClientsideFunction(
+            namespace="clientside", function_name="sync_toggles_clientside"
+        ),
+        Output({"group": "navbar", "type": "toggle", "id": t_id}, "checked"),
+        Output("filter-store", "data", allow_duplicate=True),
+        Input({"group": "drawer", "type": "toggle", "id": t_id}, "checked"),
+        State("filter-store", "data"),
+        prevent_initial_call=True,
+    )
 
 
 def _reset_outputs_for_group(group: str):

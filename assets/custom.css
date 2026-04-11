@@ -35,7 +35,7 @@ body {
         padding: 5px 0;
         letter-spacing: 1px;
     }
-    
+
     .mantine-AppShell-header {
         height: 70px !important;
     }
@@ -189,4 +189,41 @@ body {
 .custom-dropdown .Select-placeholder,
 .custom-dropdown .Select-input {
     color: #94a3b8 !important;
+}
+
+/* Evolution Chain Loading State */
+.evolution-node img {
+    min-height: 32px;
+    min-width: 32px;
+}
+/* Animated loader container for the main artwork */
+.artwork-container {
+    position: relative;
+    height: 200px; /* Matches the dmc.Image height defined in components.py */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The loading symbol is hidden by default and only shown during the 'is-loading' state */
+.artwork-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #4dabf7; /* Vibrant blue matching the glowing highlight */
+    z-index: 10;
+    pointer-events: none;
+    display: none;
+}
+
+/* Visibility toggle via JavaScript-managed class */
+.artwork-container.is-loading .artwork-loader {
+    display: block;
+}
+
+/* Ensure the image itself doesn't have offsets that break centering */
+.pokemon-artwork {
+    margin: 0 !important;
 }

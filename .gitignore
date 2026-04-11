@@ -18,12 +18,14 @@ wheels/
 # Virtual environments
 .venv
 
-# Assets Images
+# Assets (Placeholders should be included, dynamic assets ignored)
 assets/images/*.png
 assets/sprites/*.png
 assets/sounds/*.ogg
-!assets/images/*placeholder.png
-!assets/sprites/*pokeball_placeholder.png
+!assets/images/*_artwork.png
+!assets/images/placeholder.png
+!assets/sprites/*_sprite.png
+!assets/sprites/pokeball_placeholder.png
 
 # Logs
 logs/

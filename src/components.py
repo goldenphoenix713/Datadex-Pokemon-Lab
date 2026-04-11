@@ -148,13 +148,25 @@ pokemon_detail_card = dmc.GridCol(
                                     overlayProps={"radius": "sm", "blur": 2},
                                     zIndex=100,
                                 ),
-                                dmc.Image(
-                                    id="pokemon-image",
-                                    src="",
-                                    h=200,
-                                    w="auto",
-                                    fit="contain",
-                                    className="pokemon-artwork",
+                                html.Div(
+                                    className="artwork-container is-loading",
+                                    children=[
+                                        dmc.Image(
+                                            id="pokemon-image",
+                                            src="/assets/images/loading_artwork.png",
+                                            fallbackSrc="/assets/images/missing_artwork.png",
+                                            h=200,
+                                            w="auto",
+                                            fit="contain",
+                                            className="pokemon-artwork",
+                                        ),
+                                        DashIconify(
+                                            icon="line-md:loading-twotone-loop",
+                                            id="pokemon-image-loader",
+                                            width=50,
+                                            className="artwork-loader",
+                                        ),
+                                    ],
                                 ),
                             ],
                         )
