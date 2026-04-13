@@ -385,7 +385,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             };
         },
 
-        sync_filters_clientside: function (_drawer_val, _navbar_val, filter_store) {
+        sync_filters_clientside: function (triggered_value, filter_store) {
             const ctx = window.dash_clientside.callback_context;
             if (!ctx || !ctx.triggered || ctx.triggered.length === 0) {
                 return window.dash_clientside.no_update;
@@ -393,24 +393,22 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
 
             const trigger = ctx.triggered[0];
             const trigger_id = JSON.parse(trigger.prop_id.split('.')[0]);
-            const group = trigger_id.group;
             const filter_id = trigger_id.id;
             const value = trigger.value;
 
+            // Deep copy and update store
             const new_store = JSON.parse(JSON.stringify(filter_store));
             new_store.filters[filter_id] = value;
             new_store.last_updated_id = filter_id;
             new_store.last_updated_value = value;
             new_store.modified = Date.now();
 
-            if (group === 'navbar') {
-                return [window.dash_clientside.no_update, value, new_store];
-            } else {
-                return [value, window.dash_clientside.no_update, new_store];
-            }
+            // Return [sync_value, new_store]
+            // This works for both Navbar -> Drawer and Drawer -> Navbar sync
+            return [value, new_store];
         },
 
-        sync_toggles_clientside: function (_drawer_checked, _navbar_checked, filter_store) {
+        sync_toggles_clientside: function (triggered_value, filter_store) {
             const ctx = window.dash_clientside.callback_context;
             if (!ctx || !ctx.triggered || ctx.triggered.length === 0) {
                 return window.dash_clientside.no_update;
@@ -418,21 +416,17 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
 
             const trigger = ctx.triggered[0];
             const trigger_id = JSON.parse(trigger.prop_id.split('.')[0]);
-            const group = trigger_id.group;
             const toggle_id = trigger_id.id;
             const value = trigger.value;
 
+            // Deep copy and update store
             const new_store = JSON.parse(JSON.stringify(filter_store));
             new_store.toggles[toggle_id] = value;
             new_store.last_updated_id = toggle_id;
             new_store.last_updated_value = value;
             new_store.modified = Date.now();
 
-            if (group === 'navbar') {
-                return [window.dash_clientside.no_update, value, new_store];
-            } else {
-                return [value, window.dash_clientside.no_update, new_store];
-            }
+            return [value, new_store];
         },
 
         reset_filters_clientside: function (_n_clicks_nav, _n_clicks_drawer) {
