@@ -144,6 +144,19 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
+#filter-text {
+    margin-top: 1.2rem;
+}
+
+.reset-filters-btn {
+    margin: 0 !important;
+}
+
+.mantine-AppShell-navbar .mantine-Divider-root {
+    margin-top: 0.3rem !important;
+    margin-bottom: 0.3rem !important;
+}
+
 /* Aggressive Dash Dropdown Dark Theme Overrides */
 .custom-dropdown .Select-control {
     background-color: #0f172a !important;
@@ -196,10 +209,12 @@ body {
     min-height: 32px;
     min-width: 32px;
 }
+
 /* Animated loader container for the main artwork */
 .artwork-container {
     position: relative;
-    height: 200px; /* Matches the dmc.Image height defined in components.py */
+    height: 200px;
+    /* Matches the dmc.Image height defined in components.py */
     width: 100%;
     display: flex;
     align-items: center;
@@ -212,7 +227,8 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #4dabf7; /* Vibrant blue matching the glowing highlight */
+    color: #4dabf7;
+    /* Vibrant blue matching the glowing highlight */
     z-index: 10;
     pointer-events: none;
     display: none;

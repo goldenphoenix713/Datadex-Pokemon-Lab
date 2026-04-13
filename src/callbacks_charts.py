@@ -11,6 +11,7 @@ clientside_callback(
     Input("team-store", "data"),
     Input("pokemon-id-map", "data"),
     Input("full-pokemon-data", "data"),
+    Input("reset-zoom-radar", "n_clicks"),
 )
 
 # 2. Type Leaderboard: Updates based on filter-store and stat selection
@@ -23,6 +24,7 @@ clientside_callback(
     Input("filter-store", "data"),
     Input("stats-names-store", "data"),
     Input("stat-selector", "value"),
+    Input("reset-zoom-leaderboard", "n_clicks"),
 )
 
 # 3. Scatter Plot: Updates based on filter-store and axis selection
@@ -36,4 +38,5 @@ clientside_callback(
     Input("stats-names-store", "data"),
     Input("x-axis-selector", "value"),
     Input("y-axis-selector", "value"),
+    Input("reset-zoom-scatter", "n_clicks"),
 )

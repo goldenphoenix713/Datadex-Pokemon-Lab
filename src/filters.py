@@ -43,21 +43,23 @@ def create_filter_stack(group_name: str):
         children=[
             dmc.Text(
                 "Use these filters to narrow down the list of Pokémon in the selector.",
+                id="filter-text",
                 size="xs",
                 c="dimmed",
             ),
-            dmc.Divider(my="md"),
+            dmc.Divider(my="sm"),
             dmc.Button(
                 "Reset All Filters",
                 id={"group": group_name, "type": "button", "id": "reset-filters-btn"},
+                className="reset-filters-btn",
                 variant="subtle",
                 color="gray",
-                size="compact-xs",
+                size="compact-s",
                 leftSection=DashIconify(icon="tabler:arrow-back-up"),
                 fullWidth=True,
                 mb="sm",
             ),
-            dmc.Divider(my="md"),
+            dmc.Divider(my="sm"),
             dmc.Accordion(
                 multiple=True,
                 value=["basic-filters"],
@@ -308,7 +310,6 @@ def create_filter_stack(group_name: str):
                     ),
                 ],
             ),
-            dmc.Divider(my="md"),
             html.A(
                 dmc.Button(
                     "Open Study Worksheet",

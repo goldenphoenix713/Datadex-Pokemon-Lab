@@ -30,12 +30,24 @@ radar_card = dmc.GridCol(
                             order=2,
                             className="pokemon-section-title",
                         ),
-                        dmc.Button(
-                            "Clear Comparison",
-                            id="clear-team-btn",
-                            variant="subtle",
-                            color="gray",
-                            leftSection=DashIconify(icon="tabler:trash"),
+                        dmc.Group(
+                            gap="xs",
+                            children=[
+                                dmc.ActionIcon(
+                                    DashIconify(icon="tabler:zoom-out"),
+                                    id="reset-zoom-radar",
+                                    variant="subtle",
+                                    color="gray",
+                                    size="lg",
+                                ),
+                                dmc.Button(
+                                    "Clear Comparison",
+                                    id="clear-team-btn",
+                                    variant="subtle",
+                                    color="gray",
+                                    leftSection=DashIconify(icon="tabler:trash"),
+                                ),
+                            ]
                         ),
                     ],
                     mb="md",
@@ -243,11 +255,25 @@ type_leaderboard_card = dmc.GridCol(
                     mb="md",
                 ),
                 # Dropdown to select the statistic for averaging
-                dmc.Select(
-                    id="stat-selector",
-                    label="Compare averages for:",
-                    data=STAT_OPTIONS,
-                    value="Attack",
+                dmc.Group(
+                    align="flex-end",
+                    children=[
+                        dmc.Select(
+                            id="stat-selector",
+                            label="Compare averages for:",
+                            data=STAT_OPTIONS,
+                            value="Attack",
+                            style={"flex": 1},
+                        ),
+                        dmc.ActionIcon(
+                            DashIconify(icon="tabler:zoom-out"),
+                            id="reset-zoom-leaderboard",
+                            variant="subtle",
+                            color="gray",
+                            size="lg",
+                            mb=2,
+                        ),
+                    ],
                     mb="md",
                 ),
                 dcc.Loading(
@@ -286,19 +312,29 @@ world_exploration_card = dmc.GridCol(
                 ),
                 # Selectors for X and Y axes of the scatter plot
                 dmc.Group(
-                    grow=True,
+                    align="flex-end",
                     children=[
                         dmc.Select(
                             id="x-axis-selector",
                             label="Horizontal (X)",
                             data=STAT_OPTIONS + ["Height", "Weight"],
                             value="Weight",
+                            style={"flex": 1},
                         ),
                         dmc.Select(
                             id="y-axis-selector",
                             label="Vertical (Y)",
                             data=STAT_OPTIONS + ["Height", "Weight"],
                             value="Speed",
+                            style={"flex": 1},
+                        ),
+                        dmc.ActionIcon(
+                            DashIconify(icon="tabler:zoom-out"),
+                            id="reset-zoom-scatter",
+                            variant="subtle",
+                            color="gray",
+                            size="lg",
+                            mb=2,
                         ),
                     ],
                     mb="md",

@@ -158,11 +158,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             });
         },
 
-        update_radar_clientside: function (team_names, name_id_map, all_data) {
-            // Guard: If full pokemon data hasn't finished syncing from server yet,
-            // don't attempt to update the radar figure. Attempting to do so would
-            // filter out all team members (all_data.find fails), resulting in an 
-            // empty chart that then persists its "empty" state.
+        update_radar_clientside: function (team_names, name_id_map, all_data, reset_clicks) {
             if (!all_data || all_data.length === 0) {
                 return window.dash_clientside.no_update;
             }
@@ -171,7 +167,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             const closed_stats = [...stats, stats[0]];
 
             const base_layout = {
-                "uirevision": true,
+                "uirevision": reset_clicks || true,
                 "polar": {
                     "radialaxis": { "visible": true, "range": [0, 255], "showticklabels": false, "showline": false, "ticks": "", "gridcolor": "lightgrey" },
                     "angularaxis": { "tickfont": { "size": 14, "color": "white" }, "rotation": 90, "direction": "clockwise" }
@@ -225,7 +221,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             };
         },
 
-        update_leaderboard_clientside: function (all_data, filter_store, stat_names, stat) {
+        update_leaderboard_clientside: function (all_data, filter_store, stat_names, stat, reset_clicks) {
             const filters = (filter_store && filter_store.filters) || {};
             const toggles = (filter_store && filter_store.toggles) || {};
             const stat_values = stat_names ? stat_names.map(name => filters["stat-" + name] || [0, 255]) : [];
@@ -249,7 +245,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
                 return {
                     "data": [],
                     "layout": {
-                        "uirevision": true,
+                        "uirevision": reset_clicks || true,
                         "paper_bgcolor": "rgba(0,0,0,0)",
                         "plot_bgcolor": "rgba(0,0,0,0)"
                     }
@@ -289,7 +285,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             };
 
             const layout = {
-                "uirevision": true,
+                "uirevision": reset_clicks || true,
                 "title": { "text": "Top " + stat + " by Type", "font": { "color": "white" } },
                 "xaxis": {
                     "title": { "text": stat, "font": { "color": "white" } },
@@ -317,11 +313,11 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             return { "data": [trace], "layout": layout };
         },
 
-        update_scatter_clientside: function (all_data, filter_store, stat_names, x_stat, y_stat) {
+        update_scatter_clientside: function (all_data, filter_store, stat_names, x_stat, y_stat, reset_clicks) {
             if (!x_stat || !y_stat) return {
                 "data": [],
                 "layout": {
-                    "uirevision": true,
+                    "uirevision": reset_clicks || true,
                     "title": { "text": "Select both axes to explore", "font": { "color": "white" } },
                     "paper_bgcolor": "rgba(0,0,0,0)",
                     "plot_bgcolor": "rgba(0,0,0,0)"
@@ -351,7 +347,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
                 return {
                     "data": [],
                     "layout": {
-                        "uirevision": true,
+                        "uirevision": reset_clicks || true,
                         "paper_bgcolor": "rgba(0,0,0,0)",
                         "plot_bgcolor": "rgba(0,0,0,0)"
                     }
@@ -380,8 +376,8 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             return {
                 "data": traces,
                 "layout": {
-                    "uirevision": true,
-                    "template": "plotly_dark",
+                "uirevision": reset_clicks || true,
+                "template": "plotly_dark",
                     "xaxis": { "title": { "text": x_stat, "font": { "color": "white" } }, "gridcolor": "rgba(255,255,255,0.1)", "autorange": true, "tickfont": { "size": 14, "color": "white" } },
                     "yaxis": { "title": { "text": y_stat, "font": { "color": "white" } }, "gridcolor": "rgba(255,255,255,0.1)", "autorange": true, "tickfont": { "size": 14, "color": "white" } },
                     "legend": { "orientation": "h", "y": -0.2, "font": { "color": "white" }, "title": { "text": "Type", "font": { "color": "white" } } },
