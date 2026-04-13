@@ -9,6 +9,7 @@ from dash import (
     ClientsideFunction,
 )
 import dash_mantine_components as dmc
+from dash_iconify import DashIconify
 from src.constants import REGIONS, TYPES, STAT_OPTIONS
 
 # Default initial state for the filter store.
@@ -40,15 +41,23 @@ FILTER_STORE_DEFAULTS = {
 def create_filter_stack(group_name: str):
     return dmc.Stack(
         children=[
+            dmc.Text(
+                "Use these filters to narrow down the list of Pokémon in the selector.",
+                size="xs",
+                c="dimmed",
+            ),
+            dmc.Divider(my="md"),
             dmc.Button(
                 "Reset All Filters",
                 id={"group": group_name, "type": "button", "id": "reset-filters-btn"},
                 variant="subtle",
                 color="gray",
                 size="compact-xs",
+                leftSection=DashIconify(icon="tabler:arrow-back-up"),
                 fullWidth=True,
                 mb="sm",
             ),
+            dmc.Divider(my="md"),
             dmc.Accordion(
                 multiple=True,
                 value=["basic-filters"],
@@ -300,11 +309,17 @@ def create_filter_stack(group_name: str):
                 ],
             ),
             dmc.Divider(my="md"),
-            dmc.Text("Selection Helper", size="xs", c="dimmed", mb="xs"),
-            dmc.Text(
-                "Use these filters to narrow down the list of Pokémon in the selector.",
-                size="xs",
-                c="dimmed",
+            html.A(
+                dmc.Button(
+                    "Open Study Worksheet",
+                    variant="light",
+                    color="orange",
+                    fullWidth=True,
+                    leftSection=DashIconify(icon="tabler:file-type-pdf"),
+                ),
+                href="/worksheet",
+                target="_blank",
+                style={"textDecoration": "none"},
             ),
         ]
     )
