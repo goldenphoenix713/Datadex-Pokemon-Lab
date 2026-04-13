@@ -47,7 +47,7 @@ radar_card = dmc.GridCol(
                                     color="gray",
                                     leftSection=DashIconify(icon="tabler:trash"),
                                 ),
-                            ]
+                            ],
                         ),
                     ],
                     mb="md",
@@ -64,7 +64,7 @@ radar_card = dmc.GridCol(
                     children=[
                         dmc.Group(
                             id="team-list",
-                            gap="xs",
+                            # gap="xs",
                             children=[
                                 dmc.Text(
                                     "No Pokémon in your comparison yet. Add some from the Detail view!",
@@ -75,13 +75,17 @@ radar_card = dmc.GridCol(
                             ],
                         )
                     ],
-                    mb="xl",
+                    # mb="sm",
                 ),
                 dcc.Loading(
                     dcc.Graph(
                         id="radar-chart",
                         figure=get_radar_base_figure(),
-                        config={"displayModeBar": False, "scrollZoom": False},
+                        config={
+                            "displayModeBar": False,
+                            "scrollZoom": False,
+                            "showTips": False,
+                        },
                         style={"height": "500px"},
                     ),
                     type="circle",
@@ -280,7 +284,11 @@ type_leaderboard_card = dmc.GridCol(
                     dcc.Graph(
                         id="leaderboard-chart",
                         figure=get_leaderboard_base_figure(),
-                        config={"displayModeBar": False, "scrollZoom": False},
+                        config={
+                            "displayModeBar": False,
+                            "scrollZoom": False,
+                            "showTips": False,
+                        },
                     ),
                     type="dot",
                     color="yellow",
@@ -343,7 +351,11 @@ world_exploration_card = dmc.GridCol(
                     dcc.Graph(
                         id="scatter-plot",
                         figure=get_scatter_base_figure(),
-                        config={"displayModeBar": False, "scrollZoom": False},
+                        config={
+                            "displayModeBar": False,
+                            "scrollZoom": False,
+                            "showTips": False,
+                        },
                     ),
                     type="circle",
                     color="yellow",

@@ -43,7 +43,7 @@ def create_filter_stack(group_name: str):
         children=[
             dmc.Text(
                 "Use these filters to narrow down the list of Pokémon in the selector.",
-                id="filter-text",
+                className="filter-text",
                 size="xs",
                 c="dimmed",
             ),
@@ -54,7 +54,7 @@ def create_filter_stack(group_name: str):
                 className="reset-filters-btn",
                 variant="subtle",
                 color="gray",
-                size="compact-s",
+                size="compact-sm",
                 leftSection=DashIconify(icon="tabler:arrow-back-up"),
                 fullWidth=True,
                 mb="sm",
