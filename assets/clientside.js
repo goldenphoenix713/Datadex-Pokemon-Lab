@@ -159,6 +159,14 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
         },
 
         update_radar_clientside: function (team_names, name_id_map, all_data) {
+            // Guard: If full pokemon data hasn't finished syncing from server yet,
+            // don't attempt to update the radar figure. Attempting to do so would
+            // filter out all team members (all_data.find fails), resulting in an 
+            // empty chart that then persists its "empty" state.
+            if (!all_data || all_data.length === 0) {
+                return window.dash_clientside.no_update;
+            }
+
             const stats = ["HP", "Attack", "Defense", "Speed", "Special Defense", "Special Attack"];
             const closed_stats = [...stats, stats[0]];
 
@@ -488,6 +496,13 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
         update_team: function (add_clicks, clear_clicks, remove_clicks, focus_pokemon, current_team) {
             const ctx = window.dash_clientside.callback_context;
             if (!ctx || !ctx.triggered || ctx.triggered.length === 0) {
+                return window.dash_clientside.no_update;
+            }
+
+            // Safety Guard: Dash sometimes triggers Input callbacks on page load 
+            // when pattern-matched components are added to the layout. 
+            // We only want to process actual clicks (n_clicks > 0).
+            if (ctx.triggered[0].value === null || ctx.triggered[0].value === 0) {
                 return window.dash_clientside.no_update;
             }
 
