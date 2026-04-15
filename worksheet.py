@@ -5,6 +5,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent
 WORKSHEET_PATH = PROJECT_ROOT / "assets" / "data_quests_worksheet.pdf"
 CHEATSHEET_PATH = PROJECT_ROOT / "assets" / "cheatsheet.pdf"
+GUIDE_PATH = PROJECT_ROOT / "assets" / "DataDex_User_Guide.pdf"
 
 
 def register_worksheet_routes(server):
@@ -33,3 +34,15 @@ def register_worksheet_routes(server):
             )
         else:
             return "Cheat sheet file not found.", 404
+
+    @server.route("/user-guide")
+    def download_user_guide():
+        if GUIDE_PATH.exists():
+            return send_file(
+                GUIDE_PATH,
+                as_attachment=True,
+                download_name="Data-Dex_User_Guide.pdf",
+                mimetype="application/pdf",
+            )
+        else:
+            return "User guide file not found.", 404

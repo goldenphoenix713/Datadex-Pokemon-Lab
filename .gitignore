@@ -31,3 +31,5 @@ assets/sounds/*.ogg
 logs/
 
 .coverage
+
+private/
