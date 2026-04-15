@@ -19,8 +19,6 @@ FILTER_STORE_DEFAULTS = {
         "region-filter": [],
         "type-filter": [],
         "sort-order": "number",
-        "trainer-height": 4.5,
-        "trainer-weight": 150,
         **{f"stat-{stat}": [0, 255] for stat in STAT_OPTIONS},
     },
     "toggles": {
@@ -263,51 +261,6 @@ def create_filter_stack(group_name: str):
                             ),
                         ],
                     ),
-                    dmc.AccordionItem(
-                        value="trainer-comparison",
-                        children=[
-                            dmc.AccordionControl(
-                                "Trainer Comparison",
-                                className="pokemon-section-title",
-                            ),
-                            dmc.AccordionPanel(
-                                children=[
-                                    dmc.Group(
-                                        grow=True,
-                                        children=[
-                                            dmc.NumberInput(
-                                                id={
-                                                    "group": group_name,
-                                                    "type": "filter",
-                                                    "id": "trainer-height",
-                                                },
-                                                label="Your Height (ft)",
-                                                value=4.5,
-                                                min=2,
-                                                max=7,
-                                                step=0.01,
-                                                debounce=500,
-                                            ),
-                                            dmc.NumberInput(
-                                                id={
-                                                    "group": group_name,
-                                                    "type": "filter",
-                                                    "id": "trainer-weight",
-                                                },
-                                                label="Your Weight (lbs)",
-                                                value=150,
-                                                min=10,
-                                                max=500,
-                                                step=1,
-                                                debounce=500,
-                                            ),
-                                        ],
-                                        mb="md",
-                                    ),
-                                ]
-                            ),
-                        ],
-                    ),
                 ],
             ),
             html.A(
@@ -385,8 +338,6 @@ def _reset_outputs_for_group(group: str):
         "region-filter",
         "type-filter",
         "sort-order",
-        "trainer-height",
-        "trainer-weight",
     ]:
         outputs.append(
             Output(
@@ -432,8 +383,6 @@ def _reset_values():
         "region-filter",
         "type-filter",
         "sort-order",
-        "trainer-height",
-        "trainer-weight",
     ]:
         values.append(f[f_id])
     for stat in STAT_OPTIONS:

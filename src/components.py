@@ -11,87 +11,82 @@ from visualizations import (
     get_scatter_base_figure,
 )
 
-# Left Column: User Selection and Radar Comparison
-radar_card = dmc.GridCol(
-    span={"base": 12, "md": 8},
+# Radar card — exported as a plain Card (layout.py stacks it with trainer card)
+radar_card = dmc.Card(
+    withBorder=True,
+    shadow="sm",
+    p="lg",
+    radius="md",
+    mb="md",
     children=[
-        dmc.Card(
-            withBorder=True,
-            shadow="sm",
-            p="lg",
-            radius="md",
-            mb="md",
+        dmc.Group(
+            justify="space-between",
             children=[
+                dmc.Title(
+                    "Face-Off Radar",
+                    order=2,
+                    className="pokemon-section-title",
+                ),
                 dmc.Group(
-                    justify="space-between",
+                    gap="xs",
                     children=[
-                        dmc.Title(
-                            "Face-Off Radar",
-                            order=2,
-                            className="pokemon-section-title",
+                        dmc.ActionIcon(
+                            DashIconify(icon="tabler:zoom-out"),
+                            id="reset-zoom-radar",
+                            variant="subtle",
+                            color="gray",
+                            size="lg",
                         ),
-                        dmc.Group(
-                            gap="xs",
-                            children=[
-                                dmc.ActionIcon(
-                                    DashIconify(icon="tabler:zoom-out"),
-                                    id="reset-zoom-radar",
-                                    variant="subtle",
-                                    color="gray",
-                                    size="lg",
-                                ),
-                                dmc.Button(
-                                    "Clear Comparison",
-                                    id="clear-team-btn",
-                                    variant="subtle",
-                                    color="gray",
-                                    leftSection=DashIconify(icon="tabler:trash"),
-                                ),
-                            ],
+                        dmc.Button(
+                            "Clear Comparison",
+                            id="clear-team-btn",
+                            variant="subtle",
+                            color="gray",
+                            leftSection=DashIconify(icon="tabler:trash"),
                         ),
                     ],
-                    mb="md",
-                ),
-                dmc.Text(
-                    "Compare your favorite Pokémon's stats side-by-side.",
-                    c="dimmed",
-                    mb="md",
-                ),
-                # Dynamic Team List Container
-                dmc.ScrollArea(
-                    h=120,
-                    offsetScrollbars=True,
-                    children=[
-                        dmc.Group(
-                            id="team-list",
-                            # gap="xs",
-                            children=[
-                                dmc.Text(
-                                    "No Pokémon in your comparison yet. Add some from the Detail view!",
-                                    c="dimmed",
-                                    size="sm",
-                                    fs="italic",
-                                )
-                            ],
-                        )
-                    ],
-                    # mb="sm",
-                ),
-                dcc.Loading(
-                    dcc.Graph(
-                        id="radar-chart",
-                        figure=get_radar_base_figure(),
-                        config={
-                            "displayModeBar": False,
-                            "scrollZoom": False,
-                            "showTips": False,
-                        },
-                        style={"height": "500px"},
-                    ),
-                    type="circle",
-                    color="yellow",
                 ),
             ],
+            mb="md",
+        ),
+        dmc.Text(
+            "Compare your favorite Pokémon's stats side-by-side.",
+            c="dimmed",
+            mb="md",
+        ),
+        # Dynamic Team List Container
+        dmc.ScrollArea(
+            h=120,
+            offsetScrollbars=True,
+            children=[
+                dmc.Group(
+                    id="team-list",
+                    # gap="xs",
+                    children=[
+                        dmc.Text(
+                            "No Pokémon in your comparison yet. Add some from the Detail view!",
+                            c="dimmed",
+                            size="sm",
+                            fs="italic",
+                        )
+                    ],
+                )
+            ],
+            # mb="sm",
+        ),
+        dcc.Loading(
+            dcc.Graph(
+                id="radar-chart",
+                figure=get_radar_base_figure(),
+                config={
+                    "displayModeBar": False,
+                    "scrollZoom": False,
+                    "showTips": False,
+                },
+                style={"height": "500px"},
+            ),
+            type="circle",
+            color="yellow",
         ),
     ],
 )
@@ -105,6 +100,7 @@ pokemon_detail_card = dmc.GridCol(
             shadow="sm",
             p="lg",
             radius="md",
+            h="100%",
             children=[
                 dmc.Select(
                     id="focus-selector",
@@ -229,12 +225,56 @@ pokemon_detail_card = dmc.GridCol(
                     children=[
                         dmc.Text("Evolution Lineage", size="sm", fw=700, mb="sm"),
                         html.Div(id="evolution-chain-display"),
-                        dmc.Divider(my="md"),
-                        html.Div(id="trainer-comparison-display"),
                     ],
                 ),
             ],
         ),
+    ],
+)
+
+# Trainer Comparison card — exported as a plain Card (stacked with radar in layout.py)
+trainer_comparison_card = dmc.Card(
+    withBorder=True,
+    shadow="sm",
+    p="lg",
+    radius="md",
+    children=[
+        dmc.Title(
+            "Trainer Comparison",
+            order=3,
+            className="pokemon-section-title",
+            mb="xs",
+        ),
+        dmc.Text(
+            "How do you stack up against your Pokémon?",
+            c="dimmed",
+            mb="md",
+        ),
+        dmc.Group(
+            grow=True,
+            mb="md",
+            children=[
+                dmc.NumberInput(
+                    id="trainer-height-input",
+                    label="Your Height (ft)",
+                    value=4.5,
+                    min=2,
+                    max=7,
+                    step=0.01,
+                    debounce=500,
+                ),
+                dmc.NumberInput(
+                    id="trainer-weight-input",
+                    label="Your Weight (lbs)",
+                    value=150,
+                    min=10,
+                    max=500,
+                    step=1,
+                    debounce=500,
+                ),
+            ],
+        ),
+        html.Div(id="trainer-comparison-display"),
     ],
 )
 

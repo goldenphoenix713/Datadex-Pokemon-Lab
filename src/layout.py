@@ -9,6 +9,7 @@ from src.components import (
     pokemon_detail_card,
     type_leaderboard_card,
     world_exploration_card,
+    trainer_comparison_card,
 )
 from src.data import pokemon_ids, pokemon_sprites, pokemon_table
 
@@ -88,7 +89,18 @@ layout = dmc.MantineProvider(
                                     gutter="lg",
                                     children=[
                                         pokemon_detail_card,
-                                        radar_card,
+                                        dmc.GridCol(
+                                            span={"base": 12, "md": 8},
+                                            children=[
+                                                dmc.Stack(
+                                                    gap="lg",
+                                                    children=[
+                                                        radar_card,
+                                                        trainer_comparison_card,
+                                                    ],
+                                                )
+                                            ],
+                                        ),
                                         type_leaderboard_card,
                                         world_exploration_card,
                                     ],

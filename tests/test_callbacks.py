@@ -6,16 +6,16 @@ from src.callbacks_discovery import update_focus_options as update_selector_opti
 def test_update_details_callback(mocker):
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
 
-    # Signature: (focus_name, is_shiny, filter_store, team)
+    # Signature: (focus_name, is_shiny, filter_store, team, t_height, t_weight)
     store = {
-        "filters": {"trainer-height": 1.7, "trainer-weight": 70},
+        "filters": {},
         "toggles": {"mega-toggle": True, "gmax-toggle": False, "regional-toggle": True},
     }
-    result_shiny = update_details("Bulbasaur", True, store, [])
+    result_shiny = update_details("Bulbasaur", True, store, [], 4.5, 150)
     # Check current_shiny (5th element, index 4)
     assert result_shiny[4] is True
 
-    result = update_details("Bulbasaur", False, store, [])
+    result = update_details("Bulbasaur", False, store, [], 4.5, 150)
     (
         name_display,
         type_badges,
@@ -41,10 +41,10 @@ def test_update_details_callback(mocker):
 def test_update_details_callback_no_selection(mocker):
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
     store = {
-        "filters": {"trainer-height": 1.7, "trainer-weight": 70},
+        "filters": {},
         "toggles": {"mega-toggle": True, "gmax-toggle": False, "regional-toggle": True},
     }
-    result = update_details("", False, store, [])
+    result = update_details("", False, store, [], 4.5, 150)
     (
         name_display,
         type_badges,
@@ -89,10 +89,10 @@ def test_update_details_callback_high_stat(mocker):
     mocker.patch("src.callbacks_details.ctx", mocker.Mock(inputs_list=[]))
 
     store = {
-        "filters": {"trainer-height": 1.7, "trainer-weight": 70},
+        "filters": {},
         "toggles": {"mega-toggle": True, "gmax-toggle": False, "regional-toggle": True},
     }
-    result = update_details("Charizard", False, store, [])
+    result = update_details("Charizard", False, store, [], 4.5, 150)
     (
         name_display,
         type_badges,

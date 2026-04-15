@@ -62,20 +62,25 @@ def _get_artwork_url(p_id: int, shiny: bool) -> str:
     Input("shiny-toggle", "checked"),
     Input("filter-store", "data"),
     Input("team-store", "data"),
+    Input("trainer-height-input", "value"),
+    Input("trainer-weight-input", "value"),
 )
 def update_details(
     focus_name: str,
     is_shiny: bool,
     filter_store: dict,
     team: List[str],
+    t_height: float,
+    t_weight: float,
 ) -> Any:
     """Update the detail card for the focused Pokémon using DuckDB/Arrow."""
     start_time = time.time()
 
-    filters = (filter_store or {}).get("filters", {})
     toggles = (filter_store or {}).get("toggles", {})
-    t_height = filters.get("trainer-height", 4.5)
-    t_weight = filters.get("trainer-weight", 150)
+    if t_height is None:
+        t_height = 4.5
+    if t_weight is None:
+        t_weight = 150
     show_mega = toggles.get("mega-toggle", True)
     show_gmax = toggles.get("gmax-toggle", False)
     show_regional = toggles.get("regional-toggle", True)
@@ -99,11 +104,7 @@ def update_details(
     triggered_id = ctx.triggered_id
     logger.debug(f"Updating detailed view. Triggered by: {triggered_id}")
 
-    last_updated = (filter_store or {}).get("last_updated_id", "")
-    if triggered_id == "filter-store" and last_updated in [
-        "trainer-height",
-        "trainer-weight",
-    ]:
+    if triggered_id in ["trainer-height-input", "trainer-weight-input"]:
         try:
             t_height_f = float(t_height)
             t_weight_f = float(t_weight)
@@ -120,7 +121,6 @@ def update_details(
         comparison_view = dmc.Stack(
             gap=4,
             children=[
-                dmc.Text("Trainer Comparison", size="xs", fw=700, c="dimmed"),
                 dmc.Group(
                     grow=True,
                     children=[
@@ -274,37 +274,27 @@ def update_details(
     height_ratio = p_height / t_height_val if t_height_val > 0 else 1
     weight_ratio = p_weight / t_weight_val if t_weight_val > 0 else 1
 
-    comparison_view = dmc.Stack(
-        gap=4,
+    comparison_view = dmc.Group(
+        grow=True,
         children=[
-            dmc.Text("Trainer Comparison", size="xs", fw=700, c="dimmed"),
-            dmc.Group(
-                grow=True,
+            dmc.Stack(
+                gap=0,
                 children=[
-                    dmc.Stack(
-                        gap=0,
-                        children=[
-                            dmc.Text(
-                                f"{f'{name} is' if height_ratio > 1 else 'You are'} taller!",
-                                size="sm",
-                            ),
-                            dmc.Text(
-                                f"Ratio: {height_ratio:.1f}x", size="xs", c="dimmed"
-                            ),
-                        ],
+                    dmc.Text(
+                        f"{f'{name} is' if height_ratio > 1 else 'You are'} taller!",
+                        size="sm",
                     ),
-                    dmc.Stack(
-                        gap=0,
-                        children=[
-                            dmc.Text(
-                                f"{f'{name} is' if weight_ratio > 1 else 'You are'} heavier!",
-                                size="sm",
-                            ),
-                            dmc.Text(
-                                f"Ratio: {weight_ratio:.1f}x", size="xs", c="dimmed"
-                            ),
-                        ],
+                    dmc.Text(f"Ratio: {height_ratio:.1f}x", size="xs", c="dimmed"),
+                ],
+            ),
+            dmc.Stack(
+                gap=0,
+                children=[
+                    dmc.Text(
+                        f"{f'{name} is' if weight_ratio > 1 else 'You are'} heavier!",
+                        size="sm",
                     ),
+                    dmc.Text(f"Ratio: {weight_ratio:.1f}x", size="xs", c="dimmed"),
                 ],
             ),
         ],
