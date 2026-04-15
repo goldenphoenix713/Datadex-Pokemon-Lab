@@ -61,7 +61,6 @@ radar_card = dmc.Card(
             children=[
                 dmc.Group(
                     id="team-list",
-                    # gap="xs",
                     children=[
                         dmc.Text(
                             "No Pokémon in your comparison yet. Add some from the Detail view!",
@@ -72,7 +71,6 @@ radar_card = dmc.Card(
                     ],
                 )
             ],
-            # mb="sm",
         ),
         dcc.Loading(
             dcc.Graph(
